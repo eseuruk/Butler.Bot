@@ -29,6 +29,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<UpdateHandlerBase, AdminGroup.ReviewWhoisHandler>();
 
         services.AddSingleton<UpdateHandlerBase, UnknownGroupMessageHandler>();
+        services.AddSingleton<UpdateHandlerBase, BotChatStatusHandler>();
 
         services.AddSingleton<UpdateService>();
 

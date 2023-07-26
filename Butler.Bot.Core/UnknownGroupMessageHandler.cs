@@ -8,8 +8,7 @@ public class UnknownGroupMessageHandler : UpdateHandlerBase
 {
     public UnknownGroupMessageHandler(ButlerBot butler, IUserRepository userRepository, ILogger<UnknownGroupMessageHandler> logger)
         : base(butler, userRepository, logger)
-    {
-    }
+    {}
 
     public override Task<bool> TryHandleUpdateAsync(Update update, CancellationToken cancellationToken)
     {
