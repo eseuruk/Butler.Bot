@@ -1,6 +1,8 @@
 ﻿using Butler.Bot.Core;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Telegram.Bot.Types;
 
 namespace Butler.Bot.AWS;
@@ -11,22 +13,37 @@ public class BotController : ControllerBase
     private readonly ButlerBot bot;
     private readonly UpdateService updateService;
     private readonly SecretService secretService;
+    private readonly HealthCheckService healthService;
 
     private readonly ILogger<BotController> logger;
 
-    public BotController(ButlerBot bot, UpdateService updateService, SecretService secretService, ILogger<BotController> logger)
+    public BotController(ButlerBot bot, UpdateService updateService, SecretService secretService, HealthCheckService healthService, ILogger<BotController> logger)
     {
         this.bot = bot;
         this.updateService = updateService;
         this.secretService = secretService;
+        this.healthService = healthService;
         this.logger = logger;
     }
 
     [HttpGet]
-    [Route("/options")]
-    public ButlerOptions ShowConfigAsync()
+    [Route("/health")]
+    public async Task<IActionResult> HehthCheckAsync(CancellationToken cancellationToken)
     {
-        return bot.Options;
+        logger.LogInformation("Checking system health");
+
+        var report = await healthService.CheckHealthAsync(cancellationToken);
+
+        logger.LogInformation("System health status: {Status}", report.Status);
+
+        var settings = new JsonSerializerSettings
+        {
+            Formatting = Formatting.Indented,
+            Converters = new[] { new StringEnumConverter() }
+        };
+
+        string json = JsonConvert.SerializeObject(report, settings);
+        return Ok(json);
     }
 
     [HttpPost]
@@ -40,13 +57,18 @@ public class BotController : ControllerBase
         
         try
         {
+            logger.LogInformation("WebHook processing started");
+
             await updateService.HandleUpdateAsync(update, cancellationToken);
+
+            logger.LogInformation("WebHook processing finished");
         }
         catch (Exception ex) 
         {
-            logger.LogCritical(ex, "Update WebHook failed");
+            logger.LogCritical(ex, "WebHook processing failed");
         }
 
+        // always return 200 to not retry updates from telegram
         return Ok();
     }
 }

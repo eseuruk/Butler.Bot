@@ -21,8 +21,6 @@ public class ButlerBot
         AdminGroup = adminGroup;
 
         this.logger = logger;
-
-        LogOptions();
     }
 
     public ITelegramBotClient ApiClient { get; init; }
@@ -46,12 +44,6 @@ public class ButlerBot
         {
             // Callback might expire during retries so catch exceptions to unblock update processing
             logger.LogWarning("Cannot answer query callback to: {callbackQueryId}, errorCode: {ErrorCode}, errorMessage: {ErrorMessage}", callbackQueryId, ex.ErrorCode, ex.Message);
-        }   
-    }
-
-    private void LogOptions()
-    {
-        logger.LogInformation("Butler bot is created: targetGroupId: {TargetGroupId}, adminGroupId: {AdminGroupId}, invitationLink: {InvitationLink}, invitationLinkName: {InvitationLinkName}, minWoisLength: {MinWoisLength}, whoisReviewMode: {WhoisReviewMode}",
-            Options.TargetGroupId, Options.AdminGroupId, Options.InvitationLink, Options.InvitationLinkName, Options.MinWoisLength, Options.WhoisReviewMode);
+        }
     }
 }

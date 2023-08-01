@@ -46,5 +46,11 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-
+    public static IHealthChecksBuilder AddButlerHealthChecks(this IServiceCollection services)
+    {
+        return services.AddHealthChecks()
+            .AddCheck<TelegramApiHealthCheck>("TelegramApi")
+            .AddCheck<TargetGroup.TargetGroupHealthCheck>("TargetGroupMembership")
+            .AddCheck<AdminGroup.AdminGroupHealthCheck>("AdminGroupMembership");
+    }
 }
