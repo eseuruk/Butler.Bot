@@ -24,7 +24,7 @@ There is also an option for manual review #whois messages before join. Please se
 ## How to use
 Bot is not multitenant. At least for now. Each instance of the bot is configured to work with one particular **Target Group**. It means you need to run the instance of bot yourself.
 
-Likely we know how to do it for free. Please see detailed instructions [here](/Docs/BotCreation.md)
+Likely we know how to do it for free. [Please see detailed instructions](Docs/BotCreation.md)
 
 ## Technology
 Bot is written in C# using [.Net 6 LTS](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Code is fully managed and use [Telegram.Bot library](https://github.com/TelegramBots/Telegram.Bot) to interact with [Telegram Bot API](https://core.telegram.org/bots/api). 
@@ -44,7 +44,7 @@ Traditional pull model is also supported and currently used in development. Ther
 ![Butler.Bot.Local](/Docs/Images/Butler.Bot.Local.png)
 
 ## Configuration
-Configuration is file based and very simple. Please see full description [here](/Docs/Configuration.md)
+Configuration is file based and very simple. [Please see full description](Docs/Configuration.md)
 
 ## Messaging
 All bot messages are hardcoded but will be extracted to configuration files very soon.

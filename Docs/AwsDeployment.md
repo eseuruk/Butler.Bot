@@ -5,7 +5,7 @@ There are different deployment models possible with AWS Lambda. You may consider
 
 Below are the steps required for the simplest deployment mode. It utilizes [AWS Free Tier](https://aws.amazon.com/free) which means your bot might be always free in most of the cases.
 
-![Butler.Bot.AWS](/Images/Butler.Bot.AWS.png)
+![Butler.Bot.AWS](Images/Butler.Bot.AWS.png)
 
 ## 1. Create AWS account
 
@@ -21,7 +21,7 @@ Goto AWS Console for DynamoDB in selected region and create new table to store u
 
 It should be named "joinRequests" and should have "id" as partition key.
 
-![AWS.DynamoDB.Table](/Images/AWS.DynamoDB.Table.png)
+![AWS.DynamoDB.Table](Images/AWS.DynamoDB.Table.png)
 
 All other parameters might default
 
@@ -31,13 +31,13 @@ Goto AWS Console for Lambda in selected region and create new Lambda function.
 
 Select .Net 6 Runtime and create the new role with enough permissions to call DynamoDB (Simple microservice template is enough. Feel free to select it.)
 
-![AWS.Lambda.Create](/Images/AWS.Lambda.Create.png)
+![AWS.Lambda.Create](Images/AWS.Lambda.Create.png)
 
 ## 5. Create function url
 
 Go to configuration of the new function and create function url without auth
 
-![AWS.Lambda.Url](/Images/AWS.Lambda.Url.png)
+![AWS.Lambda.Url](Images/AWS.Lambda.Url.png)
 
 Remember you function url. It will be base url for your bot webhook
 
@@ -45,18 +45,18 @@ Remember you function url. It will be base url for your bot webhook
 
 Goto Lambda>Code>Runtime settings and change handler to "Buttler.Bot.AWS"
 
-![AWS.Lambda.RuntimeSettings](/Images/AWS.Lambda.RuntimeSettings.png)
+![AWS.Lambda.RuntimeSettings](Images/AWS.Lambda.RuntimeSettings.png)
 
-![AWS.Lambda.Handler](/Images/AWS.Lambda.Handler.png)
+![AWS.Lambda.Handler](Images/AWS.Lambda.Handler.png)
 
 ## 7. Deploy Lambda Code
 
 Goto Lambda>Code and deploy **Buttler.Bot.AWS.zip** manually
 
-![AWS.Lambda.Deploy](/Images/AWS.Lambda.Deploy.png)
+![AWS.Lambda.Deploy](Images/AWS.Lambda.Deploy.png)
 
 ## 8. All done
 
 You bot backend is ready to work. Go to **/health** url and check the status. It should be healthy in all rows.
 
-![AWS.Lambda.Health](/Images/AWS.Lambda.Health.png)
+![AWS.Lambda.Health](Images/AWS.Lambda.Health.png)
