@@ -52,7 +52,26 @@ Goto GitHub and download latest release binaries. Or build them from the sources
 
 ## 9. Update configuration file with values from 2, 5, 6 and 7
 
-Put values from the previous steps into [appsettings.json](Configuration.md)
+Put values from the previous steps to **[appsettings.json](Configuration.md)** inside **Butler.Bot.AWS.zip**
+```json
+  "AWS": {
+    "Region": <AWS-REGION>
+  },
+  "TelegramApi": {
+    "BotToken": <BOT-TOKEN>,
+    "SecretToken": <SECRET-TOKEN>,
+    "SecretTokenValidation": true
+  },
+  "Butler": {
+    "TargetGroupDisplayName": <TARGET-GROUP-NAME>,
+    "TargetGroupId": <TARGER-GROUP-ID>,
+    "AdminGroupId": <ADMIN-GROUP-ID>,
+    "InvitationLink": <INVITATION-LINK>,
+    "InvitationLinkName": <INVITATION-LINK-NAME>,
+    "MinWoisLength": 120,
+    "WhoisReviewMode": "PostJoin"
+  }
+```
 
 Do not forget to configure AWS region. It is used by DynamoDB client.
 
