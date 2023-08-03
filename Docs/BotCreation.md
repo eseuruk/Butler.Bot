@@ -32,7 +32,7 @@ Remember both: invite link and its name. They will be required for bot configura
 
 ![Bot.InviteLink](Images/Bot.InviteLink.png)
 
-## 6. Get telegram ids of you managed and admin groups
+## 6. Get telegram id of your managed and admin groups
 
 Open Telegram Desktop. Goto you managed group and copy url to any message. It contains group id inside.
 
@@ -40,9 +40,9 @@ Remember group id for your managed and admin groups. They will be required for b
 
 ![Bot.GroupId](Images/Bot.GroupId.png)
 
-## 7. Generate wwebhook secret
+## 7. Generate webhook secret
 
-Do some magic and generate secret for [bot webbhook](https://core.telegram.org/bots/api#setwebhook). It will be sent in a header ìX-Telegram-Bot-Api-Secret-Tokenî in every webhook request, 1-256 characters.
+Do some magic and generate secret for [bot webbhook](https://core.telegram.org/bots/api#setwebhook). It will be sent in a header ‚ÄúX-Telegram-Bot-Api-Secret-Token‚Äù in every webhook request, 1-256 characters.
 
 Remember secret. It will be required for bot configuration.
 
@@ -50,15 +50,15 @@ Remember secret. It will be required for bot configuration.
 
 Goto GitHub and download latest release binaries. Or build them from the sources. 
 
-## 9. Update configuration file with values from 2, 4, 5 and 6
+## 9. Update configuration file with values from 2, 5, 6 and 7
 
-Put values from the previous steps into [appsettings.json](/Configuration.md)
+Put values from the previous steps into [appsettings.json](Configuration.md)
 
 Do not forget to configure AWS region. It is used by DynamoDB client.
 
 ## 10. Deploy bot backend to AWS
 
-Deploy bot backend to AWS as described [here](AwsDeployment.md)
+Deploy bot backend to AWS [as described here](AwsDeployment.md)
 
 ## 11. Update webhook with the url from 9
 
