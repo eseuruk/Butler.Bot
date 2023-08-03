@@ -27,7 +27,7 @@ public class ChatMemberAddedHandler : UpdateHandlerBase
         {
             Logger.LogInformation("New member event in target group: {TargetGroupId}, userId: {UserId}", Butler.Options.TargetGroupId, newMember.Id);
 
-            var request = await UserRepository.FindJoinRequest(newMember.Id);
+            var request = await UserRepository.FindJoinRequestAsync(newMember.Id, cancellationToken);
 
             if (request == null || !request.IsWhoisProvided)
             {
@@ -42,7 +42,7 @@ public class ChatMemberAddedHandler : UpdateHandlerBase
                 var whoisMessage = await Butler.TargetGroup.SayHelloToNewMemberAsync(newMember, request.Whois, cancellationToken);
 
                 var updatedRequst = request with { WhoisMessageId = whoisMessage.MessageId };
-                await UserRepository.UpdateJoinRequestAsync(updatedRequst);
+                await UserRepository.UpdateJoinRequestAsync(updatedRequst, cancellationToken);
 
                 if (request.IsUserChatIdSaved)
                 {

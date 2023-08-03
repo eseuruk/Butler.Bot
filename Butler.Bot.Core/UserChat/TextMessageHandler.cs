@@ -39,7 +39,7 @@ public class TextMessageHandler : UpdateHandlerBase
             return;
         }
 
-        var request = await UserRepository.FindJoinRequest(from.Id);
+        var request = await UserRepository.FindJoinRequestAsync(from.Id, cancellationToken);
 
         if (request == null || request.IsWhoisProvided)
         {
@@ -55,7 +55,7 @@ public class TextMessageHandler : UpdateHandlerBase
         }
 
         var withWhois = request with { Whois = text };
-        await UserRepository.UpdateJoinRequestAsync(withWhois);
+        await UserRepository.UpdateJoinRequestAsync(withWhois, cancellationToken);
 
         await Butler.UserChat.SayWhoisOkAndAskToRequestAccessAsync(chat.Id, cancellationToken);
     }

@@ -2,20 +2,20 @@
 
 public interface IUserRepository
 {
-    Task<JoinRequest?> FindJoinRequest(long userId);
+    Task<JoinRequest?> FindJoinRequestAsync(long userId, CancellationToken cancellationToken);
 
-    Task CreateJoinRequestAsync(JoinRequest request);
+    Task CreateJoinRequestAsync(JoinRequest request, CancellationToken cancellationToken);
 
-    Task UpdateJoinRequestAsync(JoinRequest request);
+    Task UpdateJoinRequestAsync(JoinRequest request, CancellationToken cancellationToken);
 
-    public async Task<JoinRequest> FindOrCreateRequest(long userId)
+    public async Task<JoinRequest> FindOrCreateRequestAsync(long userId, CancellationToken cancellationToken)
     {
-        var request = await FindJoinRequest(userId);
+        var request = await FindJoinRequestAsync(userId, cancellationToken);
 
         if (request == null)
         {
             request = new JoinRequest { UserId = userId };
-            await CreateJoinRequestAsync(request);
+            await CreateJoinRequestAsync(request, cancellationToken);
         }
 
         return request;

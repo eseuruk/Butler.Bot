@@ -1,16 +1,15 @@
-﻿using Amazon.DynamoDBv2.DataModel;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Butler.Bot.AWS;
 
 public class DynamoHealthCheck : IHealthCheck
 {
-    private readonly IDynamoDBContext dbContext;
+    private readonly DynamoJoinRequestTable table;
     private readonly ILogger<DynamoHealthCheck> logger;
 
-    public DynamoHealthCheck(IDynamoDBContext dbContext, ILogger<DynamoHealthCheck> logger)
+    public DynamoHealthCheck(DynamoJoinRequestTable table, ILogger<DynamoHealthCheck> logger)
     {
-        this.dbContext = dbContext;
+        this.table = table;
         this.logger = logger;
     }
 
@@ -20,7 +19,7 @@ public class DynamoHealthCheck : IHealthCheck
 
         try
         {
-            var response = await dbContext.LoadAsync<DynamoJoinRequest>(testID);
+            var response = await table.GetItemAsync(testID, cancellationToken);
             
             logger.LogInformation("DynamoDB queried for test id: {Id}, response: {responseId}", testID, response?.UserId);
             return HealthCheckResult.Healthy("DynamoDB queried succesfully");

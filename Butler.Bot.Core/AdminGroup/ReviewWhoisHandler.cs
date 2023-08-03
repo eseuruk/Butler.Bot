@@ -47,7 +47,7 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
         bool alreadyAdded = await Butler.TargetGroup.IsAreadyMemberAsync(userId, cancellationToken);
         if (alreadyAdded) return;
 
-        var originalRequest = await UserRepository.FindJoinRequest(userId);
+        var originalRequest = await UserRepository.FindJoinRequestAsync(userId, cancellationToken);
         if (originalRequest == null) return;
 
         await Butler.TargetGroup.ApproveJoinRequestAsync(userId, cancellationToken);
@@ -67,13 +67,13 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
         bool alreadyAdded = await Butler.TargetGroup.IsAreadyMemberAsync(userId, cancellationToken);
         if (alreadyAdded) return;
 
-        var originalRequest = await UserRepository.FindJoinRequest(userId);
+        var originalRequest = await UserRepository.FindJoinRequestAsync(userId, cancellationToken);
         if (originalRequest == null) return;
 
         await Butler.TargetGroup.DeclineJoinRequestAsync(userId, cancellationToken);
 
         var withoutWhois = originalRequest with { Whois = string.Empty };
-        await UserRepository.UpdateJoinRequestAsync(withoutWhois);
+        await UserRepository.UpdateJoinRequestAsync(withoutWhois, cancellationToken);
 
         await Butler.AdminGroup.MarkJoinRequestAsDeclinedAsync(messageId, admin, cancellationToken);
 
@@ -90,7 +90,7 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
         bool isMember = await Butler.TargetGroup.IsAreadyMemberAsync(userId, cancellationToken);
         if (!isMember) return;
 
-        var originalRequest = await UserRepository.FindJoinRequest(userId);
+        var originalRequest = await UserRepository.FindJoinRequestAsync(userId, cancellationToken);
         if (originalRequest == null) return;
 
         await Butler.TargetGroup.DeleteUserAsync(userId, cancellationToken);
@@ -101,7 +101,7 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
         }            
 
         var emptyRequest = originalRequest with { Whois = string.Empty, WhoisMessageId = 0, UserChatId = 0 };
-        await UserRepository.UpdateJoinRequestAsync(emptyRequest);
+        await UserRepository.UpdateJoinRequestAsync(emptyRequest, cancellationToken);
 
         await Butler.AdminGroup.MarkUserAsDeletedAsync(messageId, admin, cancellationToken);
         

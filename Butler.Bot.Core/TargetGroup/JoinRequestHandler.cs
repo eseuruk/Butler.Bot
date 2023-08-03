@@ -50,7 +50,7 @@ public class JoinRequestHandler : UpdateHandlerBase
     {
         Logger.LogInformation("New join request in target group: {TargetGroupId}, userID: {UserId}", Butler.Options.TargetGroupId, from.Id);
 
-        var originalRequest = await UserRepository.FindJoinRequest(from.Id);
+        var originalRequest = await UserRepository.FindJoinRequestAsync(from.Id, cancellationToken);
 
         if (originalRequest == null || !originalRequest.IsWhoisProvided)
         {
@@ -59,7 +59,7 @@ public class JoinRequestHandler : UpdateHandlerBase
         else
         {
             var withChatId = originalRequest with { UserChatId = userChatId };
-            await UserRepository.UpdateJoinRequestAsync(withChatId);
+            await UserRepository.UpdateJoinRequestAsync(withChatId, cancellationToken);
 
             if (Butler.Options.WhoisReviewMode == WhoisReviewMode.PreJoin)
             {

@@ -37,7 +37,7 @@ public class RegisterQueryHandler : UpdateHandlerBase
         }
         else
         {
-            var request = await UserRepository.FindOrCreateRequest(userId);
+            var request = await UserRepository.FindOrCreateRequestAsync(userId, cancellationToken);
 
             if (request.IsWhoisProvided)
             {

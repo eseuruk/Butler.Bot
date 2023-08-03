@@ -12,7 +12,7 @@ public class InMemoryRequestRepository : IUserRepository
         this.logger = logger;
     }
 
-    public Task<JoinRequest?> FindJoinRequest(long userId)
+    public Task<JoinRequest?> FindJoinRequestAsync(long userId, CancellationToken cancellationToken)
     {
         JoinRequest? request;
         if (contaner.TryGetValue(userId, out request))
@@ -27,7 +27,7 @@ public class InMemoryRequestRepository : IUserRepository
         return Task.FromResult(request);
     }
 
-    public Task CreateJoinRequestAsync(JoinRequest request)
+    public Task CreateJoinRequestAsync(JoinRequest request, CancellationToken cancellationToken)
     {
         contaner.Add(request.UserId, request);
 
@@ -35,7 +35,7 @@ public class InMemoryRequestRepository : IUserRepository
         return Task.CompletedTask;
     }
 
-    public Task UpdateJoinRequestAsync(JoinRequest request)
+    public Task UpdateJoinRequestAsync(JoinRequest request, CancellationToken cancellationToken)
     {
         contaner[request.UserId] = request;
 

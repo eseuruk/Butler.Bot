@@ -1,65 +1,43 @@
-﻿using Amazon.DynamoDBv2.DataModel;
-using Butler.Bot.Core;
+﻿using Butler.Bot.Core;
 
 namespace Butler.Bot.AWS;
 
-public class DynamoRequestRepository : IUserRepository
+public class DynamoUserRepository : IUserRepository
 {
-    private readonly IDynamoDBContext context;
-    private readonly ILogger<DynamoRequestRepository> logger;
+    private readonly DynamoJoinRequestTable table;
+    private readonly ILogger<DynamoUserRepository> logger;
 
-    public DynamoRequestRepository(IDynamoDBContext context, ILogger<DynamoRequestRepository> logger)
+    public DynamoUserRepository(DynamoJoinRequestTable table, ILogger<DynamoUserRepository> logger)
     {
-        this.context = context;
+        this.table = table;
         this.logger = logger;
     }
 
-    public async Task<JoinRequest?> FindJoinRequest(long userId)
+    public async Task<JoinRequest?> FindJoinRequestAsync(long userId, CancellationToken cancellationToken)
     {
-        var requestDTO = await context.LoadAsync<DynamoJoinRequest>(userId);
+        var request = await table.GetItemAsync(userId, cancellationToken);
 
-        if (requestDTO == null)
+        if (request == null)
         {
             logger.LogInformation("Request not found: {UserId}", userId);
             return null;
         }
 
-        var request = new JoinRequest
-        {
-            UserId = requestDTO.UserId,
-            Whois = requestDTO.Whois,
-            WhoisMessageId = requestDTO.WhoisMessageId,
-            UserChatId = requestDTO.UserChatId
-        };
-
         logger.LogInformation("Request found: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
         return request;
     }
 
-    public async Task CreateJoinRequestAsync(JoinRequest request)
+    public async Task CreateJoinRequestAsync(JoinRequest request, CancellationToken cancellationToken)
     {
-        await PutJoinRequestAsync(request);
+        await table.PutItemAsync(request, cancellationToken);
 
         logger.LogInformation("Request created: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
     }
 
-    public async Task UpdateJoinRequestAsync(JoinRequest request)
+    public async Task UpdateJoinRequestAsync(JoinRequest request, CancellationToken cancellationToken)
     {
-        await PutJoinRequestAsync(request);
+        await table.PutItemAsync(request, cancellationToken);
 
         logger.LogInformation("Request updated: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
-    }
-
-    private async Task PutJoinRequestAsync(JoinRequest request)
-    {
-        var requestDTO = new DynamoJoinRequest
-        {
-            UserId = request.UserId,
-            Whois = request.Whois,
-            WhoisMessageId = request.WhoisMessageId,
-            UserChatId = request.UserChatId
-        };
-
-        await context.SaveAsync(requestDTO);
     }
 }
