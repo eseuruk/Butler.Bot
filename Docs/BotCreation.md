@@ -81,7 +81,7 @@ Deploy bot backend to AWS [as described here](AwsDeployment.md)
 
 ## 11. Update webhook with the url from 9
 
-Update [bot webhook](/WebHook.md) with the url of AWS Lambda functions created at step 9
+Update [bot webhook](WebHook.md) with the url of AWS Lambda functions created at step 9
 
 ## 12. All done
 
