@@ -52,3 +52,24 @@ Section contains parameters required for **Butler.Bot** workflows
 * **PpeJoin** - Every join request is reported to admin group and requires manual admin approval before user is added into target group.
 
 * **PostJoin** - Every new member is reported to admin group after join. Admins have ability to review and remove new member after it.
+
+## Bot Messages
+
+All messages sent by **Butler.Bot** are configurable via appsettings.json.
+
+For example, to override default hello message do the following:
+
+```json
+  "Butler": {
+      "UserChatMessages": {
+        "SayHello":  "This is the new start message"
+    }
+  }
+```
+
+For the list of all messages please see:
+* UserChatMessages.cs - for user chat
+* TargetGroupMessages.cs - for target group
+* AdminGroupMessages.cs - for admin group
+
+

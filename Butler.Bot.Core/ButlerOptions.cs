@@ -1,4 +1,8 @@
-﻿namespace Butler.Bot.Core;
+﻿using Butler.Bot.Core.AdminGroup;
+using Butler.Bot.Core.TargetGroup;
+using Butler.Bot.Core.UserChat;
+
+namespace Butler.Bot.Core;
 
 public class ButlerOptions
 {
@@ -15,4 +19,10 @@ public class ButlerOptions
     public int MinWoisLength { get; init; } = 120;
 
     public WhoisReviewMode WhoisReviewMode { get; init; } = WhoisReviewMode.None;
+
+    public UserChatMessages UserChatMessages { get; init; } =  new UserChatMessages();
+
+    public TargetGroupMessages TargetGroupMessages { get; init; } = new TargetGroupMessages();
+
+    public AdminGroupMessages AdminGroupMessages { get; init; } = new AdminGroupMessages();
 }

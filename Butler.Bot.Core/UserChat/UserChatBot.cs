@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
-using System.Globalization;
 using Telegram.Bot.Exceptions;
 
 namespace Butler.Bot.Core.UserChat;
@@ -24,11 +23,11 @@ public class UserChatBot
     public async Task SayHelloAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-                InlineKeyboardButton.WithCallbackData("Приступить", "register"));
+                InlineKeyboardButton.WithCallbackData(options.UserChatMessages.ButtonApply, "register"));
 
         await apiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: $"Привет! Я помогу тебя зайти в группу {options.TargetGroupDisplayName}. Если не против, я задам тебе несколько вопросов, перед тем как ты сможешь туда попасть.",
+            text: options.UserChatMessages.SayHello.SafeFormat(options.TargetGroupDisplayName),
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -38,11 +37,11 @@ public class UserChatBot
     public async Task SayConfusedAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-            InlineKeyboardButton.WithCallbackData("Продолжить", "register"));
+            InlineKeyboardButton.WithCallbackData(options.UserChatMessages.ButtonContinue, "register"));
 
         await apiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: $"Наверное ты хочешь зайти в группу {options.TargetGroupDisplayName}. Если да, то нажми на кнопку ниже чтоб продолжить.",
+            text: options.UserChatMessages.SayConfused.SafeFormat(options.TargetGroupDisplayName),
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -53,7 +52,7 @@ public class UserChatBot
     {
         await apiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: $"Пожалуйста, представься как тебя зовут, чем занимаешься и увлекаешься, что тебя привело в этот чат (минимум {options.MinWoisLength} символов)",
+            text: options.UserChatMessages.AskForWhois.SafeFormat(options.MinWoisLength),
             cancellationToken: cancellationToken);
 
         logger.LogInformation("Asked to provide whois in private chat: {UserChatId}", userChatId);
@@ -76,7 +75,7 @@ public class UserChatBot
 
         await apiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: "Спасибо за детальное описание. Теперь, нажми на кнопку ниже и запроси доступ к группе.",
+            text: options.UserChatMessages.SayWhoisOkAndAskToRequestAccess,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -90,7 +89,7 @@ public class UserChatBot
 
         await apiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: "Похоже, ты состоял в групе раньше но вышел из нее. Пожалуйста, нажми на кнопку ниже и запроси доступ снова.",
+            text: options.UserChatMessages.SayUsedToBeMember,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -104,7 +103,7 @@ public class UserChatBot
 
         await apiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: "Ты уже состоишь в нашей группе. Нажми на кнопну ниже, чтобы перейти в нее.",
+            text: options.UserChatMessages.SayAlreadyMember,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -120,7 +119,7 @@ public class UserChatBot
         {
             await apiClient.SendTextMessageAsync(
                 chatId: userChatId,
-                text: "Запрос в группу был одобрен. Нажми на кнопку ниже чтобы перейти в нее.",
+                text: options.UserChatMessages.SayRequestApproved,
                 replyMarkup: markup,
                 cancellationToken: cancellationToken);
 
@@ -136,13 +135,13 @@ public class UserChatBot
     public async Task TrySayingRequestDeclinedAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-            InlineKeyboardButton.WithCallbackData("Исправить", "register"));
+            InlineKeyboardButton.WithCallbackData(options.UserChatMessages.ButtonAmend, "register"));
 
         try
         {
             await apiClient.SendTextMessageAsync(
                 chatId: userChatId,
-                text: "К сожалению, запрос в группу был отклонен. Попробуй исправить описание и запросить снова.",
+                text: options.UserChatMessages.SayRequestDeclined,
                 replyMarkup: markup,
                 cancellationToken: cancellationToken);
 
@@ -158,13 +157,13 @@ public class UserChatBot
     public async Task TrySayingUserDeletedAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-            InlineKeyboardButton.WithCallbackData("Исправить", "register"));
+            InlineKeyboardButton.WithCallbackData(options.UserChatMessages.ButtonAmend, "register"));
 
         try
         {
             await apiClient.SendTextMessageAsync(
                 chatId: userChatId,
-                text: "К сожалению, администраторы удалили тебя из группы из-за плохого описания. Попробуй исправить его и запросить доступ снова.",
+                text: options.UserChatMessages.SayUserDeleted,
                 replyMarkup: markup,
                 cancellationToken: cancellationToken);
 

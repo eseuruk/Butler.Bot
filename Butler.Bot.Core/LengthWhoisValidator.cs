@@ -24,8 +24,8 @@ public class LengthWhoisValidator : IWhoisValidator
 
         logger.LogInformation("Whois length check. result: {Result} length: {WhoisLength} message: {Message}", result, whoisLength, messageText);
 
-        var error = result ? string.Empty : $"Хм. В сообщении {whoisLength}, а надо минимум {options.MinWoisLength} символов. Пожалуйста, попробуй еще раз и добавь больше информации про себя.";
-
+        var error = result ? string.Empty : options.UserChatMessages.SayWhoisTooShort.SafeFormat(whoisLength, options.MinWoisLength);
+        
         return (result, error);
     }
 }

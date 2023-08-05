@@ -51,7 +51,7 @@ public class TargetGroupBot
 
         var message = await apiClient.SendTextMessageAsync(
             chatId: options.TargetGroupId,
-            text: $"Приветствуем {userMention}\r\n#whois\r\n{whois}",
+            text: options.TargetGroupMessages.SayHelloToNewMember.SafeFormat(userMention, whois),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
@@ -65,7 +65,7 @@ public class TargetGroupBot
 
         await apiClient.SendTextMessageAsync(
             chatId: options.TargetGroupId,
-            text: $"Приветствуем {userMention}",
+            text: options.TargetGroupMessages.SayHelloToUnknownNewMember.SafeFormat(userMention),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
@@ -78,7 +78,7 @@ public class TargetGroupBot
 
         await apiClient.SendTextMessageAsync(
             chatId: options.TargetGroupId,
-            text: $"С возвращением {userMention}",
+            text: options.TargetGroupMessages.SayHelloAgain.SafeFormat(userMention),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 

@@ -27,13 +27,13 @@ public class AdminGroupBot
 
         var markup = new InlineKeyboardMarkup(new[]
             {
-                InlineKeyboardButton.WithCallbackData("Принять", ReviewQueryData.ToString("prejoin-approve", user.Id)),
-                InlineKeyboardButton.WithCallbackData("Отклонить", ReviewQueryData.ToString("prejoin-decline", user.Id))
+                InlineKeyboardButton.WithCallbackData(options.AdminGroupMessages.ButtonApprove, ReviewQueryData.ToString("prejoin-approve", user.Id)),
+                InlineKeyboardButton.WithCallbackData(options.AdminGroupMessages.ButtonDecline, ReviewQueryData.ToString("prejoin-decline", user.Id))
             });
 
         var message = await apiClient.SendTextMessageAsync(
             chatId: options.AdminGroupId,
-            text: $"Новый запрос от {userMention}\r\n#whois\r\n{whois}",
+            text: options.AdminGroupMessages.ReportJoinRequest.SafeFormat(userMention, whois),
             parseMode: ParseMode.Html,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
@@ -48,12 +48,12 @@ public class AdminGroupBot
 
         var markup = new InlineKeyboardMarkup(new[]
             {
-                InlineKeyboardButton.WithCallbackData("Удалить из группы", ReviewQueryData.ToString("postjoin-delete", user.Id))
+                InlineKeyboardButton.WithCallbackData(options.AdminGroupMessages.ButtonDelete, ReviewQueryData.ToString("postjoin-delete", user.Id))
             });
 
         await apiClient.SendTextMessageAsync(
             chatId: options.AdminGroupId,
-            text: $"Новый член группы {userMention}\r\n#whois\r\n{whois}",
+            text: options.AdminGroupMessages.ReportUserAdded.SafeFormat(userMention, whois),
             parseMode: ParseMode.Html,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
@@ -68,7 +68,7 @@ public class AdminGroupBot
         await apiClient.SendTextMessageAsync(
             chatId: options.AdminGroupId,
             replyToMessageId: messageId,
-            text: $"Принято {adminMention}",
+            text: options.AdminGroupMessages.MarkJoinRequestAsApproved.SafeFormat(adminMention),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
@@ -82,7 +82,7 @@ public class AdminGroupBot
         await apiClient.SendTextMessageAsync(
             chatId: options.AdminGroupId,
             replyToMessageId: messageId,
-            text: $"Отклонено {adminMention}",
+            text: options.AdminGroupMessages.MarkJoinRequestAsDeclined.SafeFormat(adminMention),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
@@ -96,7 +96,7 @@ public class AdminGroupBot
         await apiClient.SendTextMessageAsync(
             chatId: options.AdminGroupId,
             replyToMessageId: messageId,
-            text: $"Пользователь удален {adminMention}",
+            text: options.AdminGroupMessages.MarkUserAsDeleted.SafeFormat(adminMention),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
