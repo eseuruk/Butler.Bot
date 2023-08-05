@@ -48,7 +48,7 @@ Remember secret. It will be required for bot configuration.
 
 ## 8. Download or build lambda deployment package
 
-Goto GitHub and download [latest release binaries](/releases) for Butler.Bot.AWS. Or build them from the sources. 
+Goto GitHub and download [latest release binaries](https://github.com/eseuruk/Butler.Bot/releases) for Butler.Bot.AWS. Or build them from the sources. 
 
 ## 9. Update configuration file with values from 2, 5, 6 and 7
 
