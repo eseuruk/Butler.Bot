@@ -3,9 +3,9 @@ Welcome to **Butler.Bot**, generic bot which is built to help people joining pri
 
 Standard telegram invite links work well but require effort from administrators to review each join request manually. So **Butler.Bot** is specially designed to interact with people and add them to the group only when proper information is provided.
 
-Let’s imagine you have a private group with invite link like: https://t.me/GenericButlerBot If you click on it and follow bot instructions you will be smoothly added to Butler.Bot Discussion group without any manual intervention from administrators.
+Letâ€™s imagine you have a private group with invite link like: https://t.me/GenericButlerBot If you click on it and follow bot instructions you will be smoothly added to Butler.Bot Discussion group without any manual intervention from administrators.
 
-[ Feel free to try. Group is specially created to discuss **Buttler.Bot** behaviour and configuration ]
+[ [Feel free to try](https://t.me/GenericButlerBot). Group is specially created to discuss **Buttler.Bot** behaviour and configuration ]
 
 ![Butler of London Yuppies](/Docs/Images/Butler.Bot.png)
 
