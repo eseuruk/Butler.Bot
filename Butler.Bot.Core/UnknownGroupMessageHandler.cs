@@ -6,7 +6,7 @@ namespace Butler.Bot.Core;
 
 public class UnknownGroupMessageHandler : UpdateHandlerBase
 {
-    public UnknownGroupMessageHandler(ButlerBot butler, IUserRepository userRepository, ILogger<UnknownGroupMessageHandler> logger)
+    public UnknownGroupMessageHandler(IButlerBot butler, IUserRepository userRepository, ILogger<UnknownGroupMessageHandler> logger)
         : base(butler, userRepository, logger)
     {}
 

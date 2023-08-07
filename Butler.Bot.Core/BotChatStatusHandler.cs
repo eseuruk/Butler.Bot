@@ -5,7 +5,7 @@ namespace Butler.Bot.Core;
 
 public class BotChatStatusHandler : UpdateHandlerBase
 {
-    public BotChatStatusHandler(ButlerBot butler, IUserRepository userRepository, ILogger<BotChatStatusHandler> logger)
+    public BotChatStatusHandler(IButlerBot butler, IUserRepository userRepository, ILogger<BotChatStatusHandler> logger)
         : base(butler, userRepository, logger)
     {}
 

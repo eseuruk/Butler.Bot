@@ -6,7 +6,7 @@ namespace Butler.Bot.Core.AdminGroup;
 
 public partial class ReviewWhoisHandler : UpdateHandlerBase
 {
-    public ReviewWhoisHandler(ButlerBot butler, IUserRepository userRepository, ILogger<ReviewWhoisHandler> logger)
+    public ReviewWhoisHandler(IButlerBot butler, IUserRepository userRepository, ILogger<ReviewWhoisHandler> logger)
         : base(butler, userRepository, logger)
     {
     }

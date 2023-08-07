@@ -8,7 +8,17 @@ using Telegram.Bot.Exceptions;
 
 namespace Butler.Bot.Core;
 
-public class ButlerBot
+public interface IButlerBot
+{
+    ITelegramBotClient ApiClient { get; init; }
+    ButlerOptions Options { get; init; }
+    UserChatBot UserChat { get; init; }
+    TargetGroupBot TargetGroup { get; init; }
+    AdminGroupBot AdminGroup { get; init; }
+    Task StopQuerySpinnerAsync(string callbackQueryId, CancellationToken cancellationToken);
+}
+
+public class ButlerBot : IButlerBot
 {
     private readonly ILogger<ButlerBot> logger;
 

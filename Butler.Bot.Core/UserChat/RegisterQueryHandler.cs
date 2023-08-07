@@ -6,7 +6,7 @@ namespace Butler.Bot.Core.UserChat;
 
 public class RegisterQueryHandler : UpdateHandlerBase
 {
-    public RegisterQueryHandler(ButlerBot butler, IUserRepository userRepository, ILoggerFactory loggerFactory)
+    public RegisterQueryHandler(IButlerBot butler, IUserRepository userRepository, ILoggerFactory loggerFactory)
         : base(butler, userRepository, loggerFactory.CreateLogger<RegisterQueryHandler>())
     {
     }
