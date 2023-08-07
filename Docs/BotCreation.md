@@ -12,23 +12,22 @@ After bot is create remember bot token it will be required for backend configura
 
 ![Bot.Token](Images/Bot.Token.png)
 
-## 3. Switch off group privacy mode
-
-Swith off [privacy mode](https://core.telegram.org/bots/features#privacy-mode) to allow bot reading chat messages
-
-![Bot.PrivacyMode](Images/Bot.PrivacyMode.png)
-
-## 4. Add bot to your managed and admin groups
-Goto your managed group and add bot as administrator. Bot need to see messages and approve join requests.
-
-Do the same for your admin group if you use one.
+## 3. Add bot into your managed group
+Goto your managed group and add bot as administrator. From the image below, bot needs to have permissions for:
+* Delete messages
+* Ban users
+* Invite users via link
 
 ![Bot.Admin](Images/Bot.Admin.png)
+
+## 4. Add bot into your admin group
+
+Add bot into admin group as a member. Administrator permissions are not required for admin group.
 
 ## 5. Create invite link which will be used by bot
 Go to you managed group and generate new invite link. Switch on admin approvals and remove time limit.
 
-Remember both: invite link and its name. They will be required for bot configuration.
+Remember both: invite link and its name. They will be required for bot configuration. 
 
 ![Bot.InviteLink](Images/Bot.InviteLink.png)
 
