@@ -1,5 +1,6 @@
 using Butler.Bot.Core;
 using Butler.Bot.Local;
+using Butler.Bot.SQLite;
 using Serilog;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -8,18 +9,18 @@ builder.Services.AddSerilog((services, loggerConfiguration) => loggerConfigurati
             .WriteTo.Console());
 
 builder.Services.Configure<ConsoleLifetimeOptions>(opts => opts.SuppressStatusMessages = true);
-builder.Services.Configure<TelegramApiOptions>(builder.Configuration.GetSection("TelegramApi"));
-builder.Services.Configure<ButlerOptions>(builder.Configuration.GetSection("Butler"));
 
-builder.Services.AddTelegramBotClient();
+builder.Services.AddTelegramBotClient(builder.Configuration.GetSection("TelegramApi"));
+//builder.Services.AddSQLiteUserRepository(builder.Configuration.GetSection("SQLiteUserRepository"));
 builder.Services.AddSingleton<IUserRepository, InMemoryRequestRepository>();
-builder.Services.AddSingleton<IWhoisValidator, LengthWhoisValidator>();
-builder.Services.AddButlerBot();
-builder.Services.AddButlerUpdateService();
-builder.Services.AddButlerHealthChecks();
+builder.Services.AddButlerBot(builder.Configuration.GetSection("Butler"));
 
 builder.Services.AddSingleton<PollingUpdateHandler>();
 builder.Services.AddHostedService<PollingHostedService>();
+
+builder.Services.AddHealthChecks()
+    .AddTelegramApiCheck()
+    .AddButlerBotCheck();
 
 var host = builder.Build();
 
