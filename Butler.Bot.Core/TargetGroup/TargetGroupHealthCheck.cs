@@ -26,14 +26,9 @@ public class TargetGroupHealthCheck : IHealthCheck
 
             logger.LogInformation("Target group bot membership: {Status}", member.Status);
 
-            if (member.Status != ChatMemberStatus.Administrator)
-            {
-                return HealthCheckResult.Degraded($"Current bot group status: {member.Status}");
-            }
-            else
-            {
-                return HealthCheckResult.Healthy("Bot is a administator in the group");
-            }
+            var healthStatus = member.Status == ChatMemberStatus.Administrator ? HealthStatus.Healthy : HealthStatus.Degraded;
+
+            return new HealthCheckResult(healthStatus, $"Current bot group status: {member.Status}");
         }
         catch (ApiRequestException ex)
         {

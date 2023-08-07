@@ -32,7 +32,7 @@ public class AdminGroupHealthCheck : IHealthCheck
 
             logger.LogInformation("Admin group bot membership: {Status}", member.Status);
 
-            var goodMembership = new[] { ChatMemberStatus.Creator, ChatMemberStatus.Administrator, ChatMemberStatus.Member };
+            var goodMembership = new[] { ChatMemberStatus.Administrator, ChatMemberStatus.Member };
 
             var healthStatus = goodMembership.Contains(member.Status) ? HealthStatus.Healthy : HealthStatus.Degraded;
 
