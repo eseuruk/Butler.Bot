@@ -52,7 +52,7 @@ public class BotController : ControllerBase
     {
         if (!secretService.ValidateToken(secretToken))
         {
-            return Forbid("X-Telegram-Bot-Api-Secret-Token is invalid");
+            return StatusCode(StatusCodes.Status403Forbidden);
         }
         
         try
