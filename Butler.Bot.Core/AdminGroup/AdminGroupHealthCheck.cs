@@ -1,7 +1,6 @@
 ﻿using Butler.Bot.Core.TargetGroup;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics.Metrics;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types.Enums;
@@ -33,14 +32,11 @@ public class AdminGroupHealthCheck : IHealthCheck
 
             logger.LogInformation("Admin group bot membership: {Status}", member.Status);
 
-            if (member.Status != ChatMemberStatus.Administrator)
-            {
-                return HealthCheckResult.Degraded($"Current bot group status: {member.Status}");
-            }
-            else
-            {
-                return HealthCheckResult.Healthy("Bot is an administator in the group");
-            }
+            var goodMembership = new[] { ChatMemberStatus.Creator, ChatMemberStatus.Administrator, ChatMemberStatus.Member };
+
+            var healthStatus = goodMembership.Contains(member.Status) ? HealthStatus.Healthy : HealthStatus.Degraded;
+
+            return new HealthCheckResult(healthStatus, $"Current bot group status: {member.Status}");
         }
         catch (ApiRequestException ex)
         {
