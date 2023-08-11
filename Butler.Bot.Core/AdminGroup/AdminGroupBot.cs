@@ -35,6 +35,7 @@ public class AdminGroupBot
             chatId: options.AdminGroupId,
             text: options.AdminGroupMessages.ReportJoinRequest.SafeFormat(userMention, whois),
             parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -55,6 +56,7 @@ public class AdminGroupBot
             chatId: options.AdminGroupId,
             text: options.AdminGroupMessages.ReportUserAdded.SafeFormat(userMention, whois),
             parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 

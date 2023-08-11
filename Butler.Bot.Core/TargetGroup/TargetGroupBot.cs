@@ -53,6 +53,7 @@ public class TargetGroupBot
             chatId: options.TargetGroupId,
             text: options.TargetGroupMessages.SayHelloToNewMember.SafeFormat(userMention, whois),
             parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
         logger.LogInformation("Said hello to the new member in target group: {ChatId}, user: {UserId}, meesageId: {MessageId}", options.TargetGroupId, user.Id, message.MessageId);
