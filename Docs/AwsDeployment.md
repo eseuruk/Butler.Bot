@@ -35,13 +35,35 @@ Select .Net 6 Runtime and create the new role with enough permissions to call Dy
 
 ## 5. Create function url
 
-Go to configuration of the new function and create function url without auth
+Goto configuration of the new function and create function url without auth
 
 ![AWS.Lambda.Url](Images/AWS.Lambda.Url.png)
 
 Remember you function url. It will be base url for your bot webhook
 
-## 6. Update Lambda Handler
+## 6. Setup environment variables
+
+Goto configuration panel and setup the following environment variables for the lambda function.
+
+DynamoDB:
+* **AWS__Region** (string) - AWS region where DynamoDB table is created. 
+
+Telegram API:
+* **TelegramApi__BotToken** (string) - Token provided by @botfather during bot registration.
+* **TelegramApi__SecretToken** (string) - Token generated during webhook registration via setWebhook.
+
+Butler settings:
+* **Butler__TargetGroupDisplayName** (string) - Display name of the target group used by the bot in private messages.
+* **Butler__TargetGroupId** (long) - Telegram id of the target group.
+* **Butler__AdminGroupId** (long) - Telegram id of admin group.
+* **Butler__InvitationLink** (string) - Progenerated invite link used by the bot to invite new members.
+* **Butler__InvitationLinkName** (string) - Name of the invite link. Bot accept join requests only from this link. All other invite requests are ignored.
+
+Please check [Configuration.md](Configuration.md) for the full list of supported parameters.
+
+![AWS.Lambda.EnvVars](Images/AWS.Lambda.EnvVars.png)
+
+## 7. Update Lambda Handler
 
 Goto Lambda>Code>Runtime settings and change handler to "Buttler.Bot.AWS"
 
@@ -49,13 +71,13 @@ Goto Lambda>Code>Runtime settings and change handler to "Buttler.Bot.AWS"
 
 ![AWS.Lambda.Handler](Images/AWS.Lambda.Handler.png)
 
-## 7. Deploy Lambda Code
+## 8. Deploy Lambda Code
 
 Goto Lambda>Code and deploy **Buttler.Bot.AWS.zip** manually
 
 ![AWS.Lambda.Deploy](Images/AWS.Lambda.Deploy.png)
 
-## 8. All done
+## 9. All done
 
 You bot backend is ready to work. Go to **/health** url and check the status. It should be healthy in all rows.
 

@@ -72,4 +72,22 @@ For the list of all messages please see:
 * TargetGroupMessages.cs - for target group
 * AdminGroupMessages.cs - for admin group
 
+## Environment variables
 
+There is an option to define bot configuration using [environment vatiables](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration-providers#environment-variable-configuration-provider).
+
+For example, config: 
+```json
+  "TelegramApi": {
+    "BotToken": "<BOT-TOKEN>",
+    "SecretToken": "<SECRET-TOKEN>"
+  }
+```
+is the same as: 
+```
+set TelegramApi__BotToken="<BOT-TOKEN>"
+set TelegramApi__SecretToken="<SECRET-TOKEN>"
+```
+It might be used to provide lambda configuration without amending appsettings.json inside the package.
+
+![AWS.Lambda.EnvVars](Images/AWS.Lambda.EnvVars.png)

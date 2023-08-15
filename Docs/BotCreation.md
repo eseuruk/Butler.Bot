@@ -49,40 +49,17 @@ Remember secret. It will be required for bot configuration.
 
 Goto GitHub and download [latest release binaries](https://github.com/eseuruk/Butler.Bot/releases) for Butler.Bot.AWS. Or build them from the sources. 
 
-## 9. Update configuration file with values from 2, 5, 6 and 7
+## 9. Deploy bot backend to AWS
 
-Put values from the previous steps to **[appsettings.json](Configuration.md)** inside **Butler.Bot.AWS.zip**
-```json
-  "AWS": {
-    "Region": <AWS-REGION>
-  },
-  "TelegramApi": {
-    "BotToken": <BOT-TOKEN>,
-    "SecretToken": <SECRET-TOKEN>,
-    "SecretTokenValidation": true
-  },
-  "Butler": {
-    "TargetGroupDisplayName": <TARGET-GROUP-NAME>,
-    "TargetGroupId": <TARGER-GROUP-ID>,
-    "AdminGroupId": <ADMIN-GROUP-ID>,
-    "InvitationLink": <INVITATION-LINK>,
-    "InvitationLinkName": <INVITATION-LINK-NAME>,
-    "MinWoisLength": 120,
-    "WhoisReviewMode": "PostJoin"
-  }
-```
+Deploy bot backend to AWS [as described here](AwsDeployment.md).
 
-Do not forget to configure AWS region. It is used by DynamoDB client.
+You will need parameters from 2, 5, 6 and 7 to configure lambda function.
 
-## 10. Deploy bot backend to AWS
-
-Deploy bot backend to AWS [as described here](AwsDeployment.md)
-
-## 11. Update webhook with the url from 9
+## 10. Update webhook with the url from 9
 
 Update [bot webhook](WebHook.md) with the url of AWS Lambda functions created at step 9
 
-## 12. All done
+## 11. All done
 
 Say hello to your new bot!
 
