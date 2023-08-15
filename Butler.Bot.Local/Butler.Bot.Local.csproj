@@ -16,5 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Butler.Bot.Core\Butler.Bot.Core.csproj" />
+    <ProjectReference Include="..\Butler.Bot.Sqlite\Butler.Bot.Sqlite.csproj" />
   </ItemGroup>
 </Project>

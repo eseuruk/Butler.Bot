@@ -1,5 +1,6 @@
 using Butler.Bot.Core;
 using Butler.Bot.Local;
+using Butler.Bot.Sqlite;
 using Serilog;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -10,7 +11,7 @@ builder.Services.AddSerilog((services, loggerConfiguration) => loggerConfigurati
 builder.Services.Configure<ConsoleLifetimeOptions>(opts => opts.SuppressStatusMessages = true);
 
 builder.Services.AddTelegramBotClient(builder.Configuration.GetSection("TelegramApi"));
-builder.Services.AddSingleton<IUserRepository, InMemoryRequestRepository>();
+builder.Services.AddSqliteUserRepository(builder.Configuration.GetSection("SqliteUserRepository"));
 builder.Services.AddButlerBot(builder.Configuration.GetSection("Butler"));
 
 builder.Services.AddSingleton<PollingUpdateHandler>();

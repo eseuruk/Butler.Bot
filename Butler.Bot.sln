@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{9089D0B3-9
 		Docs\WebHook.md = Docs\WebHook.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Butler.Bot.Sqlite", "Butler.Bot.Sqlite\Butler.Bot.Sqlite.csproj", "{4F9D5087-D4D0-4346-AA16-A67F576577B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{E9B5D425-D602-48C1-9A0D-D41B4A9EFA65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9B5D425-D602-48C1-9A0D-D41B4A9EFA65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9B5D425-D602-48C1-9A0D-D41B4A9EFA65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F9D5087-D4D0-4346-AA16-A67F576577B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F9D5087-D4D0-4346-AA16-A67F576577B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F9D5087-D4D0-4346-AA16-A67F576577B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F9D5087-D4D0-4346-AA16-A67F576577B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
