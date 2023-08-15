@@ -39,7 +39,7 @@ Both of them have free plan propositions and might be used for bot deployment.
 ![Butler.Bot.AWS](/Docs/Images/Butler.Bot.AWS.png)
 
 ### Butler.Bot.Local
-Traditional pull model is also supported and currently used in development. There is no database support for local runs, but it will be released very soon.
+Traditional pull model is also supported and currently used in development. SQLite is a default database for local runs.
 
 ![Butler.Bot.Local](/Docs/Images/Butler.Bot.Local.png)
 
