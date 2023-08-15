@@ -2,7 +2,7 @@
 
 public class SqliteUserRepositoryOptions
 {
-    public string DatabaseFilePath { get; init; } = "./Buttler.Bot.Sqlite.db";
+    public string DatabaseFilePath { get; init; } = "./Butler.Bot.Sqlite.db";
 
     public string ConnectionString => $"Data Source={DatabaseFilePath}";
 }

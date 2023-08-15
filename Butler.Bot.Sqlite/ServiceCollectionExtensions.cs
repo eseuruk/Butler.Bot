@@ -10,7 +10,7 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<SqliteUserRepositoryOptions>(config);
 
-        services.AddSingleton<Database>();
+        services.AddSingleton<SqlightDatabase>();
         services.AddSingleton<IUserRepository, SqliteUserRepository>();
 
         return services;

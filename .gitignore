@@ -402,3 +402,6 @@ appsettings.*.json
 
 # aws tool configs
 aws-lambda-tools-defaults.json
+
+# Butler database
+Butler.Bot.Sqlite.db

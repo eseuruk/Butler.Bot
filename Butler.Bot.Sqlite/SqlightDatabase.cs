@@ -5,21 +5,26 @@ using Microsoft.Extensions.Options;
 
 namespace Butler.Bot.Sqlite;
 
-public class Database
+// SQLite doesn't support async, so api below is fully synchronous.
+// Please see for more details: https://learn.microsoft.com/en-gb/dotnet/standard/data/sqlite/async
+
+public class SqlightDatabase
 {
     private readonly SqliteUserRepositoryOptions options;
 
-    public Database(IOptions<SqliteUserRepositoryOptions> options)
+    public SqlightDatabase(IOptions<SqliteUserRepositoryOptions> options)
     {
         this.options = options.Value;
     }
 
-    public bool IsDatabaseExist()
+    public string FileName => options.DatabaseFilePath;
+
+    public bool IsExist()
     {
         return File.Exists(options.DatabaseFilePath);
     }
 
-    public void CreateDatabase()
+    public void Create()
     {
         using (var connection = new SqliteConnection(options.ConnectionString))
         {

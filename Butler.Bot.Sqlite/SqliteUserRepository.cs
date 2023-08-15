@@ -1,14 +1,15 @@
 ﻿using Butler.Bot.Core;
 using Microsoft.Extensions.Logging;
+using Telegram.Bot.Types;
 
 namespace Butler.Bot.Sqlite;
 
 public class SqliteUserRepository : IUserRepository
 {
-    private readonly Database database;
+    private readonly SqlightDatabase database;
     private readonly ILogger<SqliteUserRepository> logger;
     
-    public SqliteUserRepository(Database database, ILogger<SqliteUserRepository> logger)
+    public SqliteUserRepository(SqlightDatabase database, ILogger<SqliteUserRepository> logger)
     {
         this.database = database;
         this.logger = logger;
@@ -16,9 +17,9 @@ public class SqliteUserRepository : IUserRepository
 
     public Task<JoinRequest?> FindJoinRequestAsync(long userId, CancellationToken cancellationToken)
     {
-        if( !database.IsDatabaseExist() )
+        if( !database.IsExist() )
         {
-            logger.LogInformation("Database not exist, so no request found: {UserId}", userId);
+            logger.LogInformation("Database not exist, so no request found: {UserId}, databaseFileName: {DatabaseFileName}", userId, database.FileName);
             return Task.FromResult<JoinRequest?>(null);
         }
 
@@ -55,9 +56,9 @@ public class SqliteUserRepository : IUserRepository
 
     private void CreateDatabaseIfNotExist()
     {
-        if (database.IsDatabaseExist()) return;
+        if (database.IsExist()) return;
 
-        database.CreateDatabase();
-        logger.LogInformation("New database created");
+        database.Create();
+        logger.LogInformation("New database created: {DatabaseFileName}", database.FileName);
     }
 }
