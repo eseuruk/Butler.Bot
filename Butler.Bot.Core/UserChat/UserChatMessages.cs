@@ -22,6 +22,8 @@ public class UserChatMessages
 
     public string SayAlreadyMember { get; init; } = "Ты уже состоишь в нашей группе. Нажми на кнопну ниже, чтобы перейти в нее.";
 
+    public string SayBlockedMember { get; init; } = "Ты был удален из группы и только администраторы могут вернуть тебе доступ.";
+
     public string SayRequestApproved { get; init; } = "Запрос в группу был одобрен. Нажми на кнопку ниже чтобы перейти в нее.";
 
     public string SayRequestDeclined { get; init; } = "К сожалению, запрос в группу был отклонен. Попробуй исправить описание и запросить снова.";

@@ -20,15 +20,13 @@ public class TargetGroupBot
         this.logger = logger;
     }
 
-    public async Task<bool> IsAreadyMemberAsync(long userId, CancellationToken cancellationToken)
+    public async Task<ChatMemberStatus?> GetMemberStatusAsync(long userId, CancellationToken cancellationToken)
     {
         var member = await apiClient.GetChatMemberAsync(options.TargetGroupId, userId, cancellationToken);
+        var memberStatus = member?.Status;
 
-        bool result = member != null && member.Status != ChatMemberStatus.Left && member.Status != ChatMemberStatus.Kicked;
-
-        logger.LogInformation("User group membership check. target group: {ChatId} user: {UserId} result: {Result} details: {Details}", options.TargetGroupId, userId, result, member?.Status);
-
-        return result;
+        logger.LogInformation("User group membership check. target group: {ChatId} user: {UserId} status: {Status}", options.TargetGroupId, userId, memberStatus);
+        return memberStatus;
     }
 
     public async Task DeclineJoinRequestAsync(long userId, CancellationToken cancellationToken)
@@ -88,10 +86,13 @@ public class TargetGroupBot
 
     public async Task DeleteUserAsync(long userId, CancellationToken cancellationToken)
     {
-        await apiClient.BanChatMemberAsync(options.TargetGroupId, userId);
-        await apiClient.UnbanChatMemberAsync(options.TargetGroupId, userId);
+        // Per API documentation this call is enough to remove user from the chat but not block
+        await apiClient.UnbanChatMemberAsync(options.TargetGroupId, userId, null, cancellationToken);
 
-        logger.LogInformation("User deleted from target group: {ChatId} user: {UserId}", options.TargetGroupId, userId);
+        // Get the user status after removing to log it for investigations
+        var user = await apiClient.GetChatMemberAsync(options.TargetGroupId, userId, cancellationToken);
+
+        logger.LogInformation("User deleted from target group: {ChatId} user: {UserId} currentStatus: {userStatus}", options.TargetGroupId, userId, user.Status);
     }
 
     public async Task DeleteMessageAsync(int messageId, CancellationToken cancellationToken)

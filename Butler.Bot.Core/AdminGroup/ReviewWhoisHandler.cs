@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace Butler.Bot.Core.AdminGroup;
 
@@ -44,8 +45,8 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
     {
         Logger.LogInformation("Whois approve request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", Butler.Options.AdminGroupId, admin.Id, userId);
 
-        bool alreadyAdded = await Butler.TargetGroup.IsAreadyMemberAsync(userId, cancellationToken);
-        if (alreadyAdded) return;
+        var currentStatus = await Butler.TargetGroup.GetMemberStatusAsync(userId, cancellationToken);
+        if (!CanBeAddedToChat(currentStatus)) return;
 
         var originalRequest = await UserRepository.FindJoinRequestAsync(userId, cancellationToken);
         if (originalRequest == null) return;
@@ -64,8 +65,8 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
     {
         Logger.LogInformation("Whois decline request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", Butler.Options.AdminGroupId, admin.Id, userId);
 
-        bool alreadyAdded = await Butler.TargetGroup.IsAreadyMemberAsync(userId, cancellationToken);
-        if (alreadyAdded) return;
+        var currentStatus = await Butler.TargetGroup.GetMemberStatusAsync(userId, cancellationToken);
+        if (!CanBeAddedToChat(currentStatus)) return;
 
         var originalRequest = await UserRepository.FindJoinRequestAsync(userId, cancellationToken);
         if (originalRequest == null) return;
@@ -87,8 +88,8 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
     {
         Logger.LogInformation("User delete request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", Butler.Options.AdminGroupId, admin.Id, userId);
 
-        bool isMember = await Butler.TargetGroup.IsAreadyMemberAsync(userId, cancellationToken);
-        if (!isMember) return;
+        var currentStatus = await Butler.TargetGroup.GetMemberStatusAsync(userId, cancellationToken);
+        if (!CanBeDeletedFromChat(currentStatus)) return;
 
         var originalRequest = await UserRepository.FindJoinRequestAsync(userId, cancellationToken);
         if (originalRequest == null) return;
@@ -109,6 +110,22 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
         {
             await Butler.UserChat.TrySayingUserDeletedAsync(originalRequest.UserChatId, cancellationToken);
         }
+    }
+
+    private bool CanBeAddedToChat(ChatMemberStatus? memberStatus)
+    {
+        return 
+            memberStatus == null ||                 // never joinned
+            memberStatus == ChatMemberStatus.Left;  // left but not blocked
+    }
+
+    private bool CanBeDeletedFromChat(ChatMemberStatus? memberStatus)
+    {
+        return
+            memberStatus == ChatMemberStatus.Creator ||
+            memberStatus == ChatMemberStatus.Administrator ||
+            memberStatus == ChatMemberStatus.Member ||
+            memberStatus == ChatMemberStatus.Restricted;
     }
 }
 

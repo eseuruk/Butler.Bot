@@ -31,9 +31,15 @@ public class RegisterQueryHandler : UpdateHandlerBase
     {
         Logger.LogInformation("Registration requsted in private chat: {ChatId}", chatId);
 
-        if (await Butler.TargetGroup.IsAreadyMemberAsync(userId, cancellationToken))
+        var currentStatus = await Butler.TargetGroup.GetMemberStatusAsync(userId, cancellationToken);
+
+        if (IsAlreadyMember(currentStatus))
         {
             await Butler.UserChat.SayAlreadyMemberAsync(chatId, cancellationToken);
+        }
+        else if(IsBlocked(currentStatus))
+        {
+            await Butler.UserChat.SayBlockedAsync(chatId, cancellationToken);
         }
         else
         {
@@ -48,5 +54,19 @@ public class RegisterQueryHandler : UpdateHandlerBase
                 await Butler.UserChat.AskForWhoisAsync(chatId, cancellationToken);
             }
         }
+    }
+
+    private bool IsAlreadyMember(ChatMemberStatus? memberStatus)
+    {
+        return
+            memberStatus == ChatMemberStatus.Creator ||
+            memberStatus == ChatMemberStatus.Administrator ||
+            memberStatus == ChatMemberStatus.Member ||
+            memberStatus == ChatMemberStatus.Restricted;
+    }
+
+    private bool IsBlocked(ChatMemberStatus? memberStatus)
+    {
+        return memberStatus == ChatMemberStatus.Kicked;
     }
 }

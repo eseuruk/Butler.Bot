@@ -110,6 +110,16 @@ public class UserChatBot
         logger.LogInformation("Said already a member in private chat: {UserChatId}", userChatId);
     }
 
+    public async Task SayBlockedAsync(long userChatId, CancellationToken cancellationToken)
+    {
+        await apiClient.SendTextMessageAsync(
+            chatId: userChatId,
+            text: options.UserChatMessages.SayBlockedMember,
+            cancellationToken: cancellationToken);
+
+        logger.LogInformation("Said blocked in private chat: {UserChatId}", userChatId);
+    }
+
     public async Task TrySayingRequestApprovedAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
