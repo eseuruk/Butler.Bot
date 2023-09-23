@@ -74,7 +74,7 @@ public class AdminGroupBot
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Join request is marked as approved in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", options.AdminGroupId, messageId, admin);
+        logger.LogInformation("Join request is marked as approved in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", options.AdminGroupId, messageId, admin.Id);
     }
 
     public async Task MarkJoinRequestAsDeclinedAsync(int messageId, User admin, CancellationToken cancellationToken)
@@ -88,7 +88,7 @@ public class AdminGroupBot
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Join request is marked as declined in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", options.AdminGroupId, messageId, admin);
+        logger.LogInformation("Join request is marked as declined in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", options.AdminGroupId, messageId, admin.Id);
     }
 
     public async Task MarkUserAsDeletedAsync(int messageId, User admin, CancellationToken cancellationToken)
@@ -102,7 +102,7 @@ public class AdminGroupBot
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("User is marked as deleted in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", options.AdminGroupId, messageId, admin);
+        logger.LogInformation("User is marked as deleted in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", options.AdminGroupId, messageId, admin.Id);
     }
 }
 
