@@ -6,10 +6,14 @@ namespace Butler.Bot.Core.AdminGroup;
 
 public partial class ReviewWhoisHandler : UpdateHandlerBase
 {
-    public ReviewWhoisHandler(ButlerBot butler, IUserRepository userRepository, ILogger<ReviewWhoisHandler> logger)
+    private readonly InlineStateManager inlineStateManager;
+
+    public ReviewWhoisHandler(ButlerBot butler, IUserRepository userRepository, InlineStateManager inlineStateManager, ILogger<ReviewWhoisHandler> logger)
         : base(butler, userRepository, logger)
     {
+        this.inlineStateManager = inlineStateManager;
     }
+
     public override async Task<bool> TryHandleUpdateAsync(Update update, CancellationToken cancellationToken)
     {
         // Only handle callback queries from live messages
@@ -18,40 +22,42 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
         // Only handle requests from admin group
         if (update.CallbackQuery.Message.Chat.Id != Butler.Options.AdminGroupId) return false;
 
-        if (!ReviewQueryData.TryParse(update.CallbackQuery.Data, out var callBackData)) return false;
-
-        switch(callBackData.Operation)
+        if (update.CallbackQuery.Data == "prejoin-approve")
         {
-            case "prejoin-approve":
-                await Butler.StopQuerySpinnerAsync(update.CallbackQuery.Id, cancellationToken);
-                await DoHandlePreJoinApproveAsync(update.CallbackQuery.From, callBackData.UserId, update.CallbackQuery.Message.MessageId, cancellationToken);
-                return true;
-
-            case "prejoin-decline":
-                await Butler.StopQuerySpinnerAsync(update.CallbackQuery.Id, cancellationToken);
-                await DoHandlePreJoinDeclineAsync(update.CallbackQuery.From, callBackData.UserId, update.CallbackQuery.Message.MessageId, cancellationToken);
-                return true;
-
-            case "postjoin-delete":
-                await Butler.StopQuerySpinnerAsync(update.CallbackQuery.Id, cancellationToken);
-                await DoHandlePostJoinDeleteAsync(update.CallbackQuery.From, callBackData.UserId, update.CallbackQuery.Message.MessageId, cancellationToken);
-                return true;
-
-            default: return false;
+            await Butler.StopQuerySpinnerAsync(update.CallbackQuery.Id, cancellationToken);
+            var user = inlineStateManager.GetStateFromMessage<User>(update.CallbackQuery.Message);
+            await DoHandlePreJoinApproveAsync(update.CallbackQuery.From, user, update.CallbackQuery.Message.MessageId, cancellationToken);
+            return true;
         }
+        else if (update.CallbackQuery.Data == "prejoin-decline")
+        {
+            await Butler.StopQuerySpinnerAsync(update.CallbackQuery.Id, cancellationToken);
+            var user = inlineStateManager.GetStateFromMessage<User>(update.CallbackQuery.Message);
+            await DoHandlePreJoinDeclineAsync(update.CallbackQuery.From, user, update.CallbackQuery.Message.MessageId, cancellationToken);
+            return true;
+        }
+        else if (update.CallbackQuery.Data == "postjoin-delete")
+        {
+            await Butler.StopQuerySpinnerAsync(update.CallbackQuery.Id, cancellationToken);
+            var user = inlineStateManager.GetStateFromMessage<User>(update.CallbackQuery.Message);
+            await DoHandlePostJoinDeleteAsync(update.CallbackQuery.From, user, update.CallbackQuery.Message.MessageId, cancellationToken);
+            return true;
+        }
+            
+        return false;
     }
 
-    private async Task DoHandlePreJoinApproveAsync(User admin, long userId, int messageId, CancellationToken cancellationToken)
+    private async Task DoHandlePreJoinApproveAsync(User admin, User user, int messageId, CancellationToken cancellationToken)
     {
-        Logger.LogInformation("Whois approve request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", Butler.Options.AdminGroupId, admin.Id, userId);
+        Logger.LogInformation("Whois approve request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", Butler.Options.AdminGroupId, admin.Id, user.Id);
 
-        var currentStatus = await Butler.TargetGroup.GetMemberStatusAsync(userId, cancellationToken);
+        var currentStatus = await Butler.TargetGroup.GetMemberStatusAsync(user.Id, cancellationToken);
         if (!CanBeAddedToChat(currentStatus)) return;
 
-        var originalRequest = await UserRepository.FindJoinRequestAsync(userId, cancellationToken);
+        var originalRequest = await UserRepository.FindJoinRequestAsync(user.Id, cancellationToken);
         if (originalRequest == null) return;
 
-        await Butler.TargetGroup.ApproveJoinRequestAsync(userId, cancellationToken);
+        await Butler.TargetGroup.ApproveJoinRequestAsync(user.Id, cancellationToken);
 
         await Butler.AdminGroup.MarkJoinRequestAsApprovedAsync(messageId, admin, cancellationToken);
 
@@ -61,17 +67,17 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
         }
     }
 
-    private async Task DoHandlePreJoinDeclineAsync(User admin, long userId, int messageId, CancellationToken cancellationToken)
+    private async Task DoHandlePreJoinDeclineAsync(User admin, User user, int messageId, CancellationToken cancellationToken)
     {
-        Logger.LogInformation("Whois decline request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", Butler.Options.AdminGroupId, admin.Id, userId);
+        Logger.LogInformation("Whois decline request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", Butler.Options.AdminGroupId, admin.Id, user.Id);
 
-        var currentStatus = await Butler.TargetGroup.GetMemberStatusAsync(userId, cancellationToken);
+        var currentStatus = await Butler.TargetGroup.GetMemberStatusAsync(user.Id, cancellationToken);
         if (!CanBeAddedToChat(currentStatus)) return;
 
-        var originalRequest = await UserRepository.FindJoinRequestAsync(userId, cancellationToken);
+        var originalRequest = await UserRepository.FindJoinRequestAsync(user.Id, cancellationToken);
         if (originalRequest == null) return;
 
-        await Butler.TargetGroup.DeclineJoinRequestAsync(userId, cancellationToken);
+        await Butler.TargetGroup.DeclineJoinRequestAsync(user.Id, cancellationToken);
 
         var withoutWhois = originalRequest with { Whois = string.Empty };
         await UserRepository.UpdateJoinRequestAsync(withoutWhois, cancellationToken);
@@ -84,22 +90,24 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
         }
     }
 
-    private async Task DoHandlePostJoinDeleteAsync(User admin, long userId, int messageId, CancellationToken cancellationToken)
+    private async Task DoHandlePostJoinDeleteAsync(User admin, User user, int messageId, CancellationToken cancellationToken)
     {
-        Logger.LogInformation("User delete request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", Butler.Options.AdminGroupId, admin.Id, userId);
+        Logger.LogInformation("User delete request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", Butler.Options.AdminGroupId, admin.Id, user.Id);
 
-        var currentStatus = await Butler.TargetGroup.GetMemberStatusAsync(userId, cancellationToken);
+        var currentStatus = await Butler.TargetGroup.GetMemberStatusAsync(user.Id, cancellationToken);
         if (!CanBeDeletedFromChat(currentStatus)) return;
 
-        var originalRequest = await UserRepository.FindJoinRequestAsync(userId, cancellationToken);
+        var originalRequest = await UserRepository.FindJoinRequestAsync(user.Id, cancellationToken);
         if (originalRequest == null) return;
 
-        await Butler.TargetGroup.DeleteUserAsync(userId, cancellationToken);
+        await Butler.TargetGroup.SayLeavingToChangeWhoisAsync(user, cancellationToken);
+
+        await Butler.TargetGroup.DeleteUserAsync(user.Id, cancellationToken);
 
         if (originalRequest.IsWhoisMessageWritten)
         {
             await Butler.TargetGroup.DeleteMessageAsync(originalRequest.WhoisMessageId, cancellationToken);
-        }            
+        }
 
         var emptyRequest = originalRequest with { Whois = string.Empty, WhoisMessageId = 0, UserChatId = 0 };
         await UserRepository.UpdateJoinRequestAsync(emptyRequest, cancellationToken);

@@ -24,6 +24,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{9089D0B3-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Butler.Bot.Sqlite", "Butler.Bot.Sqlite\Butler.Bot.Sqlite.csproj", "{4F9D5087-D4D0-4346-AA16-A67F576577B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Butler.Bot.Core.Tests", "Butler.Bot.Core.Tests\Butler.Bot.Core.Tests.csproj", "{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC177005-D9E3-4FF8-941B-3D1880465F6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,12 +50,17 @@ Global
 		{4F9D5087-D4D0-4346-AA16-A67F576577B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F9D5087-D4D0-4346-AA16-A67F576577B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F9D5087-D4D0-4346-AA16-A67F576577B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9089D0B3-9B8C-459C-887E-63A4BE026E88} = {45FED77B-21F4-4A89-A612-EDD8A20A91B4}
+		{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41} = {EC177005-D9E3-4FF8-941B-3D1880465F6F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {547994F9-4FA5-4476-B77E-CE5C9C4EB474}

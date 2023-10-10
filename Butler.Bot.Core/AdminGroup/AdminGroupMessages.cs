@@ -8,9 +8,9 @@ public class AdminGroupMessages
 
     public string ButtonDelete { get; init; } = "Удалить из группы";
 
-    public string ReportJoinRequest { get; init; } = "Новый запрос от {0}\r\n#whois\r\n{1}";
+    public string ReportJoinRequest { get; init; } = "<b>Запрос на вход в группу</b>\n{0}\n#whois\n{1}";
 
-    public string ReportUserAdded { get; init; } = "Новый член группы {0}\r\n#whois\r\n{1}";
+    public string ReportUserAdded { get; init; } = "<b>Новый член группы</b>\n{0}\n#whois\n{1}";
 
     public string MarkJoinRequestAsApproved { get; init; } = "Принято {0}";
 

@@ -6,8 +6,8 @@ namespace Butler.Bot.Core.UserChat;
 
 public class RegisterQueryHandler : UpdateHandlerBase
 {
-    public RegisterQueryHandler(ButlerBot butler, IUserRepository userRepository, ILoggerFactory loggerFactory)
-        : base(butler, userRepository, loggerFactory.CreateLogger<RegisterQueryHandler>())
+    public RegisterQueryHandler(ButlerBot butler, IUserRepository userRepository, ILogger<RegisterQueryHandler> logger)
+        : base(butler, userRepository, logger)
     {
     }
     public override async Task<bool> TryHandleUpdateAsync(Update update, CancellationToken cancellationToken)

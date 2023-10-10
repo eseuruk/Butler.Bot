@@ -45,7 +45,7 @@ public class TargetGroupBot
 
     public async Task<Message> SayHelloToNewMemberAsync(User user, string whois, CancellationToken cancellationToken)
     {
-        var userMention = MentionBuider.GetMention(user);
+        var userMention = GetUserMention(user);
 
         var message = await apiClient.SendTextMessageAsync(
             chatId: options.TargetGroupId,
@@ -60,7 +60,7 @@ public class TargetGroupBot
 
     public async Task SayHelloToUnknownNewMemberAsync(User user, CancellationToken cancellationToken)
     {
-        var userMention = MentionBuider.GetMention(user);
+        var userMention = GetUserMention(user);
 
         await apiClient.SendTextMessageAsync(
             chatId: options.TargetGroupId,
@@ -73,7 +73,7 @@ public class TargetGroupBot
 
     public async Task SayHelloAgainAsync(User user, CancellationToken cancellationToken)
     {
-        var userMention = MentionBuider.GetMention(user);
+        var userMention = GetUserMention(user);
 
         await apiClient.SendTextMessageAsync(
             chatId: options.TargetGroupId,
@@ -99,6 +99,30 @@ public class TargetGroupBot
     {
         await apiClient.DeleteMessageAsync(options.TargetGroupId, messageId);
         logger.LogInformation("Message is deleted from target group: {ChatId} messageId: {MessageId}", options.TargetGroupId, messageId);
+    }
+        
+    public async Task SayLeavingToChangeWhoisAsync(User user, CancellationToken cancellationToken)
+    {
+        var userMention = GetUserMention(user);
+
+        await apiClient.SendTextMessageAsync(
+            chatId: options.TargetGroupId,
+            text: options.TargetGroupMessages.SayLeavingToChangeWhois.SafeFormat(userMention),
+            parseMode: ParseMode.Html,
+            cancellationToken: cancellationToken);
+
+        logger.LogInformation("Said user is leaving target group to change whois. group: {ChatId}, userId: {UserId}", options.TargetGroupId, user.Id);
+    }
+
+    public static string GetUserMention(User user)
+    {
+        var displayName = user.FirstName;
+        if (!string.IsNullOrEmpty(user.LastName))
+        {
+            displayName += " " + user.LastName;
+        }
+
+        return $"<a href='tg://user?id={user.Id}'>{displayName}</a>";
     }
 }
 

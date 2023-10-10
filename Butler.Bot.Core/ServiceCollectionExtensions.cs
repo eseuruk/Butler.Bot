@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 
@@ -26,12 +25,14 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<ButlerOptions>(config);
 
+        services.AddSingleton<InlineStateManager>();
+
+        services.AddSingleton<IWhoisValidator, LengthWhoisValidator>();
+
         services.AddSingleton<UserChat.UserChatBot>();
         services.AddSingleton<TargetGroup.TargetGroupBot>();
         services.AddSingleton<AdminGroup.AdminGroupBot>();
         services.AddSingleton<ButlerBot>();
-
-        services.AddSingleton<IWhoisValidator, LengthWhoisValidator>();
 
         services.AddSingleton<UpdateHandlerBase, UserChat.TextMessageHandler>();
         services.AddSingleton<UpdateHandlerBase, UserChat.RegisterQueryHandler>();
