@@ -8,10 +8,10 @@ namespace Butler.Bot.Local;
 
 public class PollingUpdateHandler : IUpdateHandler
 {
-    private readonly UpdateService updateService;
+    private readonly IUpdateService updateService;
     private readonly ILogger<PollingUpdateHandler> logger;
 
-    public PollingUpdateHandler(UpdateService updateService, ILogger<PollingUpdateHandler> logger)
+    public PollingUpdateHandler(IUpdateService updateService, ILogger<PollingUpdateHandler> logger)
     {
         this.updateService = updateService;
         this.logger = logger;

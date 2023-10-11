@@ -3,7 +3,12 @@ using Telegram.Bot.Types;
 
 namespace Butler.Bot.Core;
 
-public class UpdateService
+public interface IUpdateService
+{
+    Task HandleUpdateAsync(Update update, CancellationToken cancellationToken);
+}
+
+public class UpdateService : IUpdateService
 {
     private readonly IEnumerable<UpdateHandlerBase> handlers;
     private readonly ILogger<UpdateService> logger;

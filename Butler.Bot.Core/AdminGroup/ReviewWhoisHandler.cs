@@ -8,7 +8,7 @@ public partial class ReviewWhoisHandler : UpdateHandlerBase
 {
     private readonly InlineStateManager inlineStateManager;
 
-    public ReviewWhoisHandler(ButlerBot butler, IUserRepository userRepository, InlineStateManager inlineStateManager, ILogger<ReviewWhoisHandler> logger)
+    public ReviewWhoisHandler(IButlerBot butler, IUserRepository userRepository, InlineStateManager inlineStateManager, ILogger<ReviewWhoisHandler> logger)
         : base(butler, userRepository, logger)
     {
         this.inlineStateManager = inlineStateManager;
