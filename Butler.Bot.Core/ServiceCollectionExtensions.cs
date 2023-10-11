@@ -32,7 +32,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<UserChat.UserChatBot>();
         services.AddSingleton<TargetGroup.TargetGroupBot>();
         services.AddSingleton<AdminGroup.AdminGroupBot>();
-        services.AddSingleton<ButlerBot>();
+        services.AddSingleton<IButlerBot, ButlerBot>();
 
         services.AddSingleton<UpdateHandlerBase, UserChat.TextMessageHandler>();
         services.AddSingleton<UpdateHandlerBase, UserChat.RegisterQueryHandler>();
@@ -41,7 +41,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<UpdateHandlerBase, AdminGroup.ReviewWhoisHandler>();
         services.AddSingleton<UpdateHandlerBase, UnknownGroupMessageHandler>();
         services.AddSingleton<UpdateHandlerBase, BotChatStatusHandler>();
-        services.AddSingleton<UpdateService>();
+        services.AddSingleton<IUpdateService, UpdateService>();
 
         return services;
     }

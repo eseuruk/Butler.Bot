@@ -26,6 +26,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Butler.Bot.Sqlite", "Butler
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Butler.Bot.Core.Tests", "Butler.Bot.Core.Tests\Butler.Bot.Core.Tests.csproj", "{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Butler.Bot.AWS.Tests", "Butler.Bot.AWS.Tests\Butler.Bot.AWS.Tests.csproj", "{676A9962-4D3B-490B-AE0A-920434A51B5D}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC177005-D9E3-4FF8-941B-3D1880465F6F}"
 EndProject
 Global
@@ -54,6 +56,10 @@ Global
 		{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{676A9962-4D3B-490B-AE0A-920434A51B5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{676A9962-4D3B-490B-AE0A-920434A51B5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{676A9962-4D3B-490B-AE0A-920434A51B5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{676A9962-4D3B-490B-AE0A-920434A51B5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9089D0B3-9B8C-459C-887E-63A4BE026E88} = {45FED77B-21F4-4A89-A612-EDD8A20A91B4}
 		{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41} = {EC177005-D9E3-4FF8-941B-3D1880465F6F}
+		{676A9962-4D3B-490B-AE0A-920434A51B5D} = {EC177005-D9E3-4FF8-941B-3D1880465F6F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {547994F9-4FA5-4476-B77E-CE5C9C4EB474}

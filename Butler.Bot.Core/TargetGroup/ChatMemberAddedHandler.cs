@@ -5,7 +5,7 @@ namespace Butler.Bot.Core.TargetGroup;
 
 public class ChatMemberAddedHandler : UpdateHandlerBase
 {
-    public ChatMemberAddedHandler(ButlerBot butler, IUserRepository userRepository, ILogger<ChatMemberAddedHandler> logger)
+    public ChatMemberAddedHandler(IButlerBot butler, IUserRepository userRepository, ILogger<ChatMemberAddedHandler> logger)
         : base(butler, userRepository, logger)
     {}
 

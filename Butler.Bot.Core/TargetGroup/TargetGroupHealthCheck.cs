@@ -8,10 +8,10 @@ namespace Butler.Bot.Core.TargetGroup;
 
 public class TargetGroupHealthCheck : IHealthCheck
 {
-    private readonly ButlerBot butler;
+    private readonly IButlerBot butler;
     private readonly ILogger<TargetGroupHealthCheck> logger;
 
-    public TargetGroupHealthCheck(ButlerBot butler, ILogger<TargetGroupHealthCheck> logger)
+    public TargetGroupHealthCheck(IButlerBot butler, ILogger<TargetGroupHealthCheck> logger)
     {
         this.butler = butler;
         this.logger = logger;

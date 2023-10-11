@@ -8,7 +8,7 @@ public class TextMessageHandler : UpdateHandlerBase
 {
     private readonly IWhoisValidator whoisValidator;
 
-    public TextMessageHandler(ButlerBot butler, IUserRepository userRepository, IWhoisValidator whoisValidator, ILogger<TextMessageHandler> logger)
+    public TextMessageHandler(IButlerBot butler, IUserRepository userRepository, IWhoisValidator whoisValidator, ILogger<TextMessageHandler> logger)
         : base(butler, userRepository, logger)
     {
         this.whoisValidator = whoisValidator;

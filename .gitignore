@@ -394,11 +394,9 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-# JetBrains Rider
+# JetBrains
 *.sln.iml
-
-# Environment appsetings
-appsettings.*.json
+.idea
 
 # aws tool configs
 aws-lambda-tools-defaults.json

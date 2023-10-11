@@ -5,7 +5,7 @@ namespace Butler.Bot.Core.TargetGroup;
 
 public class JoinRequestHandler : UpdateHandlerBase
 {
-    public JoinRequestHandler(ButlerBot butler, IUserRepository userRepository, ILogger<JoinRequestHandler> logger)
+    public JoinRequestHandler(IButlerBot butler, IUserRepository userRepository, ILogger<JoinRequestHandler> logger)
         : base(butler, userRepository, logger)
     {}
 
