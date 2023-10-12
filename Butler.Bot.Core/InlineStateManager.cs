@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Telegram.Bot.Types.Enums;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Butler.Bot.Core;
 
@@ -11,11 +12,20 @@ public class InlineStateManager : IInlineStateManager
 
     private const string urlPrefix = "tg://btn/";
 
+    private readonly ILogger<InlineStateManager> logger;
+
+    public InlineStateManager(ILogger<InlineStateManager> logger)
+    {
+        this.logger = logger;
+    }
+
     public string InjectStateIntoMessageHtml<T>(string messageHtml, T state)
     {
         var serializedState = SerializeState(state);
         var encodedState = Base64Encode(serializedState);
         var stateLinkHtml = CreateStateLinkHtml(encodedState);
+
+        logger.LogInformation("Inline state link created: {StateLink}", stateLinkHtml);
 
         return stateLinkHtml + messageHtml;
     }
@@ -23,6 +33,8 @@ public class InlineStateManager : IInlineStateManager
     public T GetStateFromMessage<T>(Message message)
     {
         var encodedState = GetStateLinkFromMessage(message);
+        logger.LogInformation("Inline state loaded from the messege: {Id} state: {State}", message.MessageId, encodedState);
+
         var serializedState = Base64Decode(encodedState);
         return DeserializeState<T>(serializedState);
     }

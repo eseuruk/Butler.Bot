@@ -1,5 +1,6 @@
 ﻿using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Butler.Bot.Core.Tests;
 
@@ -9,7 +10,7 @@ public class InlineStateManagerTests
 
     public InlineStateManagerTests()
     {
-        inlineStateManager = new InlineStateManager();
+        inlineStateManager = new InlineStateManager(NullLogger<InlineStateManager>.Instance);
     }
 
     [Fact]
