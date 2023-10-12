@@ -6,183 +6,176 @@ using Telegram.Bot.Exceptions;
 
 namespace Butler.Bot.Core.UserChat;
 
-public class UserChatBot
+public class UserChatBot : GroupBotBase, IUserChatBot
 {
-    private readonly ITelegramBotClient apiClient;
-    private readonly ButlerOptions options;
-
-    private readonly ILogger<UserChatBot> logger;
-
     public UserChatBot(ITelegramBotClient apiClient, IOptions<ButlerOptions> options, ILogger<UserChatBot> logger)
+        : base(apiClient, options, logger)
     {
-        this.apiClient = apiClient;
-        this.options = options.Value;
-        this.logger = logger;
     }
 
     public async Task SayHelloAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-                InlineKeyboardButton.WithCallbackData(options.UserChatMessages.ButtonApply, "register"));
+                InlineKeyboardButton.WithCallbackData(Options.UserChatMessages.ButtonApply, "register"));
 
-        await apiClient.SendTextMessageAsync(
+        await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: options.UserChatMessages.SayHello.SafeFormat(options.TargetGroupDisplayName),
+            text: Options.UserChatMessages.SayHello.SafeFormat(Options.TargetGroupDisplayName),
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Said hello in private chat: {UserChatId}", userChatId);
+        Logger.LogInformation("Said hello in private chat: {UserChatId}", userChatId);
     }
 
     public async Task SayConfusedAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-            InlineKeyboardButton.WithCallbackData(options.UserChatMessages.ButtonContinue, "register"));
+            InlineKeyboardButton.WithCallbackData(Options.UserChatMessages.ButtonContinue, "register"));
 
-        await apiClient.SendTextMessageAsync(
+        await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: options.UserChatMessages.SayConfused.SafeFormat(options.TargetGroupDisplayName),
+            text: Options.UserChatMessages.SayConfused.SafeFormat(Options.TargetGroupDisplayName),
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Said confused in private chat: {UserChatId}", userChatId);
+        Logger.LogInformation("Said confused in private chat: {UserChatId}", userChatId);
     }
 
     public async Task AskForWhoisAsync(long userChatId, CancellationToken cancellationToken)
     {
-        await apiClient.SendTextMessageAsync(
+        await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: options.UserChatMessages.AskForWhois.SafeFormat(options.MinWoisLength),
+            text: Options.UserChatMessages.AskForWhois.SafeFormat(Options.MinWoisLength),
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Asked to provide whois in private chat: {UserChatId}", userChatId);
+        Logger.LogInformation("Asked to provide whois in private chat: {UserChatId}", userChatId);
     }
 
     public async Task WarnWhoisValidationFailedAsync(long userChatId, string validationError, CancellationToken cancellationToken)
     {
-        await apiClient.SendTextMessageAsync(
+        await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
             text: validationError,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Said whois is not valid in private chat: {UserChatId}", userChatId);
+        Logger.LogInformation("Said whois is not valid in private chat: {UserChatId}", userChatId);
     }
 
     public async Task SayWhoisOkAndAskToRequestAccessAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-                InlineKeyboardButton.WithUrl(options.TargetGroupDisplayName, options.InvitationLink));
+                InlineKeyboardButton.WithUrl(Options.TargetGroupDisplayName, Options.InvitationLink));
 
-        await apiClient.SendTextMessageAsync(
+        await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: options.UserChatMessages.SayWhoisOkAndAskToRequestAccess,
+            text: Options.UserChatMessages.SayWhoisOkAndAskToRequestAccess,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Said whois is ok in private chat and ask to join target group. private chat: {UserChatId}", userChatId);
+        Logger.LogInformation("Said whois is ok in private chat and ask to join target group. private chat: {UserChatId}", userChatId);
     }
 
     public async Task SayUsedToBeMemberAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-                InlineKeyboardButton.WithUrl(options.TargetGroupDisplayName, options.InvitationLink));
+                InlineKeyboardButton.WithUrl(Options.TargetGroupDisplayName, Options.InvitationLink));
 
-        await apiClient.SendTextMessageAsync(
+        await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: options.UserChatMessages.SayUsedToBeMember,
+            text: Options.UserChatMessages.SayUsedToBeMember,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Said used to be a member in private chat: {UserChatId}", userChatId);
+        Logger.LogInformation("Said used to be a member in private chat: {UserChatId}", userChatId);
     }
 
     public async Task SayAlreadyMemberAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-                InlineKeyboardButton.WithUrl(options.TargetGroupDisplayName, options.InvitationLink));
+                InlineKeyboardButton.WithUrl(Options.TargetGroupDisplayName, Options.InvitationLink));
 
-        await apiClient.SendTextMessageAsync(
+        await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: options.UserChatMessages.SayAlreadyMember,
+            text: Options.UserChatMessages.SayAlreadyMember,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Said already a member in private chat: {UserChatId}", userChatId);
+        Logger.LogInformation("Said already a member in private chat: {UserChatId}", userChatId);
     }
 
     public async Task SayBlockedAsync(long userChatId, CancellationToken cancellationToken)
     {
-        await apiClient.SendTextMessageAsync(
+        await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: options.UserChatMessages.SayBlockedMember,
+            text: Options.UserChatMessages.SayBlockedMember,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Said blocked in private chat: {UserChatId}", userChatId);
+        Logger.LogInformation("Said blocked in private chat: {UserChatId}", userChatId);
     }
 
     public async Task TrySayingRequestApprovedAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-            InlineKeyboardButton.WithUrl(options.TargetGroupDisplayName, options.InvitationLink));
+            InlineKeyboardButton.WithUrl(Options.TargetGroupDisplayName, Options.InvitationLink));
 
         try
         {
-            await apiClient.SendTextMessageAsync(
+            await ApiClient.SendTextMessageAsync(
                 chatId: userChatId,
-                text: options.UserChatMessages.SayRequestApproved,
+                text: Options.UserChatMessages.SayRequestApproved,
                 replyMarkup: markup,
                 cancellationToken: cancellationToken);
 
-            logger.LogInformation("Said request approved in private chat: {UserChatId}", userChatId);
+            Logger.LogInformation("Said request approved in private chat: {UserChatId}", userChatId);
         }
         catch (ApiRequestException ex)
         {
             // Private chat is available for 24H after join request
-            logger.LogWarning("Cannot say request approved in private chat: {UserChat}, errorCode: {ErrorCode}, errorMessage: {ErrorMessage}", userChatId, ex.ErrorCode, ex.Message);
+            Logger.LogWarning("Cannot say request approved in private chat: {UserChat}, errorCode: {ErrorCode}, errorMessage: {ErrorMessage}", userChatId, ex.ErrorCode, ex.Message);
         }
     }
 
     public async Task TrySayingRequestDeclinedAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-            InlineKeyboardButton.WithCallbackData(options.UserChatMessages.ButtonAmend, "register"));
+            InlineKeyboardButton.WithCallbackData(Options.UserChatMessages.ButtonAmend, "register"));
 
         try
         {
-            await apiClient.SendTextMessageAsync(
+            await ApiClient.SendTextMessageAsync(
                 chatId: userChatId,
-                text: options.UserChatMessages.SayRequestDeclined,
+                text: Options.UserChatMessages.SayRequestDeclined,
                 replyMarkup: markup,
                 cancellationToken: cancellationToken);
 
-            logger.LogInformation("Said request declined in private chat: {UserChatId}", userChatId);
+            Logger.LogInformation("Said request declined in private chat: {UserChatId}", userChatId);
         }
         catch (ApiRequestException ex)
         {
             // Private chat is available for 24H after join request
-            logger.LogWarning("Cannot say request declined in private chat: {UserChat}, errorCode: {ErrorCode}, errorMessage: {ErrorMessage}", userChatId, ex.ErrorCode, ex.Message);
+            Logger.LogWarning("Cannot say request declined in private chat: {UserChat}, errorCode: {ErrorCode}, errorMessage: {ErrorMessage}", userChatId, ex.ErrorCode, ex.Message);
         }
     }
 
     public async Task TrySayingUserDeletedAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(
-            InlineKeyboardButton.WithCallbackData(options.UserChatMessages.ButtonAmend, "register"));
+            InlineKeyboardButton.WithCallbackData(Options.UserChatMessages.ButtonAmend, "register"));
 
         try
         {
-            await apiClient.SendTextMessageAsync(
+            await ApiClient.SendTextMessageAsync(
                 chatId: userChatId,
-                text: options.UserChatMessages.SayUserDeleted,
+                text: Options.UserChatMessages.SayUserDeleted,
                 replyMarkup: markup,
                 cancellationToken: cancellationToken);
 
-            logger.LogInformation("Said user is deleted in private chat: {UserChatId}", userChatId);
+            Logger.LogInformation("Said user is deleted in private chat: {UserChatId}", userChatId);
         }
         catch (ApiRequestException ex)
         {
             // Private chat is available for 24H after join request
-            logger.LogWarning("Cannot say user deleted in private chat: {UserChat}, errorCode: {ErrorCode}, errorMessage: {ErrorMessage}", userChatId, ex.ErrorCode, ex.Message);
+            Logger.LogWarning("Cannot say user deleted in private chat: {UserChat}, errorCode: {ErrorCode}, errorMessage: {ErrorMessage}", userChatId, ex.ErrorCode, ex.Message);
         }
     }
 }

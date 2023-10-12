@@ -1,21 +1,38 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Butler.Bot.Core.AdminGroup;
+using Butler.Bot.Core.UserChat;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Telegram.Bot.Types;
 
 namespace Butler.Bot.Core.TargetGroup;
 
-public class ChatMemberAddedHandler : UpdateHandlerBase
+public class ChatMemberAddedHandler : IUpdateHandler
 {
-    public ChatMemberAddedHandler(IButlerBot butler, IUserRepository userRepository, ILogger<ChatMemberAddedHandler> logger)
-        : base(butler, userRepository, logger)
-    {}
+    private readonly ButlerOptions options;
+    private readonly IUserChatBot userChatBot;
+    private readonly ITargetGroupBot targetGroupBot;
+    private readonly IAdminGroupBot adminGroupBot;
+    private readonly IUserRepository userRepository;
 
-    public override async Task<bool> TryHandleUpdateAsync(Update update, CancellationToken cancellationToken)
+    private readonly ILogger<ChatMemberAddedHandler> logger;
+
+    public ChatMemberAddedHandler(IOptions<ButlerOptions> options, IUserChatBot userChatBot, ITargetGroupBot targetGroupBot, IAdminGroupBot adminGroupBot, IUserRepository userRepository, ILogger<ChatMemberAddedHandler> logger)
+    {
+        this.options = options.Value;
+        this.userChatBot = userChatBot;
+        this.targetGroupBot = targetGroupBot;
+        this.adminGroupBot = adminGroupBot;
+        this.userRepository = userRepository;
+        this.logger = logger;
+    }
+
+    public async Task<bool> TryHandleUpdateAsync(Update update, CancellationToken cancellationToken)
     {
         // Only handle add member messages
         if (update.Message == null || update.Message.NewChatMembers == null) return false;
 
         // Only handle messages from target group
-        if (update.Message.Chat.Id != Butler.Options.TargetGroupId) return false;
+        if (update.Message.Chat.Id != options.TargetGroupId) return false;
 
         await DoHadleChatMembersAdded(update.Message.NewChatMembers, cancellationToken);
         return true;
@@ -25,33 +42,33 @@ public class ChatMemberAddedHandler : UpdateHandlerBase
     {
         foreach (var newMember in newChatMembers)
         {
-            Logger.LogInformation("New member event in target group: {TargetGroupId}, userId: {UserId}", Butler.Options.TargetGroupId, newMember.Id);
+            logger.LogInformation("New member event in target group: {TargetGroupId}, userId: {UserId}", options.TargetGroupId, newMember.Id);
 
-            var request = await UserRepository.FindJoinRequestAsync(newMember.Id, cancellationToken);
+            var request = await userRepository.FindJoinRequestAsync(newMember.Id, cancellationToken);
 
             if (request == null || !request.IsWhoisProvided)
             {
-                await Butler.TargetGroup.SayHelloToUnknownNewMemberAsync(newMember, cancellationToken);
+                await targetGroupBot.SayHelloToUnknownNewMemberAsync(newMember, cancellationToken);
             }
             else if (request.IsWhoisMessageWritten)
             {
-                await Butler.TargetGroup.SayHelloAgainAsync(newMember, cancellationToken);
+                await targetGroupBot.SayHelloAgainAsync(newMember, cancellationToken);
             }
             else
             {
-                var whoisMessage = await Butler.TargetGroup.SayHelloToNewMemberAsync(newMember, request.Whois, cancellationToken);
+                var whoisMessage = await targetGroupBot.SayHelloToNewMemberAsync(newMember, request.Whois, cancellationToken);
 
                 var updatedRequst = request with { WhoisMessageId = whoisMessage.MessageId };
-                await UserRepository.UpdateJoinRequestAsync(updatedRequst, cancellationToken);
+                await userRepository.UpdateJoinRequestAsync(updatedRequst, cancellationToken);
 
                 if (request.IsUserChatIdSaved)
                 {
-                    await Butler.UserChat.TrySayingRequestApprovedAsync(request.UserChatId, cancellationToken);
+                    await userChatBot.TrySayingRequestApprovedAsync(request.UserChatId, cancellationToken);
                 }
 
-                if (Butler.Options.WhoisReviewMode == WhoisReviewMode.PostJoin)
+                if (options.WhoisReviewMode == WhoisReviewMode.PostJoin)
                 {
-                    await Butler.AdminGroup.ReportUserAddedAsync(newMember, request.Whois, cancellationToken);
+                    await adminGroupBot.ReportUserAddedAsync(newMember, request.Whois, cancellationToken);
                 }
             }
         }

@@ -1,21 +1,35 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Butler.Bot.Core.AdminGroup;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Telegram.Bot.Types;
 
 namespace Butler.Bot.Core.TargetGroup;
 
-public class JoinRequestHandler : UpdateHandlerBase
+public class JoinRequestHandler : IUpdateHandler
 {
-    public JoinRequestHandler(IButlerBot butler, IUserRepository userRepository, ILogger<JoinRequestHandler> logger)
-        : base(butler, userRepository, logger)
-    {}
+    private readonly ButlerOptions options;
+    private readonly ITargetGroupBot targetGroupBot;
+    private readonly IAdminGroupBot adminGroupBot;
+    private readonly IUserRepository userRepository;
 
-    public override async Task<bool> TryHandleUpdateAsync(Update update, CancellationToken cancellationToken)
+    private readonly ILogger<JoinRequestHandler> logger;
+
+    public JoinRequestHandler(IOptions<ButlerOptions> options, ITargetGroupBot targetGroupBot, IAdminGroupBot adminGroupBot, IUserRepository userRepository, ILogger<JoinRequestHandler> logger)
+    {
+        this.options = options.Value;
+        this.targetGroupBot = targetGroupBot;
+        this.adminGroupBot = adminGroupBot;
+        this.userRepository = userRepository;
+        this.logger = logger;
+    }
+
+    public async Task<bool> TryHandleUpdateAsync(Update update, CancellationToken cancellationToken)
     {
         // Only handle chat join requests
         if (update.ChatJoinRequest == null) return false;
 
         // Only handle requests from target group
-        if (update.ChatJoinRequest.Chat.Id != Butler.Options.TargetGroupId) return false;
+        if (update.ChatJoinRequest.Chat.Id != options.TargetGroupId) return false;
 
         // Only handle requests with invite link
         if (update.ChatJoinRequest.InviteLink == null) return false;
@@ -29,45 +43,45 @@ public class JoinRequestHandler : UpdateHandlerBase
 
     private bool CheckInviteLinkOwnership(ChatInviteLink inviteLink)
     {
-        if (string.IsNullOrEmpty(Butler.Options.InvitationLinkName))
+        if (string.IsNullOrEmpty(options.InvitationLinkName))
         {
-            Logger.LogInformation("Invite link ownership check is off for target group: {TargetGroupId}, inviteLink: {InviteLink}", Butler.Options.TargetGroupId, inviteLink.InviteLink);
+            logger.LogInformation("Invite link ownership check is off for target group: {TargetGroupId}, inviteLink: {InviteLink}", options.TargetGroupId, inviteLink.InviteLink);
             return true;
         }
-        else if (Butler.Options.InvitationLinkName.Equals(inviteLink.Name, StringComparison.OrdinalIgnoreCase))
+        else if (options.InvitationLinkName.Equals(inviteLink.Name, StringComparison.OrdinalIgnoreCase))
         {
-            Logger.LogInformation("Invite link is recognised for target group: {TargetGroupId}, inviteLinkName: {InviteLinkName}, inviteLink: {InviteLink}", Butler.Options.TargetGroupId, inviteLink.Name, inviteLink.InviteLink);
+            logger.LogInformation("Invite link is recognised for target group: {TargetGroupId}, inviteLinkName: {InviteLinkName}, inviteLink: {InviteLink}", options.TargetGroupId, inviteLink.Name, inviteLink.InviteLink);
             return true;
         }
         else
         {
-            Logger.LogInformation("Invite link is not recognised for target group: {TargetGroupId}, inviteLinkName: {InviteLinkName}, inviteLink: {InviteLink}", Butler.Options.TargetGroupId, inviteLink.Name, inviteLink.InviteLink);
+            logger.LogInformation("Invite link is not recognised for target group: {TargetGroupId}, inviteLinkName: {InviteLinkName}, inviteLink: {InviteLink}", options.TargetGroupId, inviteLink.Name, inviteLink.InviteLink);
             return false;
         }
     }
 
     private async Task DoHandleChatJoinRequestAsync(User from, long userChatId, CancellationToken cancellationToken)
     {
-        Logger.LogInformation("New join request in target group: {TargetGroupId}, userID: {UserId}", Butler.Options.TargetGroupId, from.Id);
+        logger.LogInformation("New join request in target group: {TargetGroupId}, userID: {UserId}", options.TargetGroupId, from.Id);
 
-        var originalRequest = await UserRepository.FindJoinRequestAsync(from.Id, cancellationToken);
+        var originalRequest = await userRepository.FindJoinRequestAsync(from.Id, cancellationToken);
 
         if (originalRequest == null || !originalRequest.IsWhoisProvided)
         {
-            await Butler.TargetGroup.DeclineJoinRequestAsync(from.Id, cancellationToken);
+            await targetGroupBot.DeclineJoinRequestAsync(from.Id, cancellationToken);
         }
         else
         {
             var withChatId = originalRequest with { UserChatId = userChatId };
-            await UserRepository.UpdateJoinRequestAsync(withChatId, cancellationToken);
+            await userRepository.UpdateJoinRequestAsync(withChatId, cancellationToken);
 
-            if (Butler.Options.WhoisReviewMode == WhoisReviewMode.PreJoin)
+            if (options.WhoisReviewMode == WhoisReviewMode.PreJoin)
             {
-                await Butler.AdminGroup.ReportJoinRequestAsync(from, originalRequest.Whois, cancellationToken);
+                await adminGroupBot.ReportJoinRequestAsync(from, originalRequest.Whois, cancellationToken);
             }
             else
             {
-                await Butler.TargetGroup.ApproveJoinRequestAsync(from.Id, cancellationToken);
+                await targetGroupBot.ApproveJoinRequestAsync(from.Id, cancellationToken);
             }
         }
     }

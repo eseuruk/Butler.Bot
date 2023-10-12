@@ -1,6 +1,7 @@
 ﻿using Butler.Bot.Core.TargetGroup;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types.Enums;
@@ -9,26 +10,28 @@ namespace Butler.Bot.Core.AdminGroup;
 
 public class AdminGroupHealthCheck : IHealthCheck
 {
-    private readonly IButlerBot butler;
+    private readonly ITelegramBotClient apiClient;
+    private readonly ButlerOptions options;
     private readonly ILogger<TargetGroupHealthCheck> logger;
 
-    public AdminGroupHealthCheck(IButlerBot butler, ILogger<TargetGroupHealthCheck> logger)
+    public AdminGroupHealthCheck(ITelegramBotClient apiClient, IOptions<ButlerOptions> options, ILogger<TargetGroupHealthCheck> logger)
     {
-        this.butler = butler;
+        this.apiClient = apiClient;
+        this.options = options.Value;
         this.logger = logger;
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        if (butler.Options.WhoisReviewMode == WhoisReviewMode.None)
+        if (options.WhoisReviewMode == WhoisReviewMode.None)
         {
-            return HealthCheckResult.Healthy($"Admin group is not used. whoisReviewMode: {butler.Options.WhoisReviewMode}");
+            return HealthCheckResult.Healthy($"Admin group is not used. whoisReviewMode: {options.WhoisReviewMode}");
         }
 
         try
         {
-            var me = await butler.ApiClient.GetMeAsync(cancellationToken);
-            var member = await butler.ApiClient.GetChatMemberAsync(butler.Options.AdminGroupId, me.Id, cancellationToken);
+            var me = await apiClient.GetMeAsync(cancellationToken);
+            var member = await apiClient.GetChatMemberAsync(options.AdminGroupId, me.Id, cancellationToken);
 
             logger.LogInformation("Admin group bot membership: {Status}", member.Status);
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Butler.Bot.Core;
 
-public class InlineStateManager
+public class InlineStateManager : IInlineStateManager
 {
     // Implementation idea get from https://github.com/nmlorg/metabot/issues/1
 
@@ -65,7 +65,7 @@ public class InlineStateManager
             }
             return desiarized;
         }
-        catch(JsonException ex)
+        catch (JsonException ex)
         {
             throw new InlineStateException($"Error deserializing state: {serializedState}", ex);
         }
@@ -84,7 +84,7 @@ public class InlineStateManager
             var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
-        catch(FormatException ex)
+        catch (FormatException ex)
         {
             throw new InlineStateException($"Error parsing base64: {base64EncodedData}", ex);
         }

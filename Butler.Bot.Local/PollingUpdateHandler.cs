@@ -1,12 +1,11 @@
 ﻿using Butler.Bot.Core;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
-using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 
 namespace Butler.Bot.Local;
 
-public class PollingUpdateHandler : IUpdateHandler
+public class PollingUpdateHandler : Telegram.Bot.Polling.IUpdateHandler
 {
     private readonly IUpdateService updateService;
     private readonly ILogger<PollingUpdateHandler> logger;

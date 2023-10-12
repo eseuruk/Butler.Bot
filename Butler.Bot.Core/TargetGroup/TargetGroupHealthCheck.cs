@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types.Enums;
@@ -8,12 +9,14 @@ namespace Butler.Bot.Core.TargetGroup;
 
 public class TargetGroupHealthCheck : IHealthCheck
 {
-    private readonly IButlerBot butler;
+    private readonly ITelegramBotClient apiClient;
+    private readonly ButlerOptions options;
     private readonly ILogger<TargetGroupHealthCheck> logger;
 
-    public TargetGroupHealthCheck(IButlerBot butler, ILogger<TargetGroupHealthCheck> logger)
+    public TargetGroupHealthCheck(ITelegramBotClient apiClient, IOptions<ButlerOptions> options, ILogger<TargetGroupHealthCheck> logger)
     {
-        this.butler = butler;
+        this.apiClient = apiClient;
+        this.options = options.Value;
         this.logger = logger;
     }
 
@@ -21,8 +24,8 @@ public class TargetGroupHealthCheck : IHealthCheck
     {
         try
         {
-            var me = await butler.ApiClient.GetMeAsync(cancellationToken);
-            var member = await butler.ApiClient.GetChatMemberAsync(butler.Options.TargetGroupId, me.Id, cancellationToken);
+            var me = await apiClient.GetMeAsync(cancellationToken);
+            var member = await apiClient.GetChatMemberAsync(options.TargetGroupId, me.Id, cancellationToken);
 
             logger.LogInformation("Target group bot membership: {Status}", member.Status);
 

@@ -6,55 +6,48 @@ using Telegram.Bot.Types.Enums;
 
 namespace Butler.Bot.Core.TargetGroup;
 
-public class TargetGroupBot
+public class TargetGroupBot : GroupBotBase, ITargetGroupBot
 {
-    private readonly ITelegramBotClient apiClient;
-    private readonly ButlerOptions options;
-
-    private readonly ILogger<TargetGroupBot> logger;
-
     public TargetGroupBot(ITelegramBotClient apiClient, IOptions<ButlerOptions> options, ILogger<TargetGroupBot> logger)
+        : base(apiClient, options, logger)
     {
-        this.apiClient = apiClient;
-        this.options = options.Value;
-        this.logger = logger;
     }
 
     public async Task<ChatMemberStatus?> GetMemberStatusAsync(long userId, CancellationToken cancellationToken)
     {
-        var member = await apiClient.GetChatMemberAsync(options.TargetGroupId, userId, cancellationToken);
+        var member = await ApiClient.GetChatMemberAsync(Options.TargetGroupId, userId, cancellationToken);
         var memberStatus = member?.Status;
 
-        logger.LogInformation("User group membership check. target group: {ChatId} user: {UserId} status: {Status}", options.TargetGroupId, userId, memberStatus);
+        Logger.LogInformation("User group membership check. target group: {ChatId} user: {UserId} status: {Status}", Options.TargetGroupId, userId, memberStatus);
         return memberStatus;
     }
 
     public async Task DeclineJoinRequestAsync(long userId, CancellationToken cancellationToken)
     {
-        await apiClient.DeclineChatJoinRequest(options.TargetGroupId, userId, cancellationToken);
+        await ApiClient.DeclineChatJoinRequest(Options.TargetGroupId, userId, cancellationToken);
 
-        logger.LogInformation("Join request declined to target group: {ChatId} user: {UserId}", options.TargetGroupId, userId);
+        Logger.LogInformation("Join request declined to target group: {ChatId} user: {UserId}", Options.TargetGroupId, userId);
     }
 
     public async Task ApproveJoinRequestAsync(long userId, CancellationToken cancellationToken)
     {
-        await apiClient.ApproveChatJoinRequest(options.TargetGroupId, userId, cancellationToken);
+        await ApiClient.ApproveChatJoinRequest(Options.TargetGroupId, userId, cancellationToken);
 
-        logger.LogInformation("Join request approved to target group: {ChatId} user: {UserId}", options.TargetGroupId, userId);
+        Logger.LogInformation("Join request approved to target group: {ChatId} user: {UserId}", Options.TargetGroupId, userId);
     }
 
     public async Task<Message> SayHelloToNewMemberAsync(User user, string whois, CancellationToken cancellationToken)
     {
         var userMention = GetUserMention(user);
 
-        var message = await apiClient.SendTextMessageAsync(
-            chatId: options.TargetGroupId,
-            text: options.TargetGroupMessages.SayHelloToNewMember.SafeFormat(userMention, whois),
+        var message = await ApiClient.SendTextMessageAsync(
+            chatId: Options.TargetGroupId,
+            text: Options.TargetGroupMessages.SayHelloToNewMember.SafeFormat(userMention, whois),
             parseMode: ParseMode.Html,
             disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Said hello to the new member in target group: {ChatId}, user: {UserId}, meesageId: {MessageId}", options.TargetGroupId, user.Id, message.MessageId);
+        Logger.LogInformation("Said hello to the new member in target group: {ChatId}, user: {UserId}, meesageId: {MessageId}", Options.TargetGroupId, user.Id, message.MessageId);
         return message;
     }
 
@@ -62,56 +55,56 @@ public class TargetGroupBot
     {
         var userMention = GetUserMention(user);
 
-        await apiClient.SendTextMessageAsync(
-            chatId: options.TargetGroupId,
-            text: options.TargetGroupMessages.SayHelloToUnknownNewMember.SafeFormat(userMention),
+        await ApiClient.SendTextMessageAsync(
+            chatId: Options.TargetGroupId,
+            text: Options.TargetGroupMessages.SayHelloToUnknownNewMember.SafeFormat(userMention),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Said hello to unknown new member in target group: {ChatId}, userId: {UserId}", options.TargetGroupId, user.Id);
+        Logger.LogInformation("Said hello to unknown new member in target group: {ChatId}, userId: {UserId}", Options.TargetGroupId, user.Id);
     }
 
     public async Task SayHelloAgainAsync(User user, CancellationToken cancellationToken)
     {
         var userMention = GetUserMention(user);
 
-        await apiClient.SendTextMessageAsync(
-            chatId: options.TargetGroupId,
-            text: options.TargetGroupMessages.SayHelloAgain.SafeFormat(userMention),
+        await ApiClient.SendTextMessageAsync(
+            chatId: Options.TargetGroupId,
+            text: Options.TargetGroupMessages.SayHelloAgain.SafeFormat(userMention),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Said hello again in target group: {ChatId}, userId: {UserId}", options.TargetGroupId, user.Id);
+        Logger.LogInformation("Said hello again in target group: {ChatId}, userId: {UserId}", Options.TargetGroupId, user.Id);
     }
 
     public async Task DeleteUserAsync(long userId, CancellationToken cancellationToken)
     {
         // Per API documentation this call is enough to remove user from the chat but not block
-        await apiClient.UnbanChatMemberAsync(options.TargetGroupId, userId, null, cancellationToken);
+        await ApiClient.UnbanChatMemberAsync(Options.TargetGroupId, userId, null, cancellationToken);
 
         // Get the user status after removing to log it for investigations
-        var user = await apiClient.GetChatMemberAsync(options.TargetGroupId, userId, cancellationToken);
+        var user = await ApiClient.GetChatMemberAsync(Options.TargetGroupId, userId, cancellationToken);
 
-        logger.LogInformation("User deleted from target group: {ChatId} user: {UserId} currentStatus: {userStatus}", options.TargetGroupId, userId, user.Status);
+        Logger.LogInformation("User deleted from target group: {ChatId} user: {UserId} currentStatus: {userStatus}", Options.TargetGroupId, userId, user.Status);
     }
 
     public async Task DeleteMessageAsync(int messageId, CancellationToken cancellationToken)
     {
-        await apiClient.DeleteMessageAsync(options.TargetGroupId, messageId);
-        logger.LogInformation("Message is deleted from target group: {ChatId} messageId: {MessageId}", options.TargetGroupId, messageId);
+        await ApiClient.DeleteMessageAsync(Options.TargetGroupId, messageId);
+        Logger.LogInformation("Message is deleted from target group: {ChatId} messageId: {MessageId}", Options.TargetGroupId, messageId);
     }
-        
+
     public async Task SayLeavingToChangeWhoisAsync(User user, CancellationToken cancellationToken)
     {
         var userMention = GetUserMention(user);
 
-        await apiClient.SendTextMessageAsync(
-            chatId: options.TargetGroupId,
-            text: options.TargetGroupMessages.SayLeavingToChangeWhois.SafeFormat(userMention),
+        await ApiClient.SendTextMessageAsync(
+            chatId: Options.TargetGroupId,
+            text: Options.TargetGroupMessages.SayLeavingToChangeWhois.SafeFormat(userMention),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Said user is leaving target group to change whois. group: {ChatId}, userId: {UserId}", options.TargetGroupId, user.Id);
+        Logger.LogInformation("Said user is leaving target group to change whois. group: {ChatId}, userId: {UserId}", Options.TargetGroupId, user.Id);
     }
 
     public static string GetUserMention(User user)

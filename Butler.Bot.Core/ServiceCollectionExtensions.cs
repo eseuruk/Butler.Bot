@@ -25,22 +25,21 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<ButlerOptions>(config);
 
-        services.AddSingleton<InlineStateManager>();
+        services.AddSingleton<IInlineStateManager, InlineStateManager>();
 
         services.AddSingleton<IWhoisValidator, LengthWhoisValidator>();
 
-        services.AddSingleton<UserChat.UserChatBot>();
-        services.AddSingleton<TargetGroup.TargetGroupBot>();
-        services.AddSingleton<AdminGroup.AdminGroupBot>();
-        services.AddSingleton<IButlerBot, ButlerBot>();
+        services.AddSingleton<UserChat.IUserChatBot, UserChat.UserChatBot>();
+        services.AddSingleton<TargetGroup.ITargetGroupBot, TargetGroup.TargetGroupBot>();
+        services.AddSingleton<AdminGroup.IAdminGroupBot, AdminGroup.AdminGroupBot>();
 
-        services.AddSingleton<UpdateHandlerBase, UserChat.TextMessageHandler>();
-        services.AddSingleton<UpdateHandlerBase, UserChat.RegisterQueryHandler>();
-        services.AddSingleton<UpdateHandlerBase, TargetGroup.JoinRequestHandler>();
-        services.AddSingleton<UpdateHandlerBase, TargetGroup.ChatMemberAddedHandler>();
-        services.AddSingleton<UpdateHandlerBase, AdminGroup.ReviewWhoisHandler>();
-        services.AddSingleton<UpdateHandlerBase, UnknownGroupMessageHandler>();
-        services.AddSingleton<UpdateHandlerBase, BotChatStatusHandler>();
+        services.AddSingleton<IUpdateHandler, UserChat.TextMessageHandler>();
+        services.AddSingleton<IUpdateHandler, UserChat.RegisterQueryHandler>();
+        services.AddSingleton<IUpdateHandler, TargetGroup.JoinRequestHandler>();
+        services.AddSingleton<IUpdateHandler, TargetGroup.ChatMemberAddedHandler>();
+        services.AddSingleton<IUpdateHandler, AdminGroup.ReviewWhoisHandler>();
+        services.AddSingleton<IUpdateHandler, UnknownGroupMessageHandler>();
+        services.AddSingleton<IUpdateHandler, BotChatStatusHandler>();
         services.AddSingleton<IUpdateService, UpdateService>();
 
         return services;

@@ -67,12 +67,11 @@ public class BotControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         // Arrange
         int updateId = 10;
-        var service = new Mock<UpdateHandlerBase>(MockBehavior.Loose, new Mock<IButlerBot>().Object,
-            new Mock<IUserRepository>().Object, new Mock<ILogger>().Object);
-        service.Setup(_ => _.TryHandleUpdateAsync(It.IsAny<Update>(), It.IsAny<CancellationToken>()))
+        var handler = new Mock<IUpdateHandler>();
+        handler.Setup(_ => _.TryHandleUpdateAsync(It.IsAny<Update>(), It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult(true));
         var client =
-            _factory.CreateAuthorizedClient("TEST_TOKEN", services => services.AddSingleton(_ => service.Object));
+            _factory.CreateAuthorizedClient("TEST_TOKEN", services => services.AddSingleton(_ => handler.Object));
 
         // Act
         var result = await client.PostAsync("/update", new Update()
@@ -82,7 +81,7 @@ public class BotControllerTests : IClassFixture<WebApplicationFactory<Program>>
         
         // Assert
         result.ShouldHave200Code();
-        service.Verify(_ => _.TryHandleUpdateAsync(It.Is<Update>(a => a.Id == updateId), It.IsAny<CancellationToken>()),
+        handler.Verify(_ => _.TryHandleUpdateAsync(It.Is<Update>(a => a.Id == updateId), It.IsAny<CancellationToken>()),
             Times.Once);
     }
     

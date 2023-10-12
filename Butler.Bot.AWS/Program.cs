@@ -30,4 +30,5 @@ app.MapControllers();
 
 app.Run();
 
+// To make Butler.Bot.AWS.Tests working
 public partial class Program {}

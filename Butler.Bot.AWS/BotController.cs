@@ -10,16 +10,14 @@ namespace Butler.Bot.AWS;
 [ApiController]
 public class BotController : ControllerBase
 {
-    private readonly IButlerBot bot;
     private readonly IUpdateService updateService;
     private readonly SecretService secretService;
     private readonly HealthCheckService healthService;
 
     private readonly ILogger<BotController> logger;
 
-    public BotController(IButlerBot bot, IUpdateService updateService, SecretService secretService, HealthCheckService healthService, ILogger<BotController> logger)
+    public BotController(IUpdateService updateService, SecretService secretService, HealthCheckService healthService, ILogger<BotController> logger)
     {
-        this.bot = bot;
         this.updateService = updateService;
         this.secretService = secretService;
         this.healthService = healthService;

@@ -4,17 +4,23 @@ using Telegram.Bot.Types.Enums;
 
 namespace Butler.Bot.Core.UserChat;
 
-public class TextMessageHandler : UpdateHandlerBase
+public class TextMessageHandler : IUpdateHandler
 {
+    private readonly IUserChatBot userChatBot;
+    private readonly IUserRepository userRepository;
     private readonly IWhoisValidator whoisValidator;
 
-    public TextMessageHandler(IButlerBot butler, IUserRepository userRepository, IWhoisValidator whoisValidator, ILogger<TextMessageHandler> logger)
-        : base(butler, userRepository, logger)
+    private readonly ILogger<TextMessageHandler> logger;
+
+    public TextMessageHandler(IUserChatBot userChatBot, IUserRepository userRepository, IWhoisValidator whoisValidator, ILogger<TextMessageHandler> logger)
     {
+        this.userChatBot = userChatBot;
+        this.userRepository = userRepository;
         this.whoisValidator = whoisValidator;
+        this.logger = logger;
     }
 
-    public override async Task<bool> TryHandleUpdateAsync(Update update, CancellationToken cancellationToken)
+    public async Task<bool> TryHandleUpdateAsync(Update update, CancellationToken cancellationToken)
     {
         // Only handle text chat messages
         if (update.Message == null || update.Message.Text == null) return false;
@@ -31,33 +37,33 @@ public class TextMessageHandler : UpdateHandlerBase
 
     private async Task DoHandleTextMessage(Chat chat, User from, string text, CancellationToken cancellationToken)
     {
-        Logger.LogInformation("New text message in private chat: {ChatId}, userId: {UserId}, isBot: {IsBot}, text: {Text}", chat.Id, from.Id, from.IsBot, text);
+        logger.LogInformation("New text message in private chat: {ChatId}, userId: {UserId}, isBot: {IsBot}, text: {Text}", chat.Id, from.Id, from.IsBot, text);
 
         if (text.ToLowerInvariant() == "/start")
         {
-            await Butler.UserChat.SayHelloAsync(chat.Id, cancellationToken);
+            await userChatBot.SayHelloAsync(chat.Id, cancellationToken);
             return;
         }
 
-        var request = await UserRepository.FindJoinRequestAsync(from.Id, cancellationToken);
+        var request = await userRepository.FindJoinRequestAsync(from.Id, cancellationToken);
 
         if (request == null || request.IsWhoisProvided)
         {
-            await Butler.UserChat.SayConfusedAsync(chat.Id, cancellationToken);
+            await userChatBot.SayConfusedAsync(chat.Id, cancellationToken);
             return;
         }
 
         (var result, var error) = whoisValidator.CheckMessageText(text);
         if (!result)
         {
-            await Butler.UserChat.WarnWhoisValidationFailedAsync(chat.Id, error, cancellationToken);
+            await userChatBot.WarnWhoisValidationFailedAsync(chat.Id, error, cancellationToken);
             return;
         }
 
         var withWhois = request with { Whois = text };
-        await UserRepository.UpdateJoinRequestAsync(withWhois, cancellationToken);
+        await userRepository.UpdateJoinRequestAsync(withWhois, cancellationToken);
 
-        await Butler.UserChat.SayWhoisOkAndAskToRequestAccessAsync(chat.Id, cancellationToken);
+        await userChatBot.SayWhoisOkAndAskToRequestAccessAsync(chat.Id, cancellationToken);
     }
 }
 

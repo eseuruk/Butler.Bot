@@ -1,16 +1,27 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Butler.Bot.Core.TargetGroup;
+using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace Butler.Bot.Core.UserChat;
 
-public class RegisterQueryHandler : UpdateHandlerBase
+public class RegisterQueryHandler : IUpdateHandler
 {
-    public RegisterQueryHandler(IButlerBot butler, IUserRepository userRepository, ILogger<RegisterQueryHandler> logger)
-        : base(butler, userRepository, logger)
+    private readonly IUserChatBot userChatBot;
+    private readonly ITargetGroupBot targetGroupBot;
+    private readonly IUserRepository userRepository;
+
+    private readonly ILogger<RegisterQueryHandler> logger;
+
+    public RegisterQueryHandler(IUserChatBot userChatBot, ITargetGroupBot targetGroupBot, IUserRepository userRepository, ILogger<RegisterQueryHandler> logger)
     {
+        this.userChatBot = userChatBot;
+        this.targetGroupBot = targetGroupBot;
+        this.userRepository = userRepository;
+        this.logger = logger;
     }
-    public override async Task<bool> TryHandleUpdateAsync(Update update, CancellationToken cancellationToken)
+
+    public async Task<bool> TryHandleUpdateAsync(Update update, CancellationToken cancellationToken)
     {
         // Only handle callback queries from live messages
         if (update.CallbackQuery == null || update.CallbackQuery.Message == null || update.CallbackQuery.From == null) return false;
@@ -21,7 +32,7 @@ public class RegisterQueryHandler : UpdateHandlerBase
         // Only handle [register]
         if (update.CallbackQuery.Data != "register") return false;
 
-        await Butler.StopQuerySpinnerAsync(update.CallbackQuery.Id, cancellationToken);
+        await userChatBot.StopQuerySpinnerAsync(update.CallbackQuery.Id, cancellationToken);
 
         await DoHandleRegisterCallbackAsync(update.CallbackQuery.Message.Chat.Id, update.CallbackQuery.From.Id, cancellationToken);
         return true;
@@ -29,29 +40,29 @@ public class RegisterQueryHandler : UpdateHandlerBase
 
     private async Task DoHandleRegisterCallbackAsync(long chatId, long userId, CancellationToken cancellationToken)
     {
-        Logger.LogInformation("Registration requsted in private chat: {ChatId}", chatId);
+        logger.LogInformation("Registration requsted in private chat: {ChatId}", chatId);
 
-        var currentStatus = await Butler.TargetGroup.GetMemberStatusAsync(userId, cancellationToken);
+        var currentStatus = await targetGroupBot.GetMemberStatusAsync(userId, cancellationToken);
 
         if (IsAlreadyMember(currentStatus))
         {
-            await Butler.UserChat.SayAlreadyMemberAsync(chatId, cancellationToken);
+            await userChatBot.SayAlreadyMemberAsync(chatId, cancellationToken);
         }
         else if(IsBlocked(currentStatus))
         {
-            await Butler.UserChat.SayBlockedAsync(chatId, cancellationToken);
+            await userChatBot.SayBlockedAsync(chatId, cancellationToken);
         }
         else
         {
-            var request = await UserRepository.FindOrCreateRequestAsync(userId, cancellationToken);
+            var request = await userRepository.FindOrCreateRequestAsync(userId, cancellationToken);
 
             if (request.IsWhoisProvided)
             {
-                await Butler.UserChat.SayUsedToBeMemberAsync(chatId, cancellationToken);
+                await userChatBot.SayUsedToBeMemberAsync(chatId, cancellationToken);
             }
             else
             {
-                await Butler.UserChat.AskForWhoisAsync(chatId, cancellationToken);
+                await userChatBot.AskForWhoisAsync(chatId, cancellationToken);
             }
         }
     }

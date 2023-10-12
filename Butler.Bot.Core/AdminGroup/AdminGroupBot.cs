@@ -8,108 +8,102 @@ using System.Text;
 
 namespace Butler.Bot.Core.AdminGroup;
 
-public class AdminGroupBot
+public class AdminGroupBot : GroupBotBase, IAdminGroupBot
 {
-    private readonly ITelegramBotClient apiClient;
-    private readonly InlineStateManager inlineStateManager;
-    private readonly ButlerOptions options;
+    private readonly IInlineStateManager inlineStateManager;
 
-    private readonly ILogger<AdminGroupBot> logger;
-
-    public AdminGroupBot(ITelegramBotClient apiClient, InlineStateManager inlineStateManager, IOptions<ButlerOptions> options, ILogger<AdminGroupBot> logger)
+    public AdminGroupBot(ITelegramBotClient apiClient, IOptions<ButlerOptions> options, ILogger<AdminGroupBot> logger, IInlineStateManager inlineStateManager)
+        : base(apiClient, options, logger)
     {
-        this.apiClient = apiClient;
         this.inlineStateManager = inlineStateManager;
-        this.options = options.Value;
-        this.logger = logger;
     }
 
     public async Task<Message> ReportJoinRequestAsync(User user, string whois, CancellationToken cancellationToken)
     {
         var userMention = GetUserMention(user);
-        var text = options.AdminGroupMessages.ReportJoinRequest.SafeFormat(userMention, whois);
+        var text = Options.AdminGroupMessages.ReportJoinRequest.SafeFormat(userMention, whois);
         text = inlineStateManager.InjectStateIntoMessageHtml(text, user);
 
         var markup = new InlineKeyboardMarkup(new[]
             {
-                InlineKeyboardButton.WithCallbackData(options.AdminGroupMessages.ButtonApprove, "prejoin-approve"),
-                InlineKeyboardButton.WithCallbackData(options.AdminGroupMessages.ButtonDecline, "prejoin-decline")
+                InlineKeyboardButton.WithCallbackData(Options.AdminGroupMessages.ButtonApprove, "prejoin-approve"),
+                InlineKeyboardButton.WithCallbackData(Options.AdminGroupMessages.ButtonDecline, "prejoin-decline")
             });
 
-        var message = await apiClient.SendTextMessageAsync(
-            chatId: options.AdminGroupId,
+        var message = await ApiClient.SendTextMessageAsync(
+            chatId: Options.AdminGroupId,
             text: text,
             parseMode: ParseMode.Html,
             disableWebPagePreview: true,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Reported new join request to admin group: {ChatId}, userId: {UserId} messageId: {MessageId}", options.AdminGroupId, user.Id, message.MessageId);
+        Logger.LogInformation("Reported new join request to admin group: {ChatId}, userId: {UserId} messageId: {MessageId}", Options.AdminGroupId, user.Id, message.MessageId);
         return message;
     }
 
     public async Task ReportUserAddedAsync(User user, string whois, CancellationToken cancellationToken)
     {
         var userMention = GetUserMention(user);
-        var text = options.AdminGroupMessages.ReportUserAdded.SafeFormat(userMention, whois);
+        var text = Options.AdminGroupMessages.ReportUserAdded.SafeFormat(userMention, whois);
         text = inlineStateManager.InjectStateIntoMessageHtml(text, user);
 
         var markup = new InlineKeyboardMarkup(new[]
             {
-                InlineKeyboardButton.WithCallbackData(options.AdminGroupMessages.ButtonDelete, "postjoin-delete")
+                InlineKeyboardButton.WithCallbackData(Options.AdminGroupMessages.ButtonDelete, "postjoin-delete")
             });
 
-        await apiClient.SendTextMessageAsync(
-            chatId: options.AdminGroupId,
+        await ApiClient.SendTextMessageAsync(
+            chatId: Options.AdminGroupId,
             text: text,
             parseMode: ParseMode.Html,
             disableWebPagePreview: true,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Reported new group member to admin group: {ChatId}, userId: {UserId}", options.AdminGroupId, user.Id);
+        Logger.LogInformation("Reported new group member to admin group: {ChatId}, userId: {UserId}", Options.AdminGroupId, user.Id);
     }
 
     public async Task MarkJoinRequestAsApprovedAsync(int messageId, User admin, CancellationToken cancellationToken)
     {
         var adminMention = GetAdminMention(admin);
 
-        await apiClient.SendTextMessageAsync(
-            chatId: options.AdminGroupId,
+        await ApiClient.SendTextMessageAsync(
+            chatId: Options.AdminGroupId,
             replyToMessageId: messageId,
-            text: options.AdminGroupMessages.MarkJoinRequestAsApproved.SafeFormat(adminMention),
+            text: Options.AdminGroupMessages.MarkJoinRequestAsApproved.SafeFormat(adminMention),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Join request is marked as approved in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", options.AdminGroupId, messageId, admin.Id);
+        Logger.LogInformation("Join request is marked as approved in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", Options.AdminGroupId, messageId, admin.Id);
     }
 
     public async Task MarkJoinRequestAsDeclinedAsync(int messageId, User admin, CancellationToken cancellationToken)
     {
         var adminMention = GetAdminMention(admin);
 
-        await apiClient.SendTextMessageAsync(
-            chatId: options.AdminGroupId,
+        await ApiClient.SendTextMessageAsync(
+            chatId: Options.AdminGroupId,
             replyToMessageId: messageId,
-            text: options.AdminGroupMessages.MarkJoinRequestAsDeclined.SafeFormat(adminMention),
+            text: Options.AdminGroupMessages.MarkJoinRequestAsDeclined.SafeFormat(adminMention),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("Join request is marked as declined in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", options.AdminGroupId, messageId, admin.Id);
+        Logger.LogInformation("Join request is marked as declined in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", Options.AdminGroupId, messageId, admin.Id);
     }
 
     public async Task MarkUserAsDeletedAsync(int messageId, User admin, CancellationToken cancellationToken)
     {
         var adminMention = GetAdminMention(admin);
 
-        await apiClient.SendTextMessageAsync(
-            chatId: options.AdminGroupId,
+        await ApiClient.SendTextMessageAsync(
+            chatId: Options.AdminGroupId,
             replyToMessageId: messageId,
-            text: options.AdminGroupMessages.MarkUserAsDeleted.SafeFormat(adminMention),
+            text: Options.AdminGroupMessages.MarkUserAsDeleted.SafeFormat(adminMention),
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken);
 
-        logger.LogInformation("User is marked as deleted in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", options.AdminGroupId, messageId, admin.Id);
+        Logger.LogInformation("User is marked as deleted in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", Options.AdminGroupId, messageId, admin.Id);
     }
 
     private static string GetAdminMention(User user)
