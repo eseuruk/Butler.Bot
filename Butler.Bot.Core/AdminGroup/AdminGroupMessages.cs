@@ -8,6 +8,10 @@ public class AdminGroupMessages
 
     public string ButtonDelete { get; init; } = "Удалить из группы";
 
+    public string ButtonDeleteConfirm { get; init; } = "Подтведить удаление";
+
+    public string ButtonCancel { get; init; } = "Отменить";
+
     public string ReportJoinRequest { get; init; } = "<b>Запрос на вход в группу</b>\n{0}\n#whois\n{1}";
 
     public string ReportUserAdded { get; init; } = "<b>Новый член группы</b>\n{0}\n#whois\n{1}";
@@ -16,6 +20,6 @@ public class AdminGroupMessages
 
     public string MarkJoinRequestAsDeclined { get; init; } = "Отклонено {0}";
 
-    public string MarkUserAsDeleted { get; init; } = "Пользователь удален {0}";
+    public string MarkUserAsDeleted { get; init; } = "Удалено {0}";
 }
 

@@ -37,7 +37,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IUpdateHandler, UserChat.RegisterQueryHandler>();
         services.AddSingleton<IUpdateHandler, TargetGroup.JoinRequestHandler>();
         services.AddSingleton<IUpdateHandler, TargetGroup.ChatMemberAddedHandler>();
-        services.AddSingleton<IUpdateHandler, AdminGroup.ReviewWhoisHandler>();
+        services.AddSingleton<IUpdateHandler, AdminGroup.PreJoinWhoisReviewHandler>();
+        services.AddSingleton<IUpdateHandler, AdminGroup.PostJoinWhoisReviewHandler>();
         services.AddSingleton<IUpdateHandler, UnknownGroupMessageHandler>();
         services.AddSingleton<IUpdateHandler, BotChatStatusHandler>();
         services.AddSingleton<IUpdateService, UpdateService>();
