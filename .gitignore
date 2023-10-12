@@ -401,5 +401,9 @@ FodyWeavers.xsd
 # aws tool configs
 aws-lambda-tools-defaults.json
 
+# Environment configs
+appsettings.Development.json
+appsettings.Production.json
+
 # Butler database
 Butler.Bot.Sqlite.db
