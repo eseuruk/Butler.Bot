@@ -8,9 +8,12 @@ namespace Butler.Bot.Core.TargetGroup;
 
 public class TargetGroupBot : GroupBotBase, ITargetGroupBot
 {
-    public TargetGroupBot(ITelegramBotClient apiClient, IOptions<ButlerOptions> options, ILogger<TargetGroupBot> logger)
+    private readonly ITargetGroupMentionStrategy mentionStrategy;
+
+    public TargetGroupBot(ITelegramBotClient apiClient, IOptions<ButlerOptions> options, ILogger<TargetGroupBot> logger, ITargetGroupMentionStrategy mentionStrategy)
         : base(apiClient, options, logger)
     {
+        this.mentionStrategy = mentionStrategy;
     }
 
     public async Task<ChatMemberStatus?> GetMemberStatusAsync(long userId, CancellationToken cancellationToken)
@@ -38,7 +41,7 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
 
     public async Task<Message> SayHelloToNewMemberAsync(User user, string whois, CancellationToken cancellationToken)
     {
-        var userMention = GetUserMention(user);
+        var userMention = mentionStrategy.GetUserMention(user);
 
         var message = await ApiClient.SendTextMessageAsync(
             chatId: Options.TargetGroupId,
@@ -53,7 +56,7 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
 
     public async Task SayHelloToUnknownNewMemberAsync(User user, CancellationToken cancellationToken)
     {
-        var userMention = GetUserMention(user);
+        var userMention = mentionStrategy.GetUserMention(user);
 
         await ApiClient.SendTextMessageAsync(
             chatId: Options.TargetGroupId,
@@ -66,7 +69,7 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
 
     public async Task SayHelloAgainAsync(User user, CancellationToken cancellationToken)
     {
-        var userMention = GetUserMention(user);
+        var userMention = mentionStrategy.GetUserMention(user);
 
         await ApiClient.SendTextMessageAsync(
             chatId: Options.TargetGroupId,
@@ -96,7 +99,7 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
 
     public async Task SayLeavingToChangeWhoisAsync(User user, CancellationToken cancellationToken)
     {
-        var userMention = GetUserMention(user);
+        var userMention = mentionStrategy.GetUserMention(user);
 
         await ApiClient.SendTextMessageAsync(
             chatId: Options.TargetGroupId,
@@ -105,17 +108,6 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("Said user is leaving target group to change whois. group: {ChatId}, userId: {UserId}", Options.TargetGroupId, user.Id);
-    }
-
-    public static string GetUserMention(User user)
-    {
-        var displayName = user.FirstName;
-        if (!string.IsNullOrEmpty(user.LastName))
-        {
-            displayName += " " + user.LastName;
-        }
-
-        return $"<a href='tg://user?id={user.Id}'>{displayName}</a>";
     }
 }
 

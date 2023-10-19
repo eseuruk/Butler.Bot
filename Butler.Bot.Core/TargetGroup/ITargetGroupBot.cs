@@ -12,6 +12,7 @@ public interface ITargetGroupBot
     Task ApproveJoinRequestAsync(long userId, CancellationToken cancellationToken);
 
     Task<Message> SayHelloToNewMemberAsync(User user, string whois, CancellationToken cancellationToken);
+
     Task SayHelloToUnknownNewMemberAsync(User user, CancellationToken cancellationToken);
 
     Task SayHelloAgainAsync(User user, CancellationToken cancellationToken);

@@ -20,6 +20,10 @@ public class ButlerOptions
 
     public WhoisReviewMode WhoisReviewMode { get; init; } = WhoisReviewMode.None;
 
+    public AdminGroupOptions AdminGroupOptions { get; init; } = new AdminGroupOptions();
+
+    public TargetGroupOptions TargetGroupOptions { get; init; } = new TargetGroupOptions();
+
     public UserChatMessages UserChatMessages { get; init; } =  new UserChatMessages();
 
     public TargetGroupMessages TargetGroupMessages { get; init; } = new TargetGroupMessages();

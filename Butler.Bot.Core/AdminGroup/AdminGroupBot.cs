@@ -4,23 +4,24 @@ using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using System.Text;
 
 namespace Butler.Bot.Core.AdminGroup;
 
 public class AdminGroupBot : GroupBotBase, IAdminGroupBot
 {
     private readonly IInlineStateManager inlineStateManager;
+    private readonly IAdminGroupMentionStrategy mentionStrategy;
 
-    public AdminGroupBot(ITelegramBotClient apiClient, IOptions<ButlerOptions> options, ILogger<AdminGroupBot> logger, IInlineStateManager inlineStateManager)
+    public AdminGroupBot(ITelegramBotClient apiClient, IOptions<ButlerOptions> options, ILogger<AdminGroupBot> logger, IInlineStateManager inlineStateManager, IAdminGroupMentionStrategy mentionStrategy)
         : base(apiClient, options, logger)
     {
         this.inlineStateManager = inlineStateManager;
+        this.mentionStrategy = mentionStrategy;
     }
 
     public async Task<Message> ReportJoinRequestAsync(User user, string whois, CancellationToken cancellationToken)
     {
-        var userMention = GetUserMention(user);
+        var userMention = mentionStrategy.GetUserMention(user);
         var text = Options.AdminGroupMessages.ReportJoinRequest.SafeFormat(userMention, whois);
         text = inlineStateManager.InjectStateIntoMessageHtml(text, user);
 
@@ -44,7 +45,7 @@ public class AdminGroupBot : GroupBotBase, IAdminGroupBot
 
     public async Task MarkJoinRequestAsApprovedAsync(int messageId, User admin, CancellationToken cancellationToken)
     {
-        var adminMention = GetAdminMention(admin);
+        var adminMention = mentionStrategy.GetAdminMention(admin);
         var buttonText = Options.AdminGroupMessages.MarkJoinRequestAsApproved.SafeFormat(adminMention);
 
         var markup = new InlineKeyboardMarkup(new[]
@@ -63,7 +64,7 @@ public class AdminGroupBot : GroupBotBase, IAdminGroupBot
 
     public async Task MarkJoinRequestAsDeclinedAsync(int messageId, User admin, CancellationToken cancellationToken)
     {
-        var adminMention = GetAdminMention(admin);
+        var adminMention = mentionStrategy.GetAdminMention(admin);
         var buttonText = Options.AdminGroupMessages.MarkJoinRequestAsDeclined.SafeFormat(adminMention);
 
         var markup = new InlineKeyboardMarkup(new[]
@@ -83,7 +84,7 @@ public class AdminGroupBot : GroupBotBase, IAdminGroupBot
 
     public async Task ReportUserAddedAsync(User user, string whois, CancellationToken cancellationToken)
     {
-        var userMention = GetUserMention(user);
+        var userMention = mentionStrategy.GetUserMention(user);
         var text = Options.AdminGroupMessages.ReportUserAdded.SafeFormat(userMention, whois);
         text = inlineStateManager.InjectStateIntoMessageHtml(text, user);
 
@@ -144,7 +145,7 @@ public class AdminGroupBot : GroupBotBase, IAdminGroupBot
 
     public async Task MarkUserAsDeletedAsync(int messageId, User admin, CancellationToken cancellationToken)
     {
-        var adminMention = GetAdminMention(admin);
+        var adminMention = mentionStrategy.GetAdminMention(admin);
         var buttonText = Options.AdminGroupMessages.MarkUserAsDeleted.SafeFormat(adminMention);
 
         var markup = new InlineKeyboardMarkup(new[]
@@ -159,43 +160,6 @@ public class AdminGroupBot : GroupBotBase, IAdminGroupBot
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("User is marked as deleted in admin group: {ChatId} messageId: {MessageId}, adminId: {AdminId}", Options.AdminGroupId, messageId, admin.Id);
-    }
-
-    private static string GetAdminMention(User user)
-    {
-        if (!string.IsNullOrEmpty(user.Username))
-        {
-            return "@" + user.Username;
-        }
-
-        var displayName = user.FirstName;
-        if (!string.IsNullOrEmpty(user.LastName))
-        {
-            displayName += " " + user.LastName;
-        }
-
-        return displayName;
-    }
-
-    private static string GetUserMention(User user)
-    {
-        var mention = new StringBuilder();
-
-        mention.Append(user.FirstName);
-
-        if (!string.IsNullOrEmpty(user.LastName))
-        {
-            mention.Append(' ');
-            mention.Append(user.LastName);
-        }
-
-        if (!string.IsNullOrEmpty(user.Username))
-        {
-            mention.Append(" @");
-            mention.Append(user.Username);
-        }
-
-        return mention.ToString();
     }
 }
 

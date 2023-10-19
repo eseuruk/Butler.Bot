@@ -29,6 +29,9 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IWhoisValidator, LengthWhoisValidator>();
 
+        services.AddSingleton<AdminGroup.IAdminGroupMentionStrategy, AdminGroup.AdminGroupMentionStrategy>();
+        services.AddSingleton<TargetGroup.ITargetGroupMentionStrategy, TargetGroup.TargetGroupMentionStrategy>();
+
         services.AddSingleton<UserChat.IUserChatBot, UserChat.UserChatBot>();
         services.AddSingleton<TargetGroup.ITargetGroupBot, TargetGroup.TargetGroupBot>();
         services.AddSingleton<AdminGroup.IAdminGroupBot, AdminGroup.AdminGroupBot>();
