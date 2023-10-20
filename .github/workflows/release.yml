@@ -33,3 +33,15 @@ jobs:
     - name: Build Lambda Package 
       working-directory: ./Butler.Bot.AWS
       run: dotnet lambda package
+
+    - name: Create Release
+      id: release
+      uses: actions/create-release@v1
+      env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+         tag_name: v${{ inputs.varsion }} 
+         release_name: v${{ inputs.varsion }} 
+         draft: true
+
+
