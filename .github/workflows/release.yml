@@ -1,4 +1,4 @@
-name: Release
+name: Draft Release
 run-name: Release ${{ inputs.varsion }} 
    
 on:
@@ -11,7 +11,7 @@ on:
   
 jobs:
   release:
-    name: Dreft Release   
+    name: Build & Release   
     
     runs-on: ubuntu-latest
 
@@ -32,7 +32,7 @@ jobs:
 
     - name: Build Lambda Package 
       working-directory: ./Butler.Bot.AWS
-      run: dotnet lambda package Butler.Bot.AWS/bin/Package/Butler.Bot.AWS.zip
+      run: dotnet lambda package bin/Package/Butler.Bot.AWS.zip
 
     - name: Create Draft Release
       uses: softprops/action-gh-release@v1
