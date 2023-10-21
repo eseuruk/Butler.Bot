@@ -8,6 +8,9 @@ on:
         description: 'Version in X.X.X format'
         required: true
         type: string
+        
+permissions:
+  contents: write
   
 jobs:
   release:
@@ -26,6 +29,9 @@ jobs:
 
     - name: Setup Amazon.Lambda.Tools
       run: dotnet tool install -g Amazon.Lambda.Tools
+
+    - name: Restore Dependencies
+      run: dotnet restore
 
     - name: Build Lambda Package 
       working-directory: ./Butler.Bot.AWS
