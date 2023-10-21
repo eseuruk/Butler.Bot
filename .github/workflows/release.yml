@@ -27,19 +27,18 @@ jobs:
     - name: Setup Amazon.Lambda.Tools
       run: dotnet tool install -g Amazon.Lambda.Tools
     
-    - name: Restore dependencies
+    - name: Restore Dependencies
       run: dotnet restore
 
     - name: Build Lambda Package 
       working-directory: ./Butler.Bot.AWS
-      run: dotnet lambda package
+      run: dotnet lambda package Butler.Bot.AWS/bin/Package/Butler.Bot.AWS.zip
 
-    - name: Create Release
+    - name: Create Draft Release
       uses: softprops/action-gh-release@v1
       with:
-        files: Butler.Bot.AWS/bin/Release/net6.0/Butler.Bot.AWS.zip
+        files: Butler.Bot.AWS/bin/Package/Butler.Bot.AWS.zip
         tag_name: v${{ inputs.varsion }} 
-        release_name: v${{ inputs.varsion }} 
         draft: true
 
 
