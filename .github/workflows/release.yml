@@ -35,13 +35,11 @@ jobs:
       run: dotnet lambda package
 
     - name: Create Release
-      id: release
-      uses: actions/create-release@v1
-      env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
-         tag_name: v${{ inputs.varsion }} 
-         release_name: v${{ inputs.varsion }} 
-         draft: true
+        files: Butler.Bot.AWS/bin/Release/net6.0/Butler.Bot.AWS.zip
+        tag_name: v${{ inputs.varsion }} 
+        release_name: v${{ inputs.varsion }} 
+        draft: true
 
 
