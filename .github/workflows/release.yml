@@ -1,5 +1,5 @@
 name: Draft Release
-run-name: Release ${{ inputs.varsion }} 
+run-name: Draft Release ${{ inputs.varsion }} 
    
 on:
   workflow_dispatch:
@@ -26,9 +26,6 @@ jobs:
 
     - name: Setup Amazon.Lambda.Tools
       run: dotnet tool install -g Amazon.Lambda.Tools
-    
-    - name: Restore Dependencies
-      run: dotnet restore
 
     - name: Build Lambda Package 
       working-directory: ./Butler.Bot.AWS
