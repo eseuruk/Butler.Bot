@@ -35,7 +35,7 @@ jobs:
 
     - name: Build Lambda Package 
       working-directory: ./Butler.Bot.AWS
-      run: dotnet lambda package bin/Package/Butler.Bot.AWS.zip
+      run: dotnet lambda package bin/Package/Butler.Bot.AWS.zip /p:Version=${{ inputs.varsion }}
 
     - name: Create Draft Release
       uses: softprops/action-gh-release@v1

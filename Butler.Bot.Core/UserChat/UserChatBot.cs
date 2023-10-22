@@ -13,6 +13,18 @@ public class UserChatBot : GroupBotBase, IUserChatBot
     {
     }
 
+    public async Task SayBotVersionAsync(long userChatId, CancellationToken cancellationToken)
+    {
+        var botVersion = ButlerVersion.GetCurrent();
+
+        await ApiClient.SendTextMessageAsync(
+            chatId: userChatId,
+            text: Options.UserChatMessages.SayBotVersion.SafeFormat(botVersion),
+            cancellationToken: cancellationToken);
+
+        Logger.LogInformation("Said current version in private chat: {UserChatId} version: {Version}", userChatId, botVersion);
+    }
+
     public async Task SayHelloAsync(long userChatId, CancellationToken cancellationToken)
     {
         var markup = new InlineKeyboardMarkup(

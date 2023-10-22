@@ -8,6 +8,8 @@ public class UserChatMessages
 
     public string ButtonAmend { get; init; } = "Исправить";
 
+    public string SayBotVersion { get; init; } = "Версия бота: {0}";
+
     public string SayHello { get; init; } = "Привет! Я помогу тебя зайти в группу {0}. Если не против, я задам тебе несколько вопросов, перед тем как ты сможешь туда попасть.";
 
     public string SayConfused { get; init; } = "Наверное ты хочешь зайти в группу {0}. Если да, то нажми на кнопку ниже чтоб продолжить.";

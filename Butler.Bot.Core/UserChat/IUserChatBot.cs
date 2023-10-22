@@ -4,6 +4,8 @@ public interface IUserChatBot
 {
     Task StopQuerySpinnerAsync(string callbackQueryId, CancellationToken cancellationToken);
 
+    Task SayBotVersionAsync(long userChatId, CancellationToken cancellationToken);
+
     Task SayHelloAsync(long userChatId, CancellationToken cancellationToken);
 
     Task SayConfusedAsync(long userChatId, CancellationToken cancellationToken);

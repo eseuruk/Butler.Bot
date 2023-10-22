@@ -39,6 +39,12 @@ public class TextMessageHandler : IUpdateHandler
     {
         logger.LogInformation("New text message in private chat: {ChatId}, userId: {UserId}, isBot: {IsBot}, text: {Text}", chat.Id, from.Id, from.IsBot, text);
 
+        if (text.ToLowerInvariant() == "/version")
+        {
+            await userChatBot.SayBotVersionAsync(chat.Id, cancellationToken);
+            return;
+        }
+
         if (text.ToLowerInvariant() == "/start")
         {
             await userChatBot.SayHelloAsync(chat.Id, cancellationToken);
