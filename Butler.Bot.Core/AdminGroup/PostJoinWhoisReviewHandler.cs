@@ -54,7 +54,7 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
         case "postjoin-delete-cancel":
             await DoHandlePostJoinDeleteCanceledAsync(update.CallbackQuery.From, user, update.CallbackQuery.Message.MessageId, cancellationToken);
             return true;
-        case "postjoin -deleted":
+        case "postjoin-deleted":
             return true;
         }
 
@@ -84,7 +84,7 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
 
         if (originalRequest.IsWhoisMessageWritten)
         {
-            await targetGroupBot.DeleteMessageAsync(originalRequest.WhoisMessageId, cancellationToken);
+            await targetGroupBot.TryDeleteMessageAsync(originalRequest.WhoisMessageId, cancellationToken);
         }
 
         var emptyRequest = originalRequest with { Whois = string.Empty, WhoisMessageId = 0, UserChatId = 0 };

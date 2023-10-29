@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
+using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
@@ -91,10 +92,18 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
         Logger.LogInformation("User deleted from target group: {ChatId} user: {UserId} currentStatus: {userStatus}", Options.TargetGroupId, userId, user.Status);
     }
 
-    public async Task DeleteMessageAsync(int messageId, CancellationToken cancellationToken)
+    public async Task TryDeleteMessageAsync(int messageId, CancellationToken cancellationToken)
     {
-        await ApiClient.DeleteMessageAsync(Options.TargetGroupId, messageId);
-        Logger.LogInformation("Message is deleted from target group: {ChatId} messageId: {MessageId}", Options.TargetGroupId, messageId);
+        try
+        {
+            await ApiClient.DeleteMessageAsync(Options.TargetGroupId, messageId);
+            Logger.LogInformation("Message is deleted from target group: {ChatId} messageId: {MessageId}", Options.TargetGroupId, messageId);
+        }
+        catch (ApiRequestException ex)
+        {
+            // Message might be deleted already
+            Logger.LogWarning("Cannot delete message in target group: {ChatId}, messageId: {MessageId}, errorCode: {ErrorCode}, errorMessage: {ErrorMessage}", Options.TargetGroupId, messageId, ex.ErrorCode, ex.Message);
+        }
     }
 
     public async Task SayLeavingToChangeWhoisAsync(User user, CancellationToken cancellationToken)

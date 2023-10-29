@@ -19,7 +19,7 @@ public interface ITargetGroupBot
 
     Task DeleteUserAsync(long userId, CancellationToken cancellationToken);
 
-    Task DeleteMessageAsync(int messageId, CancellationToken cancellationToken);
+    Task TryDeleteMessageAsync(int messageId, CancellationToken cancellationToken);
 
     Task SayLeavingToChangeWhoisAsync(User user, CancellationToken cancellationToken);
 }
