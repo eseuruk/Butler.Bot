@@ -41,18 +41,18 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
         if (update.CallbackQuery.Data == null || !update.CallbackQuery.Data.StartsWith("postjoin-")) return false;
 
         await adminGroupBot.StopQuerySpinnerAsync(update.CallbackQuery.Id, cancellationToken);
-        var user = inlineStateManager.GetStateFromMessage<User>(update.CallbackQuery.Message);
+        var inlineState = inlineStateManager.GetStateFromMessage<PostJoinInlineState>(update.CallbackQuery.Message);
 
-        switch(update.CallbackQuery.Data)
+        switch (update.CallbackQuery.Data)
         { 
         case "postjoin-delete":
-            await DoHandlePostJoinDeleteAsync(update.CallbackQuery.From, user, update.CallbackQuery.Message.MessageId, cancellationToken);
+            await DoHandlePostJoinDeleteAsync(update.CallbackQuery.From, inlineState, update.CallbackQuery.Message.MessageId, cancellationToken);
             return true;
         case "postjoin-delete-confirm":
-            await DoHandlePostJoinDeleteConfirmedAsync(update.CallbackQuery.From, user, update.CallbackQuery.Message.MessageId, cancellationToken);
+            await DoHandlePostJoinDeleteConfirmedAsync(update.CallbackQuery.From, inlineState, update.CallbackQuery.Message.MessageId, cancellationToken);
             return true;
         case "postjoin-delete-cancel":
-            await DoHandlePostJoinDeleteCanceledAsync(update.CallbackQuery.From, user, update.CallbackQuery.Message.MessageId, cancellationToken);
+            await DoHandlePostJoinDeleteCanceledAsync(update.CallbackQuery.From, inlineState, update.CallbackQuery.Message.MessageId, cancellationToken);
             return true;
         case "postjoin-deleted":
             return true;
@@ -61,26 +61,26 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
         return false;
     }
 
-    private async Task DoHandlePostJoinDeleteAsync(User admin, User user, int messageId, CancellationToken cancellationToken)
+    private async Task DoHandlePostJoinDeleteAsync(User admin, PostJoinInlineState inlineState, int messageId, CancellationToken cancellationToken)
     {
-        logger.LogInformation("User delete request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", options.AdminGroupId, admin.Id, user.Id);
+        logger.LogInformation("User delete request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}, whoisMessageId: {WhoisMessageId}", options.AdminGroupId, admin.Id, inlineState.UserId, inlineState.WhoisMessageId);
 
         await adminGroupBot.AskForUserDeleteConfirmationAsync(messageId, cancellationToken);
     }
 
-    private async Task DoHandlePostJoinDeleteConfirmedAsync(User admin, User user, int messageId, CancellationToken cancellationToken)
+    private async Task DoHandlePostJoinDeleteConfirmedAsync(User admin, PostJoinInlineState inlineState, int messageId, CancellationToken cancellationToken)
     {
-        logger.LogInformation("User delete request confirmed in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", options.AdminGroupId, admin.Id, user.Id);
+        logger.LogInformation("User delete request confirmed in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}, whoisMessageId: {WhoisMessageId}", options.AdminGroupId, admin.Id, inlineState.UserId, inlineState.WhoisMessageId);
 
-        var currentStatus = await targetGroupBot.GetMemberStatusAsync(user.Id, cancellationToken);
-        if (!CanBeDeletedFromChat(currentStatus)) return;
+        var chatMember = await targetGroupBot.GetChatMemberAsync(inlineState.UserId, cancellationToken);
+        if (!CanBeDeletedFromChat(chatMember.Status)) return;
 
-        var originalRequest = await userRepository.FindJoinRequestAsync(user.Id, cancellationToken);
-        if (originalRequest == null) return;
+        var originalRequest = await userRepository.FindJoinRequestAsync(inlineState.UserId, cancellationToken);
+        if (originalRequest == null || originalRequest.WhoisMessageId != inlineState.WhoisMessageId) return;
 
-        await targetGroupBot.SayLeavingToChangeWhoisAsync(user, cancellationToken);
+        await targetGroupBot.SayLeavingToChangeWhoisAsync(chatMember.User, cancellationToken);
 
-        await targetGroupBot.DeleteUserAsync(user.Id, cancellationToken);
+        await targetGroupBot.DeleteUserAsync(inlineState.UserId, cancellationToken);
 
         if (originalRequest.IsWhoisMessageWritten)
         {
@@ -97,14 +97,14 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
             await userChatBot.TrySayingUserDeletedAsync(originalRequest.UserChatId, cancellationToken);
         }
     }
-    private async Task DoHandlePostJoinDeleteCanceledAsync(User admin, User user, int messageId, CancellationToken cancellationToken)
+    private async Task DoHandlePostJoinDeleteCanceledAsync(User admin, PostJoinInlineState inlineState, int messageId, CancellationToken cancellationToken)
     {
-        logger.LogInformation("User delete request canceled in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", options.AdminGroupId, admin.Id, user.Id);
+        logger.LogInformation("User delete request canceled in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}, whoisMessageId: {WhoisMessageId}", options.AdminGroupId, admin.Id, inlineState.UserId, inlineState.WhoisMessageId);
 
         await adminGroupBot.CancelUserDeletionAsync(messageId, cancellationToken);
     }
 
-    private bool CanBeDeletedFromChat(ChatMemberStatus? memberStatus)
+    private bool CanBeDeletedFromChat(ChatMemberStatus memberStatus)
     {
         return
             memberStatus == ChatMemberStatus.Creator ||

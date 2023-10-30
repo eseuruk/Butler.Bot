@@ -5,7 +5,7 @@ namespace Butler.Bot.Core.TargetGroup;
 
 public interface ITargetGroupBot
 {
-    Task<ChatMemberStatus?> GetMemberStatusAsync(long userId, CancellationToken cancellationToken);
+    Task<ChatMember> GetChatMemberAsync(long userId, CancellationToken cancellationToken);
 
     Task DeclineJoinRequestAsync(long userId, CancellationToken cancellationToken);
 

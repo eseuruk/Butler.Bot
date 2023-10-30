@@ -23,7 +23,9 @@ public class AdminGroupBot : GroupBotBase, IAdminGroupBot
     {
         var userMention = mentionStrategy.GetUserMention(user);
         var text = Options.AdminGroupMessages.ReportJoinRequest.SafeFormat(userMention, whois);
-        text = inlineStateManager.InjectStateIntoMessageHtml(text, user);
+
+        var inlineState = new PreJoinInlineState { UserId = user.Id };
+        text = inlineStateManager.InjectStateIntoMessageHtml(text, inlineState);
 
         var markup = new InlineKeyboardMarkup(new[]
             {
@@ -82,11 +84,13 @@ public class AdminGroupBot : GroupBotBase, IAdminGroupBot
     }
 
 
-    public async Task ReportUserAddedAsync(User user, string whois, CancellationToken cancellationToken)
+    public async Task ReportUserAddedAsync(User user, int whoisMessageId, string whois, CancellationToken cancellationToken)
     {
         var userMention = mentionStrategy.GetUserMention(user);
         var text = Options.AdminGroupMessages.ReportUserAdded.SafeFormat(userMention, whois);
-        text = inlineStateManager.InjectStateIntoMessageHtml(text, user);
+
+        var inlineState = new PostJoinInlineState { WhoisMessageId = whoisMessageId, UserId = user.Id };
+        text = inlineStateManager.InjectStateIntoMessageHtml(text, inlineState);
 
         var markup = new InlineKeyboardMarkup(new[]
             {

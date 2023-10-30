@@ -68,7 +68,7 @@ public class ChatMemberAddedHandler : IUpdateHandler
 
                 if (options.WhoisReviewMode == WhoisReviewMode.PostJoin)
                 {
-                    await adminGroupBot.ReportUserAddedAsync(newMember, request.Whois, cancellationToken);
+                    await adminGroupBot.ReportUserAddedAsync(newMember, whoisMessage.MessageId, request.Whois, cancellationToken);
                 }
             }
         }

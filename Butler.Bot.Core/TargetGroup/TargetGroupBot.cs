@@ -17,13 +17,12 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
         this.mentionStrategy = mentionStrategy;
     }
 
-    public async Task<ChatMemberStatus?> GetMemberStatusAsync(long userId, CancellationToken cancellationToken)
+    public async Task<ChatMember> GetChatMemberAsync(long userId, CancellationToken cancellationToken)
     {
         var member = await ApiClient.GetChatMemberAsync(Options.TargetGroupId, userId, cancellationToken);
-        var memberStatus = member?.Status;
 
-        Logger.LogInformation("User group membership check. target group: {ChatId} user: {UserId} status: {Status}", Options.TargetGroupId, userId, memberStatus);
-        return memberStatus;
+        Logger.LogInformation("Get group membership. target group: {ChatId} user: {UserId} status: {Status}, retUser: {RetUserId}", Options.TargetGroupId, userId, member.Status, member.User.Id);
+        return member;
     }
 
     public async Task DeclineJoinRequestAsync(long userId, CancellationToken cancellationToken)

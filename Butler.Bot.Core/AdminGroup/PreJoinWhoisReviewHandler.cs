@@ -41,15 +41,15 @@ public class PreJoinWhoisReviewHandler : IUpdateHandler
         if (update.CallbackQuery.Data == null || !update.CallbackQuery.Data.StartsWith("prejoin-")) return false;
 
         await adminGroupBot.StopQuerySpinnerAsync(update.CallbackQuery.Id, cancellationToken);
-        var user = inlineStateManager.GetStateFromMessage<User>(update.CallbackQuery.Message);
+        var inlineState = inlineStateManager.GetStateFromMessage<PreJoinInlineState>(update.CallbackQuery.Message);
 
         switch (update.CallbackQuery.Data)
         {
         case "prejoin-approve":
-            await DoHandlePreJoinApproveAsync(update.CallbackQuery.From, user, update.CallbackQuery.Message.MessageId, cancellationToken);
+            await DoHandlePreJoinApproveAsync(update.CallbackQuery.From, inlineState, update.CallbackQuery.Message.MessageId, cancellationToken);
             return true;
         case "prejoin-decline":
-            await DoHandlePreJoinDeclineAsync(update.CallbackQuery.From, user, update.CallbackQuery.Message.MessageId, cancellationToken);
+            await DoHandlePreJoinDeclineAsync(update.CallbackQuery.From, inlineState, update.CallbackQuery.Message.MessageId, cancellationToken);
             return true;
         case "prejoin-done":
             return true;
@@ -58,17 +58,17 @@ public class PreJoinWhoisReviewHandler : IUpdateHandler
         return false;
     }
 
-    private async Task DoHandlePreJoinApproveAsync(User admin, User user, int messageId, CancellationToken cancellationToken)
+    private async Task DoHandlePreJoinApproveAsync(User admin, PreJoinInlineState inlineState, int messageId, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Whois approve request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", options.AdminGroupId, admin.Id, user.Id);
+        logger.LogInformation("Whois approve request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", options.AdminGroupId, admin.Id, inlineState.UserId);
 
-        var currentStatus = await targetGroupBot.GetMemberStatusAsync(user.Id, cancellationToken);
-        if (!CanBeAddedToChat(currentStatus)) return;
+        var chatMember = await targetGroupBot.GetChatMemberAsync(inlineState.UserId, cancellationToken);
+        if (!CanBeAddedToChat(chatMember.Status)) return;
 
-        var originalRequest = await userRepository.FindJoinRequestAsync(user.Id, cancellationToken);
+        var originalRequest = await userRepository.FindJoinRequestAsync(inlineState.UserId, cancellationToken);
         if (originalRequest == null) return;
 
-        await targetGroupBot.ApproveJoinRequestAsync(user.Id, cancellationToken);
+        await targetGroupBot.ApproveJoinRequestAsync(inlineState.UserId, cancellationToken);
 
         await adminGroupBot.MarkJoinRequestAsApprovedAsync(messageId, admin, cancellationToken);
 
@@ -78,17 +78,17 @@ public class PreJoinWhoisReviewHandler : IUpdateHandler
         }
     }
 
-    private async Task DoHandlePreJoinDeclineAsync(User admin, User user, int messageId, CancellationToken cancellationToken)
+    private async Task DoHandlePreJoinDeclineAsync(User admin, PreJoinInlineState inlineState, int messageId, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Whois decline request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", options.AdminGroupId, admin.Id, user.Id);
+        logger.LogInformation("Whois decline request in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}", options.AdminGroupId, admin.Id, inlineState.UserId);
 
-        var currentStatus = await targetGroupBot.GetMemberStatusAsync(user.Id, cancellationToken);
-        if (!CanBeAddedToChat(currentStatus)) return;
+        var chatMember = await targetGroupBot.GetChatMemberAsync(inlineState.UserId, cancellationToken);
+        if (!CanBeAddedToChat(chatMember.Status)) return;
 
-        var originalRequest = await userRepository.FindJoinRequestAsync(user.Id, cancellationToken);
+        var originalRequest = await userRepository.FindJoinRequestAsync(inlineState.UserId, cancellationToken);
         if (originalRequest == null) return;
 
-        await targetGroupBot.DeclineJoinRequestAsync(user.Id, cancellationToken);
+        await targetGroupBot.DeclineJoinRequestAsync(inlineState.UserId, cancellationToken);
 
         var withoutWhois = originalRequest with { Whois = string.Empty };
         await userRepository.UpdateJoinRequestAsync(withoutWhois, cancellationToken);
@@ -101,11 +101,9 @@ public class PreJoinWhoisReviewHandler : IUpdateHandler
         }
     }
 
-    private bool CanBeAddedToChat(ChatMemberStatus? memberStatus)
+    private bool CanBeAddedToChat(ChatMemberStatus memberStatus)
     {
-        return 
-            memberStatus == null ||                 // never joinned
-            memberStatus == ChatMemberStatus.Left;  // left but not blocked
+        return memberStatus == ChatMemberStatus.Left;  // never joinned OR left but not blocked
     }
 }
 

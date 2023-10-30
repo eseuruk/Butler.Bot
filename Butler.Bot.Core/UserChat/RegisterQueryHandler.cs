@@ -40,15 +40,15 @@ public class RegisterQueryHandler : IUpdateHandler
 
     private async Task DoHandleRegisterCallbackAsync(long chatId, long userId, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Registration requsted in private chat: {ChatId}", chatId);
+        logger.LogInformation("Registration requested in private chat: {ChatId}", chatId);
 
-        var currentStatus = await targetGroupBot.GetMemberStatusAsync(userId, cancellationToken);
+        var chatMember = await targetGroupBot.GetChatMemberAsync(userId, cancellationToken);
 
-        if (IsAlreadyMember(currentStatus))
+        if (IsAlreadyMember(chatMember.Status))
         {
             await userChatBot.SayAlreadyMemberAsync(chatId, cancellationToken);
         }
-        else if(IsBlocked(currentStatus))
+        else if(IsBlocked(chatMember.Status))
         {
             await userChatBot.SayBlockedAsync(chatId, cancellationToken);
         }
@@ -67,7 +67,7 @@ public class RegisterQueryHandler : IUpdateHandler
         }
     }
 
-    private bool IsAlreadyMember(ChatMemberStatus? memberStatus)
+    private bool IsAlreadyMember(ChatMemberStatus memberStatus)
     {
         return
             memberStatus == ChatMemberStatus.Creator ||
@@ -76,7 +76,7 @@ public class RegisterQueryHandler : IUpdateHandler
             memberStatus == ChatMemberStatus.Restricted;
     }
 
-    private bool IsBlocked(ChatMemberStatus? memberStatus)
+    private bool IsBlocked(ChatMemberStatus memberStatus)
     {
         return memberStatus == ChatMemberStatus.Kicked;
     }

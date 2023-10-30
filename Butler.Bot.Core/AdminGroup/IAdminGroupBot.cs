@@ -12,7 +12,7 @@ public interface IAdminGroupBot
 
     Task MarkJoinRequestAsDeclinedAsync(int messageId, User admin, CancellationToken cancellationToken);
 
-    Task ReportUserAddedAsync(User user, string whois, CancellationToken cancellationToken);
+    Task ReportUserAddedAsync(User user, int whoisMessageId, string whois, CancellationToken cancellationToken);
 
     Task AskForUserDeleteConfirmationAsync(int messageId, CancellationToken cancellationToken);
 
