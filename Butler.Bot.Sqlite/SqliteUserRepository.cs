@@ -1,5 +1,6 @@
 ﻿using Butler.Bot.Core;
 using Microsoft.Extensions.Logging;
+using Telegram.Bot.Requests.Abstractions;
 using Telegram.Bot.Types;
 
 namespace Butler.Bot.Sqlite;
@@ -19,7 +20,7 @@ public class SqliteUserRepository : IUserRepository
     {
         if( !database.IsExist() )
         {
-            logger.LogInformation("Database not exist, so no request found: {UserId}, databaseFileName: {DatabaseFileName}", userId, database.FileName);
+            logger.LogInformation("Database does not exist, so no request found: {UserId}, databaseFileName: {DatabaseFileName}", userId, database.FileName);
             return Task.FromResult<JoinRequest?>(null);
         }
 
@@ -30,7 +31,7 @@ public class SqliteUserRepository : IUserRepository
             return Task.FromResult<JoinRequest?>(null);
         }
 
-        logger.LogInformation("Request found: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
+        logger.LogInformation("Request is found: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
         return Task.FromResult<JoinRequest?>(request);
     }
 
@@ -40,7 +41,7 @@ public class SqliteUserRepository : IUserRepository
 
         database.InsertUserRequest(request);
 
-        logger.LogInformation("Request created: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
+        logger.LogInformation("Request is created: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
         return Task.CompletedTask;
     }
 
@@ -50,10 +51,23 @@ public class SqliteUserRepository : IUserRepository
 
         database.UpdateUserRequest(request);
         
-        logger.LogInformation("Request updated: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
+        logger.LogInformation("Request is updated: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
         return Task.CompletedTask;
     }
 
+    public Task DeleteJoinRequestAsync(long userId, CancellationToken cancellationToken)
+    {
+        if (!database.IsExist())
+        {
+            logger.LogInformation("Database does not exist, so nothing to delete for: {UserId}, databaseFileName: {DatabaseFileName}", userId, database.FileName);
+            return Task.FromResult<JoinRequest?>(null);
+        }
+
+        database.DeleteUserRequest(userId);
+
+        logger.LogInformation("Request is deleted: {UserId}", userId);
+        return Task.CompletedTask;
+    }
     private void CreateDatabaseIfNotExist()
     {
         if (database.IsExist()) return;

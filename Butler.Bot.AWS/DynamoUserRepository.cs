@@ -19,11 +19,11 @@ public class DynamoUserRepository : IUserRepository
 
         if (request == null)
         {
-            logger.LogInformation("Request not found: {UserId}", userId);
+            logger.LogInformation("Request is not found: {UserId}", userId);
             return null;
         }
 
-        logger.LogInformation("Request found: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
+        logger.LogInformation("Request is found: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
         return request;
     }
 
@@ -31,13 +31,20 @@ public class DynamoUserRepository : IUserRepository
     {
         await table.PutItemAsync(request, cancellationToken);
 
-        logger.LogInformation("Request created: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
+        logger.LogInformation("Request is created: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
     }
 
     public async Task UpdateJoinRequestAsync(JoinRequest request, CancellationToken cancellationToken)
     {
         await table.PutItemAsync(request, cancellationToken);
 
-        logger.LogInformation("Request updated: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
+        logger.LogInformation("Request is updated: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
+    }
+
+    public async Task DeleteJoinRequestAsync(long userId, CancellationToken cancellationToken)
+    {
+        await table.DeleteItemAsync(userId, cancellationToken);
+
+        logger.LogInformation("Request is deleted: {UserId}", userId);
     }
 }

@@ -48,6 +48,14 @@ public class DynamoJoinRequestTable
         await client.PutItemAsync(options.Table, item, cancellationToken);
     }
 
+    public async Task DeleteItemAsync(long userId, CancellationToken cancellationToken)
+    {
+        var key = new Dictionary<string, AttributeValue>();
+        Add_Id(key, userId);
+
+        await client.DeleteItemAsync(options.Table, key, cancellationToken);
+    }
+
     private void Add_Id(Dictionary<string, AttributeValue> attributes, long value)
     {
         attributes.Add(options.UserId, new AttributeValue { N = value.ToString() });

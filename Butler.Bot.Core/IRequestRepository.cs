@@ -8,6 +8,8 @@ public interface IUserRepository
 
     Task UpdateJoinRequestAsync(JoinRequest request, CancellationToken cancellationToken);
 
+    Task DeleteJoinRequestAsync(long userId, CancellationToken cancellationToken);
+
     public async Task<JoinRequest> FindOrCreateRequestAsync(long userId, CancellationToken cancellationToken)
     {
         var request = await FindJoinRequestAsync(userId, cancellationToken);

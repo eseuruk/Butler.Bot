@@ -17,11 +17,11 @@ public class InMemoryRequestRepository : IUserRepository
         JoinRequest? request;
         if (contaner.TryGetValue(userId, out request))
         {
-            logger.LogInformation("Request found: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
+            logger.LogInformation("Request is found: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
         }
         else
         {
-            logger.LogInformation("Request not found: {UserId}", userId);
+            logger.LogInformation("Request is not found: {UserId}", userId);
         }
 
         return Task.FromResult(request);
@@ -31,7 +31,7 @@ public class InMemoryRequestRepository : IUserRepository
     {
         contaner.Add(request.UserId, request);
 
-        logger.LogInformation("Request created: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
+        logger.LogInformation("Request is created: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
         return Task.CompletedTask;
     }
 
@@ -39,7 +39,23 @@ public class InMemoryRequestRepository : IUserRepository
     {
         contaner[request.UserId] = request;
 
-        logger.LogInformation("Request updated: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
+        logger.LogInformation("Request is updated: {UserId}, whois: {Whois}, whoisMessageId: {WhoisMessageId}, userChatId: {UserChatId}", request.UserId, request.Whois, request.WhoisMessageId, request.UserChatId);
+        return Task.CompletedTask;
+    }
+
+    public Task DeleteJoinRequestAsync(long userId, CancellationToken cancellationToken)
+    {
+        bool removed = contaner.Remove(userId);
+
+        if (removed)
+        {
+            logger.LogInformation("Request is deleted: {UserId}", userId);
+        }
+        else
+        {
+            logger.LogInformation("Request is not found so can not be deleted: {UserId}", userId);
+        }
+
         return Task.CompletedTask;
     }
 }

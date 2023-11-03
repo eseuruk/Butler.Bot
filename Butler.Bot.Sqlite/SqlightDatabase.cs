@@ -2,6 +2,7 @@
 using Dapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
+using Telegram.Bot.Requests.Abstractions;
 
 namespace Butler.Bot.Sqlite;
 
@@ -73,6 +74,15 @@ public class SqlightDatabase
                 WHERE UserId = @UserId";
 
             connection.Execute(sql, new { UserId = request.UserId, Whois = request.Whois, WhoisMessageId = request.WhoisMessageId, UserChatId = request.UserChatId });
+        }
+    }
+
+    public void DeleteUserRequest(long userId)
+    {
+        using (var connection = new SqliteConnection(options.ConnectionString))
+        {
+            var sql = @"DELETE FROM JoinRequests WHERE UserId = @UserId";
+            connection.Execute(sql, new { UserId = userId });
         }
     }
 }
