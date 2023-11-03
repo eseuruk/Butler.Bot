@@ -8,6 +8,10 @@ public class UserChatMessages
 
     public string ButtonAmend { get; init; } = "Исправить";
 
+    public string ButtonRequestToJoin{ get; init; } = "Запросить доступ";
+
+    public string ButtonDeleteWhois { get; init; } = "Удалить описание";
+
     public string SayBotVersion { get; init; } = "Версия бота: {0}";
 
     public string SayHello { get; init; } = "Привет! Я помогу тебя зайти в группу {0}. Если не против, я задам тебе несколько вопросов, перед тем как ты сможешь туда попасть.";
@@ -20,7 +24,7 @@ public class UserChatMessages
 
     public string SayWhoisOkAndAskToRequestAccess { get; init; } = "Спасибо за детальное описание. Теперь, нажми на кнопку ниже и запроси доступ к группе.";
 
-    public string SayUsedToBeMember { get; init; } = "Похоже, ты состоял в групе раньше но вышел из нее. Пожалуйста, нажми на кнопку ниже и запроси доступ снова.";
+    public string SayUsedToBeMember { get; init; } = "Похоже, ты состоял в групе раньше но вышел из нее. Пожалуйста, запроси доступ снова, либо удали старое описание чтобы написать новое.";
 
     public string SayAlreadyMember { get; init; } = "Ты уже состоишь в нашей группе. Нажми на кнопну ниже, чтобы перейти в нее.";
 

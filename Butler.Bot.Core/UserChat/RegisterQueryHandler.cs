@@ -1,5 +1,6 @@
 ﻿using Butler.Bot.Core.TargetGroup;
 using Microsoft.Extensions.Logging;
+using System.Runtime.Serialization;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
@@ -29,18 +30,27 @@ public class RegisterQueryHandler : IUpdateHandler
         // Only accept callback from private chat
         if (update.CallbackQuery.Message.Chat.Type != ChatType.Private) return false;
 
-        // Only handle [register]
-        if (update.CallbackQuery.Data != "register") return false;
+        // Only handle register requests
+        if (update.CallbackQuery.Data == null || !update.CallbackQuery.Data.StartsWith("register")) return false;
 
         await userChatBot.StopQuerySpinnerAsync(update.CallbackQuery.Id, cancellationToken);
 
-        await DoHandleRegisterCallbackAsync(update.CallbackQuery.Message.Chat.Id, update.CallbackQuery.From.Id, cancellationToken);
-        return true;
+        switch(update.CallbackQuery.Data)
+        {
+            case "register":
+                await DoHandleRegisterAsync(update.CallbackQuery.Message.Chat.Id, update.CallbackQuery.From.Id, false, cancellationToken);
+                return true;
+
+            case "register-delete":
+                await DoHandleRegisterAsync(update.CallbackQuery.Message.Chat.Id, update.CallbackQuery.From.Id, true, cancellationToken);
+                return true;
+        }
+        return false;
     }
 
-    private async Task DoHandleRegisterCallbackAsync(long chatId, long userId, CancellationToken cancellationToken)
+    private async Task DoHandleRegisterAsync(long chatId, long userId, bool forceDeleteOldWhois, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Registration requested in private chat: {ChatId}", chatId);
+        logger.LogInformation("Registration requested in private chat: {ChatId}, userId: {UserId}, forceDeleteOldWhois: {ForceDeleteOldWhois}", chatId, userId, forceDeleteOldWhois);
 
         var chatMember = await targetGroupBot.GetChatMemberAsync(userId, cancellationToken);
 
@@ -48,7 +58,7 @@ public class RegisterQueryHandler : IUpdateHandler
         {
             await userChatBot.SayAlreadyMemberAsync(chatId, cancellationToken);
         }
-        else if(IsBlocked(chatMember.Status))
+        else if (IsBlocked(chatMember.Status))
         {
             await userChatBot.SayBlockedAsync(chatId, cancellationToken);
         }
@@ -58,7 +68,19 @@ public class RegisterQueryHandler : IUpdateHandler
 
             if (request.IsWhoisProvided)
             {
-                await userChatBot.SayUsedToBeMemberAsync(chatId, cancellationToken);
+                if (forceDeleteOldWhois)
+                {
+                    await targetGroupBot.TryDeleteMessageAsync(request.WhoisMessageId, cancellationToken);
+
+                    var emptyRequest = request with { Whois = string.Empty, WhoisMessageId = 0, UserChatId = 0 };
+                    await userRepository.UpdateJoinRequestAsync(emptyRequest, cancellationToken);
+
+                    await userChatBot.AskForWhoisAsync(chatId, cancellationToken);
+                }
+                else
+                {
+                    await userChatBot.SayUsedToBeMemberAsync(chatId, cancellationToken);
+                }
             }
             else
             {

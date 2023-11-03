@@ -53,6 +53,11 @@ public class ChatMemberAddedHandler : IUpdateHandler
             else if (request.IsWhoisMessageWritten)
             {
                 await targetGroupBot.SayHelloAgainAsync(newMember, cancellationToken);
+
+                if (request.IsUserChatIdSaved)
+                {
+                    await userChatBot.TrySayingRequestApprovedAsync(request.UserChatId, cancellationToken);
+                }
             }
             else
             {

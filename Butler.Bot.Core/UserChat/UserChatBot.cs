@@ -89,8 +89,17 @@ public class UserChatBot : GroupBotBase, IUserChatBot
 
     public async Task SayUsedToBeMemberAsync(long userChatId, CancellationToken cancellationToken)
     {
-        var markup = new InlineKeyboardMarkup(
-                InlineKeyboardButton.WithUrl(Options.TargetGroupDisplayName, Options.InvitationLink));
+        var markup = new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithUrl(Options.UserChatMessages.ButtonRequestToJoin, Options.InvitationLink)
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(Options.UserChatMessages.ButtonDeleteWhois, "register-delete")
+                }
+            });
 
         await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
