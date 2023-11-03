@@ -2,6 +2,7 @@
 using Butler.Bot.Core.UserChat;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Text;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
@@ -44,7 +45,7 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
         var inlineState = inlineStateManager.GetStateFromMessage<PostJoinInlineState>(update.CallbackQuery.Message);
 
         switch (update.CallbackQuery.Data)
-        { 
+        {
         case "postjoin-delete":
             await DoHandlePostJoinDeleteAsync(update.CallbackQuery.From, inlineState, update.CallbackQuery.Message.MessageId, cancellationToken);
             return true;
@@ -72,31 +73,34 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
     {
         logger.LogInformation("User delete request confirmed in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}, whoisMessageId: {WhoisMessageId}", options.AdminGroupId, admin.Id, inlineState.UserId, inlineState.WhoisMessageId);
 
-        var chatMember = await targetGroupBot.GetChatMemberAsync(inlineState.UserId, cancellationToken);
-        if (!CanBeDeletedFromChat(chatMember.Status)) return;
+        (var joinRequestToDelete, var userToDelete) = await DecideWhatToDeleteAsync(inlineState, cancellationToken);
 
-        var originalRequest = await userRepository.FindJoinRequestAsync(inlineState.UserId, cancellationToken);
-        if (originalRequest == null || originalRequest.WhoisMessageId != inlineState.WhoisMessageId) return;
+        // 1. delete whois message from target group
+        await targetGroupBot.TryDeleteMessageAsync(inlineState.WhoisMessageId, cancellationToken);
 
-        await targetGroupBot.SayLeavingToChangeWhoisAsync(chatMember.User, cancellationToken);
-
-        await targetGroupBot.DeleteUserAsync(inlineState.UserId, cancellationToken);
-
-        if (originalRequest.IsWhoisMessageWritten)
+        if (joinRequestToDelete != null)
         {
-            await targetGroupBot.TryDeleteMessageAsync(originalRequest.WhoisMessageId, cancellationToken);
+            // 2. delete join request from db
+            var emptyRequest = joinRequestToDelete with { Whois = string.Empty, WhoisMessageId = 0, UserChatId = 0 };
+            await userRepository.UpdateJoinRequestAsync(emptyRequest, cancellationToken);
         }
 
-        var emptyRequest = originalRequest with { Whois = string.Empty, WhoisMessageId = 0, UserChatId = 0 };
-        await userRepository.UpdateJoinRequestAsync(emptyRequest, cancellationToken);
+        if (userToDelete != null)
+        {
+            // 3. delete user from the target group
+            await targetGroupBot.SayLeavingToChangeWhoisAsync(userToDelete, cancellationToken);
+            await targetGroupBot.DeleteUserAsync(userToDelete.Id, cancellationToken);
+
+            // 4. notify user about deletion 
+            if (joinRequestToDelete != null && joinRequestToDelete.IsWhoisMessageWritten)
+            {
+                await userChatBot.TrySayingUserDeletedAsync(joinRequestToDelete.UserChatId, cancellationToken);
+            }
+        }
 
         await adminGroupBot.MarkUserAsDeletedAsync(messageId, admin, cancellationToken);
-        
-        if (originalRequest.IsUserChatIdSaved)
-        {
-            await userChatBot.TrySayingUserDeletedAsync(originalRequest.UserChatId, cancellationToken);
-        }
     }
+
     private async Task DoHandlePostJoinDeleteCanceledAsync(User admin, PostJoinInlineState inlineState, int messageId, CancellationToken cancellationToken)
     {
         logger.LogInformation("User delete request canceled in admin group: {AdminGroup}, admin: {AdminId}, userID: {UserId}, whoisMessageId: {WhoisMessageId}", options.AdminGroupId, admin.Id, inlineState.UserId, inlineState.WhoisMessageId);
@@ -104,7 +108,70 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
         await adminGroupBot.CancelUserDeletionAsync(messageId, cancellationToken);
     }
 
-    private bool CanBeDeletedFromChat(ChatMemberStatus memberStatus)
+    private async Task<(JoinRequest?, User?)> DecideWhatToDeleteAsync(PostJoinInlineState inlineState, CancellationToken cancellationToken)
+    {
+        var joinRequest = await userRepository.FindJoinRequestAsync(inlineState.UserId, cancellationToken);
+        var chatMember = await targetGroupBot.GetChatMemberAsync(inlineState.UserId, cancellationToken);
+
+        var isMemberOfTheChat = IsMemberOfTheGroup(chatMember.Status);
+
+        string caseDescription, decision;
+
+        JoinRequest? requestToDelete;
+        User? userToDelete;
+
+        if (joinRequest == null)
+        {
+            if (!isMemberOfTheChat)
+            {
+                caseDescription = "request was deleted previously, user left the group as well";
+                decision = "nothing to delete";
+
+                requestToDelete = null;
+                userToDelete = null;
+            }
+            else
+            {
+                caseDescription = "request was deleted previously, but user still a member of the group somehow";
+                decision = "removing user from the group";
+
+                requestToDelete = null;
+                userToDelete = chatMember.User;
+            }
+        }
+        else
+        {
+            if (joinRequest.WhoisMessageId != inlineState.WhoisMessageId)
+            {
+                caseDescription = "request exists, but admin clicked not on the latest whois message";
+                decision = "nothing to delete. admin needs to click on another whois message to remove the user";
+
+                requestToDelete = null;
+                userToDelete = null;
+            }
+            else if (!isMemberOfTheChat)
+            {
+                caseDescription = "request exists, but user left the group or was kicked off";
+                decision = "removing request";
+
+                requestToDelete = joinRequest;
+                userToDelete = null;
+            }
+            else
+            {
+                caseDescription = "request exists, user is member of the group";
+                decision = "removing request and user from the group";
+
+                requestToDelete = joinRequest;
+                userToDelete = chatMember.User;
+            }
+        }
+
+        logger.LogInformation("Decide what to delete. UserId: {UserId} WhoisMessageId: {WhoisMessageId}, Case: {Case}, Result: {Result}", inlineState.UserId, inlineState.WhoisMessageId, caseDescription, decision);
+        return (requestToDelete, userToDelete);
+    }
+
+    private bool IsMemberOfTheGroup(ChatMemberStatus memberStatus)
     {
         return
             memberStatus == ChatMemberStatus.Creator ||
