@@ -38,6 +38,7 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IUpdateHandler, UserChat.TextMessageHandler>();
         services.AddSingleton<IUpdateHandler, UserChat.RegisterQueryHandler>();
+        services.AddSingleton<IUpdateHandler, UserChat.LeaveQueryHandler>();
         services.AddSingleton<IUpdateHandler, TargetGroup.JoinRequestHandler>();
         services.AddSingleton<IUpdateHandler, TargetGroup.ChatMemberAddedHandler>();
         services.AddSingleton<IUpdateHandler, AdminGroup.PreJoinWhoisReviewHandler>();

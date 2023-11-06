@@ -4,7 +4,7 @@ public interface IUserChatBot
 {
     Task StopQuerySpinnerAsync(string callbackQueryId, CancellationToken cancellationToken);
 
-    Task SayBotVersionAsync(long userChatId, CancellationToken cancellationToken);
+    Task ShowBotVersionAsync(long userChatId, CancellationToken cancellationToken);
 
     Task SayHelloAsync(long userChatId, CancellationToken cancellationToken);
 
@@ -21,6 +21,12 @@ public interface IUserChatBot
     Task SayAlreadyMemberAsync(long userChatId, CancellationToken cancellationToken);
 
     Task SayBlockedAsync(long userChatId, CancellationToken cancellationToken);
+
+    Task<int> ShowLeaveRequestAsync(long userChatId, CancellationToken cancellationToken);
+
+    Task SayLeaveRequestCanceledAsync(long userChatId, int requestMessageId, CancellationToken cancellationToken);
+
+    Task SayLeaveRequestFulfilledAsync(long userChatId, int requestMessageId, CancellationToken cancellationToken);
 
     Task TrySayingRequestApprovedAsync(long userChatId, CancellationToken cancellationToken);
 

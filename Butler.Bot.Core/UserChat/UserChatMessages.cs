@@ -12,6 +12,10 @@ public class UserChatMessages
 
     public string ButtonDeleteWhois { get; init; } = "Удалить описание";
 
+    public string ButtonLeave { get; init; } = "Покинуть группу";
+
+    public string ButtonCancel { get; init; } = "Отменить";
+
     public string SayBotVersion { get; init; } = "Версия бота: {0}";
 
     public string SayHello { get; init; } = "Привет! Я помогу тебя зайти в группу {0}. Если не против, я задам тебе несколько вопросов, перед тем как ты сможешь туда попасть.";
@@ -29,6 +33,12 @@ public class UserChatMessages
     public string SayAlreadyMember { get; init; } = "Ты уже состоишь в нашей группе. Нажми на кнопну ниже, чтобы перейти в нее.";
 
     public string SayBlockedMember { get; init; } = "Ты был удален из группы и только администраторы могут вернуть тебе доступ.";
+
+    public string AskForForLeavingConfirmation { get; init; } = "Ты действительно хочешь покинуть группу {0} и удалить свое описание?\n\nЯ не могу удалить твои сообщения. Если хочешь удалить их, то перейди в группу и сделай это сам.";
+
+    public string SayLeavingRequestCanceled { get; init; } = "Запрос на удаление из группы {0} был отменен.";
+
+    public string SayUserLeft { get; init; } = "Если ты состоял в группе {0}, то ты из нее удален. Также удолено твое описание.\n\nПриходи ещё.";
 
     public string SayRequestApproved { get; init; } = "Запрос в группу был одобрен. Нажми на кнопку ниже чтобы перейти в нее.";
 

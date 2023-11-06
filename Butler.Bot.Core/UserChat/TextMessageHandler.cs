@@ -39,17 +39,8 @@ public class TextMessageHandler : IUpdateHandler
     {
         logger.LogInformation("New text message in private chat: {ChatId}, userId: {UserId}, isBot: {IsBot}, text: {Text}", chat.Id, from.Id, from.IsBot, text);
 
-        if (text.ToLowerInvariant() == "/version")
-        {
-            await userChatBot.SayBotVersionAsync(chat.Id, cancellationToken);
-            return;
-        }
-
-        if (text.ToLowerInvariant() == "/start")
-        {
-            await userChatBot.SayHelloAsync(chat.Id, cancellationToken);
-            return;
-        }
+        bool menu = await TryHandleMenuCommands(chat, from, text, cancellationToken);
+        if (menu) return;
 
         var request = await userRepository.FindJoinRequestAsync(from.Id, cancellationToken);
 
@@ -71,5 +62,25 @@ public class TextMessageHandler : IUpdateHandler
 
         await userChatBot.SayWhoisOkAndAskToRequestAccessAsync(chat.Id, cancellationToken);
     }
-}
 
+    private async Task<bool> TryHandleMenuCommands(Chat chat, User from, string text, CancellationToken cancellationToken)
+    {
+        switch (text.ToLowerInvariant())
+        {
+            case "/version":
+                await userChatBot.ShowBotVersionAsync(chat.Id, cancellationToken);
+                return true;
+
+            case "/start":
+                await userChatBot.SayHelloAsync(chat.Id, cancellationToken);
+                return true;
+
+            case "/leave":
+                await userChatBot.ShowLeaveRequestAsync(chat.Id, cancellationToken);
+                return true;
+        }
+
+        return false;
+    }
+
+}

@@ -2,9 +2,7 @@
 using Butler.Bot.Core.UserChat;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Text;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 
 namespace Butler.Bot.Core.AdminGroup;
 
@@ -113,8 +111,6 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
         var joinRequest = await userRepository.FindJoinRequestAsync(inlineState.UserId, cancellationToken);
         var chatMember = await targetGroupBot.GetChatMemberAsync(inlineState.UserId, cancellationToken);
 
-        var isMemberOfTheChat = IsMemberOfTheGroup(chatMember.Status);
-
         string caseDescription, decision;
 
         JoinRequest? requestToDelete;
@@ -122,21 +118,21 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
 
         if (joinRequest == null)
         {
-            if (!isMemberOfTheChat)
-            {
-                caseDescription = "request was deleted previously, user left the group as well";
-                decision = "nothing to delete";
-
-                requestToDelete = null;
-                userToDelete = null;
-            }
-            else
+            if (chatMember.Status.IsRemovableMember())
             {
                 caseDescription = "request was deleted previously, but user still a member of the group somehow";
                 decision = "removing user from the group";
 
                 requestToDelete = null;
                 userToDelete = chatMember.User;
+            }
+            else
+            {
+                caseDescription = "request was deleted previously, and user can not be removed from the group";
+                decision = "nothing to delete";
+
+                requestToDelete = null;
+                userToDelete = null;
             }
         }
         else
@@ -149,15 +145,7 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
                 requestToDelete = null;
                 userToDelete = null;
             }
-            else if (!isMemberOfTheChat)
-            {
-                caseDescription = "request exists, but user left the group or was kicked off";
-                decision = "removing request";
-
-                requestToDelete = joinRequest;
-                userToDelete = null;
-            }
-            else
+            else if (chatMember.Status.IsRemovableMember())
             {
                 caseDescription = "request exists, user is member of the group";
                 decision = "removing request and user from the group";
@@ -165,19 +153,18 @@ public class PostJoinWhoisReviewHandler : IUpdateHandler
                 requestToDelete = joinRequest;
                 userToDelete = chatMember.User;
             }
+            else
+            {
+                caseDescription = "request exists, but user can not be removed frmom the group";
+                decision = "removing request";
+
+                requestToDelete = joinRequest;
+                userToDelete = null;
+            }
         }
 
-        logger.LogInformation("Decide what to delete. UserId: {UserId} WhoisMessageId: {WhoisMessageId}, Case: {Case}, Result: {Result}", inlineState.UserId, inlineState.WhoisMessageId, caseDescription, decision);
+        logger.LogInformation("Decide what to delete. UserId: {UserId}, Status: {Status}, WhoisMessageId: {WhoisMessageId}, Case: {Case}, Result: {Result}", inlineState.UserId, chatMember.Status, inlineState.WhoisMessageId, caseDescription, decision);
         return (requestToDelete, userToDelete);
-    }
-
-    private bool IsMemberOfTheGroup(ChatMemberStatus memberStatus)
-    {
-        return
-            memberStatus == ChatMemberStatus.Creator ||
-            memberStatus == ChatMemberStatus.Administrator ||
-            memberStatus == ChatMemberStatus.Member ||
-            memberStatus == ChatMemberStatus.Restricted;
     }
 }
 

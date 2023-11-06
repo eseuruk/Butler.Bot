@@ -50,15 +50,15 @@ public class RegisterQueryHandler : IUpdateHandler
 
     private async Task DoHandleRegisterAsync(long chatId, long userId, bool forceDeleteOldWhois, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Registration requested in private chat: {ChatId}, userId: {UserId}, forceDeleteOldWhois: {ForceDeleteOldWhois}", chatId, userId, forceDeleteOldWhois);
+        logger.LogInformation("Registration request in private chat: {ChatId}, userId: {UserId}, forceDeleteOldWhois: {ForceDeleteOldWhois}", chatId, userId, forceDeleteOldWhois);
 
         var chatMember = await targetGroupBot.GetChatMemberAsync(userId, cancellationToken);
 
-        if (IsAlreadyMember(chatMember.Status))
+        if (chatMember.Status.IsAlreadyMember())
         {
             await userChatBot.SayAlreadyMemberAsync(chatId, cancellationToken);
         }
-        else if (IsBlocked(chatMember.Status))
+        else if (chatMember.Status == ChatMemberStatus.Kicked)
         {
             await userChatBot.SayBlockedAsync(chatId, cancellationToken);
         }
@@ -87,19 +87,5 @@ public class RegisterQueryHandler : IUpdateHandler
                 await userChatBot.AskForWhoisAsync(chatId, cancellationToken);
             }
         }
-    }
-
-    private bool IsAlreadyMember(ChatMemberStatus memberStatus)
-    {
-        return
-            memberStatus == ChatMemberStatus.Creator ||
-            memberStatus == ChatMemberStatus.Administrator ||
-            memberStatus == ChatMemberStatus.Member ||
-            memberStatus == ChatMemberStatus.Restricted;
-    }
-
-    private bool IsBlocked(ChatMemberStatus memberStatus)
-    {
-        return memberStatus == ChatMemberStatus.Kicked;
     }
 }

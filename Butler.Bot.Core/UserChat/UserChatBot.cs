@@ -13,7 +13,7 @@ public class UserChatBot : GroupBotBase, IUserChatBot
     {
     }
 
-    public async Task SayBotVersionAsync(long userChatId, CancellationToken cancellationToken)
+    public async Task ShowBotVersionAsync(long userChatId, CancellationToken cancellationToken)
     {
         var botVersion = ButlerVersion.GetCurrent();
 
@@ -22,7 +22,7 @@ public class UserChatBot : GroupBotBase, IUserChatBot
             text: Options.UserChatMessages.SayBotVersion.SafeFormat(botVersion),
             cancellationToken: cancellationToken);
 
-        Logger.LogInformation("Said current version in private chat: {UserChatId} version: {Version}", userChatId, botVersion);
+        Logger.LogInformation("Showed current version in private chat: {UserChatId} version: {Version}", userChatId, botVersion);
     }
 
     public async Task SayHelloAsync(long userChatId, CancellationToken cancellationToken)
@@ -132,6 +132,52 @@ public class UserChatBot : GroupBotBase, IUserChatBot
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("Said blocked in private chat: {UserChatId}", userChatId);
+    }
+
+    public async Task<int> ShowLeaveRequestAsync(long userChatId, CancellationToken cancellationToken)
+    {
+        var markup = new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(Options.UserChatMessages.ButtonLeave, "leave-confirm")
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(Options.UserChatMessages.ButtonCancel, "leave-cancel")
+                }
+            });
+
+        var message = await ApiClient.SendTextMessageAsync(
+            chatId: userChatId,
+            text: Options.UserChatMessages.AskForForLeavingConfirmation.SafeFormat(Options.TargetGroupDisplayName),
+            replyMarkup: markup,
+            cancellationToken: cancellationToken);
+
+        Logger.LogInformation("Showed leave request in private chat: {UserChatId}, MessageId: {MessageId}", userChatId, message.MessageId);
+        return message.MessageId;
+    }
+
+    public async Task SayLeaveRequestCanceledAsync(long userChatId, int requestMessageId, CancellationToken cancellationToken)
+    {
+        await ApiClient.EditMessageTextAsync(
+            chatId: userChatId,
+            messageId: requestMessageId,
+            text: Options.UserChatMessages.SayLeavingRequestCanceled.SafeFormat(Options.TargetGroupDisplayName),
+            cancellationToken: cancellationToken);
+
+        Logger.LogInformation("Said leave request canceled in private chat: {UserChatId}, requestMessageId: {RequestMessageId}", userChatId, requestMessageId);
+    }
+ 
+    public async Task SayLeaveRequestFulfilledAsync(long userChatId, int requestMessageId, CancellationToken cancellationToken)
+    {
+        await ApiClient.EditMessageTextAsync(
+            chatId: userChatId,
+            messageId: requestMessageId,
+            text: Options.UserChatMessages.SayUserLeft.SafeFormat(Options.TargetGroupDisplayName),
+            cancellationToken: cancellationToken);
+
+        Logger.LogInformation("Said leave request fulfilled in private chat: {UserChatId}, requestMessageId: {RequestMessageId}", userChatId, requestMessageId);
     }
 
     public async Task TrySayingRequestApprovedAsync(long userChatId, CancellationToken cancellationToken)
