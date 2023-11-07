@@ -38,7 +38,7 @@ public class UserChatMessages
 
     public string SayLeavingRequestCanceled { get; init; } = "Запрос на удаление из группы {0} был отменен.";
 
-    public string SayUserLeft { get; init; } = "Если ты состоял в группе {0}, то ты из нее удален. Также удолено твое описание.\n\nПриходи ещё.";
+    public string SayUserLeft { get; init; } = "Если ты состоял в группе {0}, то ты из нее удален. Также удалено твое описание.\n\nПриходи ещё.";
 
     public string SayRequestApproved { get; init; } = "Запрос в группу был одобрен. Нажми на кнопку ниже чтобы перейти в нее.";
 

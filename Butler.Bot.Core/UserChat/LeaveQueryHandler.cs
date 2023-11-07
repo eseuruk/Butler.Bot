@@ -57,10 +57,19 @@ public class LeaveQueryHandler : IUpdateHandler
         if ( joinRequest is not null)
         {
             await userRepository.DeleteJoinRequestAsync(userId, cancellationToken);
+
+            if (joinRequest.IsWhoisMessageWritten)
+            {
+                await targetGroupBot.TryDeleteMessageAsync(joinRequest.WhoisMessageId, cancellationToken);
+            }
+            else
+            {
+                logger.LogInformation("Whois message was not written to target group. UserId: {UserId}", userId);
+            }
         }
         else
         {
-            logger.LogInformation("Join request is not found so nothing to delete. UserId: {UserId}", userId);
+            logger.LogInformation("Join request is not found. UserId: {UserId}", userId);
         }
 
         if (chatMember.Status.IsRemovableMember())
