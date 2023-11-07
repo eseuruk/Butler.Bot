@@ -1,13 +1,18 @@
 # Butler.Bot
+[![Latest release](https://img.shields.io/github/v/release/eseuruk/Butler.Bot?label=Latest%20Release)](https://github.com/eseuruk/Butler.Bot/releases/latest)
+[![support chat](https://img.shields.io/badge/Support_Chat-Telegram-blue.svg)](https://t.me/GenericButlerBot)
+[![telegram lib](https://img.shields.io/badge/Telegram.Bot-v19.0.0-blue.svg)](https://github.com/TelegramBots/Telegram.Bot)
+[![bot api](https://img.shields.io/badge/Bot_API-6.7-blue.svg)](https://core.telegram.org/bots/api#april-21-2023)
+
 Welcome to **Butler.Bot**, generic bot which is built to help people joining private groups describing themselves with #whois messages.
 
 Standard telegram invite links work well but require effort from administrators to review each join request manually. So **Butler.Bot** is specially designed to interact with people and add them to the group only when proper information is provided.
 
 Let’s imagine you have a private group with invite link like: https://t.me/GenericButlerBot If you click on it and follow bot instructions you will be smoothly added to Butler.Bot Discussion group without any manual intervention from administrators.
 
-[ [Feel free to try](https://t.me/GenericButlerBot). Group is specially created to discuss **Buttler.Bot** behaviour and configuration ]
-
 ![Butler of London Yuppies](/Docs/Images/Butler.Bot.png)
+
+[Feel free to try](https://t.me/GenericButlerBot). Group is specially created to discuss **Buttler.Bot** behaviour and configuration.
 
 ## Invite link
 
