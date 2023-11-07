@@ -19,14 +19,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{9089D0B3-9
 		Docs\AwsDeployment.md = Docs\AwsDeployment.md
 		Docs\BotCreation.md = Docs\BotCreation.md
 		Docs\Configuration.md = Docs\Configuration.md
+		Docs\BotMenu.md = Docs\BotMenu.md
 		Docs\WebHook.md = Docs\WebHook.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Butler.Bot.Sqlite", "Butler.Bot.Sqlite\Butler.Bot.Sqlite.csproj", "{4F9D5087-D4D0-4346-AA16-A67F576577B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Butler.Bot.Core.Tests", "Butler.Bot.Core.Tests\Butler.Bot.Core.Tests.csproj", "{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Butler.Bot.Core.Tests", "Butler.Bot.Core.Tests\Butler.Bot.Core.Tests.csproj", "{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Butler.Bot.AWS.Tests", "Butler.Bot.AWS.Tests\Butler.Bot.AWS.Tests.csproj", "{676A9962-4D3B-490B-AE0A-920434A51B5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Butler.Bot.AWS.Tests", "Butler.Bot.AWS.Tests\Butler.Bot.AWS.Tests.csproj", "{676A9962-4D3B-490B-AE0A-920434A51B5D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC177005-D9E3-4FF8-941B-3D1880465F6F}"
 EndProject

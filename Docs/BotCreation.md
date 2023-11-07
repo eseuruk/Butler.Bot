@@ -59,7 +59,13 @@ You will need parameters from 2, 5, 6 and 7 to configure lambda function.
 
 Update [bot webhook](WebHook.md) with the url of AWS Lambda functions created at step 9
 
-## 11. All done
+## 11. Setup bot command menu for provate chats 
+
+If you want bot command menu to be visable in the private chat, please follow [the instructions](BotMenu.md)
+
+![Bot.Menu](Images/Bot.Menu.png)
+
+## 12. All done
 
 Say hello to your new bot!
 
