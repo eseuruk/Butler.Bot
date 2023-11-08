@@ -8,40 +8,37 @@ on:
         description: 'Version in X.X.X format'
         required: true
         type: string
-        
-permissions:
-  contents: write
-  
+ 
 jobs:
   release:
     name: Build & Release   
-    
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
     
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Setup Amazon.Lambda.Tools
-      run: dotnet tool install -g Amazon.Lambda.Tools
+      - name: Setup Amazon.Lambda.Tools
+        run: dotnet tool install -g Amazon.Lambda.Tools
 
-    - name: Restore Dependencies
-      run: dotnet restore
+      - name: Restore Dependencies
+        run: dotnet restore
 
-    - name: Build Lambda Package 
-      working-directory: ./Butler.Bot.AWS
-      run: dotnet lambda package bin/Package/Butler.Bot.AWS.${{ inputs.varsion }}.zip /p:Version=${{ inputs.varsion }}
+      - name: Build Lambda Package 
+        working-directory: ./Butler.Bot.AWS
+        run: dotnet lambda package bin/Package/Butler.Bot.AWS.${{ inputs.varsion }}.zip /p:Version=${{ inputs.varsion }}
 
-    - name: Create Draft Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: Butler.Bot.AWS/bin/Package/Butler.Bot.AWS.${{ inputs.varsion }}.zip
-        tag_name: v${{ inputs.varsion }} 
-        draft: true
+      - name: Create Draft Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Butler.Bot.AWS/bin/Package/Butler.Bot.AWS.${{ inputs.varsion }}.zip
+          tag_name: v${{ inputs.varsion }} 
+          draft: true
 
 
