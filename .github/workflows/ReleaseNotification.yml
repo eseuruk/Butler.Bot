@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Send Telegram Message
         env:
-          CHAT_ID: -1001869678964
+          CHAT_ID: ${{ vars.CHAT_ID }}
           API_URL: https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}/sendMessage
           MESSAGE_TEXT: <b>New Release:</b>${{ env.RELEASE_URL }}%0A<b>Notes:</b>%0A${{ env.RELEASE_NOTES }}
         run: |
