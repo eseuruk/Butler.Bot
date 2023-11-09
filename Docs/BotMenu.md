@@ -2,9 +2,9 @@
 
 If you want bot command menu to be visable in the private chat, please follow the instructions bellow.
 
-![Bot.Menu](Images/Bot.Menu.png)
+Windows and Linux shell scripts are available in [/Commands](../Commands) folder.
 
-All shell scripts are available in /Commands folder.
+![Bot.Menu](Images/Bot.Menu.png)
 
 * To make bot menu visable in the private chat
 
