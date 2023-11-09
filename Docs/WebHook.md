@@ -1,6 +1,6 @@
 # Bot WebHook
 
-All shell scripts are available in /Commands folder.
+Windows and Linux shell scripts are available in [/Commands](../Commands) folder.
 
 * To set bot [webhook](https://core.telegram.org/bots/api#setwebhook) and switch to push mode
 
