@@ -17,6 +17,6 @@ jobs:
         env:
           CHAT_ID: ${{ vars.CHAT_ID }}
           API_URL: https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}/sendMessage
-          MESSAGE_TEXT: <b>New Release:</b>${{ env.RELEASE_URL }}%0A<b>Notes:</b>%0A${{ env.RELEASE_NOTES }}
+          MESSAGE_TEXT: <b>New Release:</b>%0A${{ env.RELEASE_URL }}%0A<b>Notes:</b>%0A${{ env.RELEASE_NOTES }}
         run: |
           curl -s -o /dev/null -X POST $API_URL -d chat_id=$CHAT_ID -d text="$MESSAGE_TEXT" -d parse_mode=HTML -d disable_web_page_preview=True
