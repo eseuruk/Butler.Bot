@@ -67,16 +67,16 @@ public class TextMessageHandler : IUpdateHandler
     {
         switch (text.ToLowerInvariant())
         {
-            case "/version":
-                await userChatBot.ShowBotVersionAsync(chat.Id, cancellationToken);
-                return true;
-
             case "/start":
                 await userChatBot.SayHelloAsync(chat.Id, cancellationToken);
                 return true;
 
             case "/leave":
                 await userChatBot.ShowLeaveRequestAsync(chat.Id, cancellationToken);
+                return true;
+
+            case "/version":
+                await userChatBot.ShowBotVersionAsync(chat.Id, cancellationToken);
                 return true;
         }
 

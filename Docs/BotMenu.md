@@ -4,22 +4,33 @@ If you want bot command menu to be visable in the private chat, please follow th
 
 ![Bot.Menu](Images/Bot.Menu.png)
 
+All command files are available in /Commands folder.
+
 * To make bot menu visable in the private chat
 
 ```bat
 REM your bot token
 SET BotToken=XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-curl -X POST https://api.telegram.org/bot%BotToken%/setMyCommands -H "Content-Type: application/json" -d "{\"commands\":[{\"command\":\"start\",\"description\":\"join the group\"}, {\"command\":\"leave\",\"description\":\"leave the group\"}], \"scope\":{\"type\":\"all_private_chats\"}}" 
+REM bot menu commands
+SET "Commands=[{\"command\":\"start\",\"description\":\"join the group\"}, {\"command\":\"leave\",\"description\":\"leave the group\"}, {\"command\":\"version\",\"description\":\"bot version\"}]"
+
+REM menu scope for private chats only
+SET "Scope={\"type\":\"all_private_chats\"}"
+
+curl https://api.telegram.org/bot%BotToken%/setMyCommands --json "{\"commands\":%Commands%, \"scope\":%Scope%}" 
 ```
 
-* To delete private chat menu 
+* * To delete private chat menu 
 
 ```bat
 REM your bot token
 SET BotToken=XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-curl https://api.telegram.org/bot%BotToken%/deleteWebhook?drop_pending_updates=true
+REM menu scope for private chats only
+SET "Scope={\"type\": \"all_private_chats\"}"
+
+curl --get https://api.telegram.org/bot%BotToken%/deleteMyCommands --data-urlencode scope="%Scope%"
 ```
 
 * To see the current settings of private chat menu 
@@ -28,5 +39,8 @@ curl https://api.telegram.org/bot%BotToken%/deleteWebhook?drop_pending_updates=t
 REM your bot token
 SET BotToken=XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-curl https://api.telegram.org/bot%BotToken%/getMyCommands?scope=%%7B%%22type%%22%%3A%%22all_private_chats%%22%%7D
+REM menu scope for private chats only
+SET "Scope={\"type\":\"all_private_chats\"}"
+
+curl --get https://api.telegram.org/bot%BotToken%/getMyCommands --data-urlencode scope="%Scope%"
 ```

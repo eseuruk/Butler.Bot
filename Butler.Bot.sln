@@ -18,8 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{9089D0B3-9
 	ProjectSection(SolutionItems) = preProject
 		Docs\AwsDeployment.md = Docs\AwsDeployment.md
 		Docs\BotCreation.md = Docs\BotCreation.md
-		Docs\Configuration.md = Docs\Configuration.md
 		Docs\BotMenu.md = Docs\BotMenu.md
+		Docs\Configuration.md = Docs\Configuration.md
 		Docs\WebHook.md = Docs\WebHook.md
 	EndProjectSection
 EndProject
@@ -30,6 +30,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Butler.Bot.AWS.Tests", "Butler.Bot.AWS.Tests\Butler.Bot.AWS.Tests.csproj", "{676A9962-4D3B-490B-AE0A-920434A51B5D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC177005-D9E3-4FF8-941B-3D1880465F6F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commands", "Commands", "{04FCCC45-237B-4C70-A6E8-9057E2DADE13}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows", "Windows", "{B62FB86C-F106-42E2-9523-4FD76FA38708}"
+	ProjectSection(SolutionItems) = preProject
+		Commands\Windows\bot_menu_delete.bat = Commands\Windows\bot_menu_delete.bat
+		Commands\Windows\bot_menu_get.bat = Commands\Windows\bot_menu_get.bat
+		Commands\Windows\bot_menu_set.bat = Commands\Windows\bot_menu_set.bat
+		Commands\Windows\web_hook_delete.bat = Commands\Windows\web_hook_delete.bat
+		Commands\Windows\web_hook_get.bat = Commands\Windows\web_hook_get.bat
+		Commands\Windows\web_hook_set.bat = Commands\Windows\web_hook_set.bat
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +81,8 @@ Global
 		{9089D0B3-9B8C-459C-887E-63A4BE026E88} = {45FED77B-21F4-4A89-A612-EDD8A20A91B4}
 		{0F1826F9-4A45-4632-9BD1-5E4B41DFEB41} = {EC177005-D9E3-4FF8-941B-3D1880465F6F}
 		{676A9962-4D3B-490B-AE0A-920434A51B5D} = {EC177005-D9E3-4FF8-941B-3D1880465F6F}
+		{04FCCC45-237B-4C70-A6E8-9057E2DADE13} = {45FED77B-21F4-4A89-A612-EDD8A20A91B4}
+		{B62FB86C-F106-42E2-9523-4FD76FA38708} = {04FCCC45-237B-4C70-A6E8-9057E2DADE13}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {547994F9-4FA5-4476-B77E-CE5C9C4EB474}

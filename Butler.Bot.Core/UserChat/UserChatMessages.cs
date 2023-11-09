@@ -16,7 +16,7 @@ public class UserChatMessages
 
     public string ButtonCancel { get; init; } = "Отменить";
 
-    public string SayBotVersion { get; init; } = "Версия бота: {0}";
+    public string ShowBotVersion { get; init; } = "<b>{0}</b>\nверсия: {1}\nсайт: {2}";
 
     public string SayHello { get; init; } = "Привет! Я помогу тебя зайти в группу {0}. Если не против, я задам тебе несколько вопросов, перед тем как ты сможешь туда попасть.";
 

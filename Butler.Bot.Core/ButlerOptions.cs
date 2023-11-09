@@ -20,6 +20,8 @@ public class ButlerOptions
 
     public WhoisReviewMode WhoisReviewMode { get; init; } = WhoisReviewMode.None;
 
+    public string SiteUrl { get; init; } = "https://github.com/eseuruk/Butler.Bot";
+
     public AdminGroupOptions AdminGroupOptions { get; init; } = new AdminGroupOptions();
 
     public TargetGroupOptions TargetGroupOptions { get; init; } = new TargetGroupOptions();

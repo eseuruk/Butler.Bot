@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Exceptions;
+using Telegram.Bot.Types.Enums;
 
 namespace Butler.Bot.Core.UserChat;
 
@@ -15,14 +16,18 @@ public class UserChatBot : GroupBotBase, IUserChatBot
 
     public async Task ShowBotVersionAsync(long userChatId, CancellationToken cancellationToken)
     {
-        var botVersion = ButlerVersion.GetCurrent();
+        var bot = await ApiClient.GetMeAsync(cancellationToken);
+        var botName = bot.FirstName;
+        var botVersion = ButlerVersion.GetCurrent().ToString(3);
 
         await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
-            text: Options.UserChatMessages.SayBotVersion.SafeFormat(botVersion),
+            text: Options.UserChatMessages.ShowBotVersion.SafeFormat(botName, botVersion, Options.SiteUrl),
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
-        Logger.LogInformation("Showed current version in private chat: {UserChatId} version: {Version}", userChatId, botVersion);
+        Logger.LogInformation("Showed bot version in private chat: {UserChatId}, botName: {BotName}, botVersion: {BotVersion}, siteUrl: {SiteUrl}", userChatId, botName, botVersion, Options.SiteUrl);
     }
 
     public async Task SayHelloAsync(long userChatId, CancellationToken cancellationToken)

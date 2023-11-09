@@ -1,5 +1,7 @@
 # Bot WebHook
 
+All command files are available in /Commands folder.
+
 * To set bot [webhook](https://core.telegram.org/bots/api#setwebhook) and switch to push mode
 
 ```bat
@@ -12,7 +14,7 @@ SET SecretToken=XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 REM your aws lamda function url
 SET WebHook=https://XXXXXXXXXXXXXXXXXXXXXXXX.lambda-url.XXXXXXXXXX.on.aws/update
 
-curl -X POST https://api.telegram.org/bot%BotToken%/setWebhook -d "{\"url\": \"%WebHook%\", \"secret_token\":\"%SecretToken%\"}" -H "Content-Type: application/json"
+curl https://api.telegram.org/bot%BotToken%/setWebhook --json "{\"url\":\"%WebHook%\", \"secret_token\":\"%SecretToken%\"}"
 ```
 
 * To see the current bot webhook 
