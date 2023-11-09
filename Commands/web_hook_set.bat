@@ -1,3 +1,5 @@
+@ECHO OFF
+
 REM your bot token
 SET BotToken=XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
@@ -7,4 +9,4 @@ SET SecretToken=XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 REM your aws lamda function url
 SET WebHook=https://XXXXXXXXXXXXXXXXXXXXXXXX.lambda-url.XXXXXXXXXX.on.aws/update
 
-curl https://api.telegram.org/bot%BotToken%/setWebhook --json "{\"url\":\"%WebHook%\", \"secret_token\":\"%SecretToken%\"}"
+curl "https://api.telegram.org/bot%BotToken%/setWebhook" --header "Content-Type: application/json" --data "{\"url\":\"%WebHook%\",\"secret_token\":\"%SecretToken%\"}"
