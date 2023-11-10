@@ -117,5 +117,19 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
 
         Logger.LogInformation("Said user is leaving target group to change whois. group: {ChatId}, userId: {UserId}", Options.TargetGroupId, user.Id);
     }
+
+    public async Task SayLeavingAsync(User user, CancellationToken cancellationToken)
+    {
+        var userMention = mentionStrategy.GetUserMention(user);
+
+        await ApiClient.SendTextMessageAsync(
+            chatId: Options.TargetGroupId,
+            text: Options.TargetGroupMessages.SayLeaving.SafeFormat(userMention),
+            parseMode: ParseMode.Html,
+            cancellationToken: cancellationToken);
+
+        Logger.LogInformation("Said user is leaving target group. group: {ChatId}, userId: {UserId}", Options.TargetGroupId, user.Id);
+    }
+
 }
 

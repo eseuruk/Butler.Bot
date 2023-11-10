@@ -22,4 +22,6 @@ public interface ITargetGroupBot
     Task TryDeleteMessageAsync(int messageId, CancellationToken cancellationToken);
 
     Task SayLeavingToChangeWhoisAsync(User user, CancellationToken cancellationToken);
+
+    Task SayLeavingAsync(User user, CancellationToken cancellationToken);
 }

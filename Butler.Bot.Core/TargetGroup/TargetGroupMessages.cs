@@ -9,5 +9,7 @@ public class TargetGroupMessages
     public string SayHelloAgain { get; init; } = "С возвращением {0}";
 
     public string SayLeavingToChangeWhois{ get; init; } = "{0} покидает чат исправлять описание";
+
+    public string SayLeaving { get; init; } = "{0} покидает чат";
 }
 

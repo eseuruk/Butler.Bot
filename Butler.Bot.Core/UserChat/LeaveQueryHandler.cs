@@ -37,26 +37,26 @@ public class LeaveQueryHandler : IUpdateHandler
         switch (update.CallbackQuery.Data)
         {
             case "leave-confirm":
-                await DoHandleLeaveConfirmedAsync(update.CallbackQuery.Message.Chat.Id, update.CallbackQuery.From.Id, update.CallbackQuery.Message.MessageId, cancellationToken);
+                await DoHandleLeaveConfirmedAsync(update.CallbackQuery.Message.Chat.Id, update.CallbackQuery.From, update.CallbackQuery.Message.MessageId, cancellationToken);
                 return true;
             case "leave-cancel":
-                await DoHandleLeaveCanceledAsync(update.CallbackQuery.Message.Chat.Id, update.CallbackQuery.From.Id, update.CallbackQuery.Message.MessageId, cancellationToken);
+                await DoHandleLeaveCanceledAsync(update.CallbackQuery.Message.Chat.Id, update.CallbackQuery.From, update.CallbackQuery.Message.MessageId, cancellationToken);
                 return true;
         }
         
         return true;
     }
 
-    private async Task DoHandleLeaveConfirmedAsync(long chatId, long userId, int messageId, CancellationToken cancellationToken)
+    private async Task DoHandleLeaveConfirmedAsync(long chatId, User user, int messageId, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Leave request confirmed in private chat: {ChatId}, userId: {UserId}", chatId, userId);
+        logger.LogInformation("Leave request confirmed in private chat: {ChatId}, userId: {UserId}", chatId, user.Id);
 
-        var joinRequest = await userRepository.FindJoinRequestAsync(userId, cancellationToken);
-        var chatMember = await targetGroupBot.GetChatMemberAsync(userId, cancellationToken);
+        var joinRequest = await userRepository.FindJoinRequestAsync(user.Id, cancellationToken);
+        var chatMember = await targetGroupBot.GetChatMemberAsync(user.Id, cancellationToken);
 
         if ( joinRequest is not null)
         {
-            await userRepository.DeleteJoinRequestAsync(userId, cancellationToken);
+            await userRepository.DeleteJoinRequestAsync(user.Id, cancellationToken);
 
             if (joinRequest.IsWhoisMessageWritten)
             {
@@ -64,29 +64,30 @@ public class LeaveQueryHandler : IUpdateHandler
             }
             else
             {
-                logger.LogInformation("Whois message was not written to target group. UserId: {UserId}", userId);
+                logger.LogInformation("Whois message was not written to target group. UserId: {UserId}", user.Id);
             }
         }
         else
         {
-            logger.LogInformation("Join request is not found. UserId: {UserId}", userId);
+            logger.LogInformation("Join request is not found. UserId: {UserId}", user.Id);
         }
 
         if (chatMember.Status.IsRemovableMember())
         {
-            await targetGroupBot.DeleteUserAsync(userId, cancellationToken);
+            await targetGroupBot.SayLeavingAsync(user, cancellationToken);
+            await targetGroupBot.DeleteUserAsync(user.Id, cancellationToken);
         }
         else
         {
-            logger.LogInformation("User is not removable from target group. UserId: {UserId}, userStatus: {UserStatus}", userId, chatMember.Status);
+            logger.LogInformation("User is not removable from target group. UserId: {UserId}, userStatus: {UserStatus}", user.Id, chatMember.Status);
         }
 
         await userChatBot.SayLeaveRequestFulfilledAsync(chatId, messageId, cancellationToken);
     }
 
-    private async Task DoHandleLeaveCanceledAsync(long chatId, long userId, int messageId, CancellationToken cancellationToken)
+    private async Task DoHandleLeaveCanceledAsync(long chatId, User user, int messageId, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Leave request canceled in private chat: {ChatId}, userId: {UserId}", chatId, userId);
+        logger.LogInformation("Leave request canceled in private chat: {ChatId}, userId: {UserId}", chatId, user.Id);
 
         await userChatBot.SayLeaveRequestCanceledAsync(chatId, messageId, cancellationToken);
     }
