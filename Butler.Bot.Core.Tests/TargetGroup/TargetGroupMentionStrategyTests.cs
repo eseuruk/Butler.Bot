@@ -1,8 +1,4 @@
-﻿using Butler.Bot.Core.TargetGroup;
-using Microsoft.Extensions.Options;
-using Telegram.Bot.Types;
-
-namespace Butler.Bot.Core.Tests.TargetGroup;
+﻿namespace Butler.Bot.Core.Tests.TargetGroup;
 
 public class TargetGroupMentionStrategyTests
 {

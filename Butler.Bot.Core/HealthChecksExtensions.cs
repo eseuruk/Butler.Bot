@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace Butler.Bot.Core;
+﻿namespace Butler.Bot.Core;
 
 public static class HealthChecksExtensions
 {

@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Telegram.Bot;
-using Telegram.Bot.Exceptions;
-
-namespace Butler.Bot.Core;
+﻿namespace Butler.Bot.Core;
 
 public abstract class GroupBotBase
 {

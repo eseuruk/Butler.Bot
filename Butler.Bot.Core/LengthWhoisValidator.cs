@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace Butler.Bot.Core;
 

@@ -1,11 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Telegram.Bot;
-using Telegram.Bot.Exceptions;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-
-namespace Butler.Bot.Core.TargetGroup;
+﻿namespace Butler.Bot.Core.TargetGroup;
 
 public class TargetGroupBot : GroupBotBase, ITargetGroupBot
 {

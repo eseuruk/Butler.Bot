@@ -1,6 +1,4 @@
-﻿using Telegram.Bot.Types;
-
-namespace Butler.Bot.Core.TargetGroup;
+﻿namespace Butler.Bot.Core.TargetGroup;
 
 public interface ITargetGroupMentionStrategy
 {

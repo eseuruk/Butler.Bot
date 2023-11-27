@@ -1,6 +1,4 @@
-﻿using Telegram.Bot.Types;
-
-namespace Butler.Bot.Core;
+﻿namespace Butler.Bot.Core;
 
 public interface IUpdateService
 {

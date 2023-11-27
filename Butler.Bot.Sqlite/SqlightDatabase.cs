@@ -1,8 +1,5 @@
-﻿using Butler.Bot.Core;
-using Dapper;
+﻿using Dapper;
 using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Options;
-using Telegram.Bot.Requests.Abstractions;
 
 namespace Butler.Bot.Sqlite;
 

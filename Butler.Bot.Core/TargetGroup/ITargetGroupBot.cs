@@ -1,7 +1,4 @@
-﻿using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-
-namespace Butler.Bot.Core.TargetGroup;
+﻿namespace Butler.Bot.Core.TargetGroup;
 
 public interface ITargetGroupBot
 {

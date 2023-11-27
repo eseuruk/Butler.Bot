@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Telegram.Bot;
-
-namespace Butler.Bot.Core;
+﻿namespace Butler.Bot.Core;
 
 public static class ServiceCollectionExtensions
 {

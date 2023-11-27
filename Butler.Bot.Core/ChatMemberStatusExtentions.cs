@@ -1,6 +1,4 @@
-﻿using Telegram.Bot.Types.Enums;
-
-namespace Butler.Bot.Core;
+﻿namespace Butler.Bot.Core;
 
 public static class ChatMemberStatusExtentions
 {

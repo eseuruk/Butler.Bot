@@ -1,9 +1,4 @@
-﻿using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types;
-using Microsoft.Extensions.Logging.Abstractions;
-using Butler.Bot.Core.AdminGroup;
-
-namespace Butler.Bot.Core.Tests.AdminGroup;
+﻿namespace Butler.Bot.Core.Tests.AdminGroup;
 
 public class PostJoinInlineStateTests
 {

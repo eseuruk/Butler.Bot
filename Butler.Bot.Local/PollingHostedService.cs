@@ -1,7 +1,4 @@
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Telegram.Bot;
 using Telegram.Bot.Polling;
-using Telegram.Bot.Types.Enums;
 
 namespace Butler.Bot.Local;
 

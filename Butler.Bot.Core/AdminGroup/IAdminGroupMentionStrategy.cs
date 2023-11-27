@@ -1,6 +1,4 @@
-﻿using Telegram.Bot.Types;
-
-namespace Butler.Bot.Core.AdminGroup;
+﻿namespace Butler.Bot.Core.AdminGroup;
 
 public interface IAdminGroupMentionStrategy
 {

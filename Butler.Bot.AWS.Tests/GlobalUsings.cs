@@ -1,14 +1,18 @@
 // Microsoft.Extensions
 global using Microsoft.Extensions.Logging;
-global using Microsoft.Extensions.Logging.Abstractions;
 global using Microsoft.Extensions.Options;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-// Xunit + FluentAssertions
+// AspNetCore.Testing
+global using Microsoft.AspNetCore.TestHost;
+global using Microsoft.AspNetCore.Mvc.Testing;
+
+// Xunit + FluentAssertions + Moq
 global using Xunit;
 global using FluentAssertions;
+global using Moq;
 
 // Newtonsoft.Json
 global using Newtonsoft.Json;
@@ -23,5 +27,3 @@ global using Telegram.Bot.Types.ReplyMarkups;
 
 // Bot.Core
 global using Butler.Bot.Core;
-global using Butler.Bot.Core.AdminGroup;
-global using Butler.Bot.Core.TargetGroup;

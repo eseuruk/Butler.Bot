@@ -1,14 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using FluentAssertions;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+﻿using System.Net.Http.Headers;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace Butler.Bot.AWS.Tests;

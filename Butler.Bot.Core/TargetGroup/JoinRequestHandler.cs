@@ -1,7 +1,4 @@
 ﻿using Butler.Bot.Core.AdminGroup;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Telegram.Bot.Types;
 
 namespace Butler.Bot.Core.TargetGroup;
 

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-
-namespace Butler.Bot.AWS;
+﻿namespace Butler.Bot.AWS;
 
 public class DynamoHealthCheck : IHealthCheck
 {

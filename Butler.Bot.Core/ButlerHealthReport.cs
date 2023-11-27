@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace Butler.Bot.Core;
+﻿namespace Butler.Bot.Core;
 
 public class ButlerHealthReport
 {

@@ -1,8 +1,4 @@
-﻿using Butler.Bot.Core.AdminGroup;
-using Microsoft.Extensions.Options;
-using Telegram.Bot.Types;
-
-namespace Butler.Bot.Core.Tests.AdminGroup;
+﻿namespace Butler.Bot.Core.Tests.AdminGroup;
 
 public class AdminGroupMentionStrategyTests
 {

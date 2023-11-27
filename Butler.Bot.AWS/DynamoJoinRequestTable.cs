@@ -1,7 +1,5 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
-using Butler.Bot.Core;
-using Microsoft.Extensions.Options;
 
 namespace Butler.Bot.AWS;
 

@@ -1,10 +1,4 @@
 ﻿using Butler.Bot.Core.TargetGroup;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Telegram.Bot;
-using Telegram.Bot.Exceptions;
-using Telegram.Bot.Types.Enums;
 
 namespace Butler.Bot.Core.AdminGroup;
 

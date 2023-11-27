@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
-using Telegram.Bot;
-using Telegram.Bot.Exceptions;
-
-namespace Butler.Bot.Core;
+﻿namespace Butler.Bot.Core;
 
 public class TelegramApiHealthCheck : IHealthCheck
 {

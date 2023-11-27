@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Butler.Bot.Core;
-
-namespace Butler.Bot.AWS;
+﻿namespace Butler.Bot.AWS;
 
 public class SecretService
 {

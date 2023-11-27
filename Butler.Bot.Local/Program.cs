@@ -1,6 +1,4 @@
-using Butler.Bot.Core;
 using Butler.Bot.Local;
-using Butler.Bot.Sqlite;
 using Serilog;
 
 var builder = Host.CreateApplicationBuilder(args);

@@ -1,11 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Telegram.Bot;
-using Telegram.Bot.Types.ReplyMarkups;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-
-namespace Butler.Bot.Core.AdminGroup;
+﻿namespace Butler.Bot.Core.AdminGroup;
 
 public class AdminGroupBot : GroupBotBase, IAdminGroupBot
 {

@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Telegram.Bot.Types;
-
-namespace Butler.Bot.Core;
+﻿namespace Butler.Bot.Core;
 
 public class BotChatStatusHandler : IUpdateHandler
 {

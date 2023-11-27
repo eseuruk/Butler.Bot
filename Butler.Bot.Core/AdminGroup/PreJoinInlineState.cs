@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Butler.Bot.Core.AdminGroup;
+﻿namespace Butler.Bot.Core.AdminGroup;
 
 public class PreJoinInlineState
 {

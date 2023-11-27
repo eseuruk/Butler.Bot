@@ -1,9 +1,4 @@
-﻿using Butler.Bot.Core;
-using Microsoft.Extensions.Logging;
-using Telegram.Bot.Requests.Abstractions;
-using Telegram.Bot.Types;
-
-namespace Butler.Bot.Sqlite;
+﻿namespace Butler.Bot.Sqlite;
 
 public class SqliteUserRepository : IUserRepository
 {

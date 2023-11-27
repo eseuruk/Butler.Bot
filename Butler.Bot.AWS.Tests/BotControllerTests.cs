@@ -1,19 +1,4 @@
-﻿using System.Net.Http;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Butler.Bot.Core;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Moq;
-using Newtonsoft.Json;
-using Telegram.Bot.Types;
-using Xunit;
-
-namespace Butler.Bot.AWS.Tests;
+﻿namespace Butler.Bot.AWS.Tests;
 
 public class BotControllerTests : IClassFixture<WebApplicationFactory<Program>>
 {

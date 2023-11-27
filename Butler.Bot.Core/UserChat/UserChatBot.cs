@@ -1,11 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Telegram.Bot;
-using Telegram.Bot.Types.ReplyMarkups;
-using Telegram.Bot.Exceptions;
-using Telegram.Bot.Types.Enums;
-
-namespace Butler.Bot.Core.UserChat;
+﻿namespace Butler.Bot.Core.UserChat;
 
 public class UserChatBot : GroupBotBase, IUserChatBot
 {

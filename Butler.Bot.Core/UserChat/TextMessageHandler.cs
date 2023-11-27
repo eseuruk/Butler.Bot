@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-
-namespace Butler.Bot.Core.UserChat;
+﻿namespace Butler.Bot.Core.UserChat;
 
 public class TextMessageHandler : IUpdateHandler
 {

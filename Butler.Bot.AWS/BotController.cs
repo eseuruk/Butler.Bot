@@ -1,9 +1,4 @@
-﻿using Butler.Bot.Core;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Telegram.Bot.Types;
-
-namespace Butler.Bot.AWS;
+﻿namespace Butler.Bot.AWS;
 
 [ApiController]
 public class BotController : ControllerBase

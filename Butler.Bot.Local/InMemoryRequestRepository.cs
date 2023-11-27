@@ -1,6 +1,4 @@
-﻿using Butler.Bot.Core;
-
-namespace Butler.Bot.Local;
+﻿namespace Butler.Bot.Local;
 
 public class InMemoryRequestRepository : IUserRepository
 {

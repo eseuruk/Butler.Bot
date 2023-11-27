@@ -1,8 +1,4 @@
-﻿using Butler.Bot.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Butler.Bot.Sqlite;
+﻿namespace Butler.Bot.Sqlite;
 
 public static class ServiceCollectionExtensions
 {

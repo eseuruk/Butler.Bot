@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-
-namespace Butler.Bot.Core;
+﻿namespace Butler.Bot.Core;
 
 public class UnknownGroupMessageHandler : IUpdateHandler
 {

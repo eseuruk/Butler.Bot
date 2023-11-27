@@ -1,4 +1,3 @@
-using Butler.Bot.Core;
 using Butler.Bot.AWS;
 
 var builder = WebApplication.CreateBuilder(args);

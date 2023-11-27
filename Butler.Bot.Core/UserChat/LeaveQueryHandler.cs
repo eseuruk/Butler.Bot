@@ -1,7 +1,4 @@
 ﻿using Butler.Bot.Core.TargetGroup;
-using Microsoft.Extensions.Logging;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 
 namespace Butler.Bot.Core.UserChat;
 

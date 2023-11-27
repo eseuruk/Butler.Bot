@@ -1,9 +1,4 @@
-﻿using Butler.Bot.Core;
-using Telegram.Bot;
-using Telegram.Bot.Exceptions;
-using Telegram.Bot.Types;
-
-namespace Butler.Bot.Local;
+﻿namespace Butler.Bot.Local;
 
 public class PollingUpdateHandler : Telegram.Bot.Polling.IUpdateHandler
 {
