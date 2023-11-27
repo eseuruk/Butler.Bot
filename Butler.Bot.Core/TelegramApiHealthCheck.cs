@@ -1,5 +1,4 @@
-﻿using Butler.Bot.Core.TargetGroup;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -24,7 +23,7 @@ public class TelegramApiHealthCheck : IHealthCheck
             var me = await botClient.GetMeAsync(cancellationToken);
 
             logger.LogInformation("Bot information: {Username}, id: {Id}, canJoinGroups: {CanJoinGroups}, canReadAllGroupMessages: {CanReadAllGroupMessages}", me.Username, me.Id, me.CanJoinGroups, me.CanReadAllGroupMessages);
-            return HealthCheckResult.Healthy($"Api response: {me.Username}");
+            return HealthCheckResult.Healthy($"Bot name: {me.Username}");
         }
         catch (ApiRequestException ex)
         {

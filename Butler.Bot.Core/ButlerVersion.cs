@@ -2,11 +2,16 @@
 
 namespace Butler.Bot.Core;
 
-class ButlerVersion
+public static class ButlerVersion
 {
     public static Version GetCurrent()
     {
+        // Semantic versining with three part version number. Revision component is not used for now.
+        // Version is provided as a built parameter durig CI. Please see .github/worflows/DraftRelease.yml
+
         Assembly assembly = Assembly.GetExecutingAssembly();
-        return assembly.GetName().Version!;
+        var assemblyVersion = assembly.GetName().Version!;
+
+        return new Version(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
     }
 }

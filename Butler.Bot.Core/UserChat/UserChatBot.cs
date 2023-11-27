@@ -18,7 +18,7 @@ public class UserChatBot : GroupBotBase, IUserChatBot
     {
         var bot = await ApiClient.GetMeAsync(cancellationToken);
         var botName = bot.FirstName;
-        var botVersion = ButlerVersion.GetCurrent().ToString(3);
+        var botVersion = ButlerVersion.GetCurrent();
 
         await ApiClient.SendTextMessageAsync(
             chatId: userChatId,

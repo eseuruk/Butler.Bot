@@ -1,8 +1,6 @@
 ﻿using Butler.Bot.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Telegram.Bot.Types;
 
 namespace Butler.Bot.AWS;
@@ -26,22 +24,16 @@ public class BotController : ControllerBase
 
     [HttpGet]
     [Route("/health")]
-    public async Task<IActionResult> HehthCheckAsync(CancellationToken cancellationToken)
+    public async Task<ButlerHealthReport> HehthCheckAsync(CancellationToken cancellationToken)
     {
         logger.LogInformation("Checking system health");
 
-        var report = await healthService.CheckHealthAsync(cancellationToken);
+        var buttlerVersion = ButlerVersion.GetCurrent();
+        var healthReport = await healthService.CheckHealthAsync(cancellationToken);
 
-        logger.LogInformation("System health status: {Status}", report.Status);
+        logger.LogInformation("System health status: {Status}, buttlerVersion: {ButtlerVersion}", healthReport.Status, buttlerVersion);
 
-        var settings = new JsonSerializerSettings
-        {
-            Formatting = Formatting.Indented,
-            Converters = new[] { new StringEnumConverter() }
-        };
-
-        string json = JsonConvert.SerializeObject(report, settings);
-        return Ok(json);
+        return new ButlerHealthReport(buttlerVersion, healthReport);
     }
 
     [HttpPost]
