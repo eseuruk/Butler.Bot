@@ -1,7 +1,4 @@
-﻿using Amazon.DynamoDBv2;
-using Butler.Bot.Core;
-
-namespace Butler.Bot.AWS;
+﻿namespace Butler.Bot.DynamoDB;
 
 public static class ServiceCollectionExtensions
 {
@@ -9,10 +6,9 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<DynamoUserRepositoryOptions>(config);
 
-        services.AddAWSService<IAmazonDynamoDB>();
+        services.AddSingleton<IAmazonDynamoDB>(DynamoDBClientFactory.CreateClient);
         services.AddSingleton<DynamoJoinRequestTable>();
         services.AddSingleton<IUserRepository, DynamoUserRepository>();
-
         return services;
     }
 }

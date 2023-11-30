@@ -6,9 +6,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddLambdaLogger(builder.Configuration.GetLambdaLoggerOptions());
 
 builder.Services.Configure<ConsoleLifetimeOptions>(opts => opts.SuppressStatusMessages = true);
-
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
-builder.Services.AddDefaultAWSOptions(_ => builder.Configuration.GetAWSOptions());
 
 builder.Services.AddTelegramBotClient(builder.Configuration.GetSection("TelegramApi"));
 builder.Services.AddDynamoUserRepository(builder.Configuration.GetSection("DynamoUserRepository"));

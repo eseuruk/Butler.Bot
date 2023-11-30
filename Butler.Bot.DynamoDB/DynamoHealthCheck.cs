@@ -1,4 +1,4 @@
-﻿namespace Butler.Bot.AWS;
+﻿namespace Butler.Bot.DynamoDB;
 
 public class DynamoHealthCheck : IHealthCheck
 {
@@ -25,7 +25,7 @@ public class DynamoHealthCheck : IHealthCheck
         catch (Exception ex) 
         {
             logger.LogError(ex, "Error quering DynamoDB for test id: {Id}", testID);
-            return HealthCheckResult.Unhealthy("Error quering DynamoDB");
+            return HealthCheckResult.Unhealthy($"Error: {ex.Message}");
         }
     }
 }

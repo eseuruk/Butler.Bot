@@ -45,9 +45,6 @@ Remember you function url. It will be base url for your bot webhook
 
 Goto configuration panel and setup the following environment variables for the lambda function.
 
-DynamoDB:
-* **AWS__Region** (string) - AWS region where DynamoDB table is created. 
-
 Telegram API:
 * **TelegramApi__BotToken** (string) - Token provided by @botfather during bot registration.
 * **TelegramApi__SecretToken** (string) - Token generated during webhook registration via setWebhook.

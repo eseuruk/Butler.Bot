@@ -43,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows", "Windows", "{B62F
 		Commands\Windows\web_hook_set.bat = Commands\Windows\web_hook_set.bat
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Butler.Bot.DynamoDB", "Butler.Bot.DynamoDB\Butler.Bot.DynamoDB.csproj", "{2D370625-2277-441B-98A8-B34BC3B6C0AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{676A9962-4D3B-490B-AE0A-920434A51B5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{676A9962-4D3B-490B-AE0A-920434A51B5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{676A9962-4D3B-490B-AE0A-920434A51B5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D370625-2277-441B-98A8-B34BC3B6C0AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D370625-2277-441B-98A8-B34BC3B6C0AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D370625-2277-441B-98A8-B34BC3B6C0AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D370625-2277-441B-98A8-B34BC3B6C0AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,4 @@
-﻿using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
-
-namespace Butler.Bot.AWS;
+﻿namespace Butler.Bot.DynamoDB;
 
 public class DynamoJoinRequestTable
 {

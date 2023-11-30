@@ -8,7 +8,8 @@
       "launchUrl": "health",
       "applicationUrl": "https://localhost:7085;http://localhost:5123",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "AWS_PROFILE": "Butler.Bot.AWS"
       }
     },
     "Mock Lambda Test Tool": {

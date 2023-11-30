@@ -1,7 +1,10 @@
-﻿namespace Butler.Bot.AWS;
+﻿namespace Butler.Bot.DynamoDB;
 
 public class DynamoUserRepositoryOptions
 {
+    // if null then use AWS_REGION from execution context
+    public string? Region { get; init; }
+
     public string Table { get; init; } = "joinRequests";
 
     public string UserId { get; init; } = "id";

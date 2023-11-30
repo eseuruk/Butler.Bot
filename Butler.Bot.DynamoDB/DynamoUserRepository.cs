@@ -1,4 +1,4 @@
-﻿namespace Butler.Bot.AWS;
+﻿namespace Butler.Bot.DynamoDB;
 
 public class DynamoUserRepository : IUserRepository
 {
