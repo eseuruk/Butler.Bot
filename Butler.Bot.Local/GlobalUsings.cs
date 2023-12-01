@@ -21,3 +21,6 @@ global using Butler.Bot.Core;
 
 // Bot.Sqlite
 global using Butler.Bot.Sqlite;
+
+// Bot.DynamoDB
+global using Butler.Bot.DynamoDB;

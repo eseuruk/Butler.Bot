@@ -9,15 +9,13 @@ builder.Services.AddSerilog((services, loggerConfiguration) => loggerConfigurati
 builder.Services.Configure<ConsoleLifetimeOptions>(opts => opts.SuppressStatusMessages = true);
 
 builder.Services.AddTelegramBotClient(builder.Configuration.GetSection("TelegramApi"));
-builder.Services.AddSqliteUserRepository(builder.Configuration.GetSection("SqliteUserRepository"));
+builder.Services.AddUserRepository(builder.Configuration.GetSection("UserRepository"));
 builder.Services.AddButlerBot(builder.Configuration.GetSection("Butler"));
 
 builder.Services.AddSingleton<PollingUpdateHandler>();
 builder.Services.AddHostedService<PollingHostedService>();
 
-builder.Services.AddHealthChecks()
-    .AddTelegramApiCheck()
-    .AddButlerBotCheck();
+builder.Services.AddHealthChecks();
 
 var host = builder.Build();
 

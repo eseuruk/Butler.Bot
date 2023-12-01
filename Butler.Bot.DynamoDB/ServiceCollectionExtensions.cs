@@ -9,6 +9,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IAmazonDynamoDB>(DynamoDBClientFactory.CreateClient);
         services.AddSingleton<DynamoJoinRequestTable>();
         services.AddSingleton<IUserRepository, DynamoUserRepository>();
+
+        services.AddHealthChecks().AddCheck<DynamoHealthCheck>("DynamoUserRepository");
         return services;
     }
 }

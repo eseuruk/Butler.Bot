@@ -16,9 +16,6 @@ builder.Services.AddSingleton<SecretService>();
 builder.Services.AddControllers().AddNewtonsoftJson();
 
 builder.Services.AddHealthChecks()
-    .AddTelegramApiCheck()
-    .AddButlerBotCheck()
-    .AddDynamoHealthCheck()
     .AddSecretServiceCheck();
 
 var app = builder.Build();
