@@ -6,11 +6,11 @@ namespace Butler.Bot.Sqlite;
 // SQLite doesn't support async, so api below is fully synchronous.
 // Please see for more details: https://learn.microsoft.com/en-gb/dotnet/standard/data/sqlite/async
 
-public class SqlightDatabase
+public class SqliteDatabase
 {
     private readonly SqliteUserRepositoryOptions options;
 
-    public SqlightDatabase(IOptions<SqliteUserRepositoryOptions> options)
+    public SqliteDatabase(IOptions<SqliteUserRepositoryOptions> options)
     {
         this.options = options.Value;
     }

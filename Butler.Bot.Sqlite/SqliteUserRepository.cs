@@ -2,10 +2,10 @@
 
 public class SqliteUserRepository : IUserRepository
 {
-    private readonly SqlightDatabase database;
+    private readonly SqliteDatabase database;
     private readonly ILogger<SqliteUserRepository> logger;
     
-    public SqliteUserRepository(SqlightDatabase database, ILogger<SqliteUserRepository> logger)
+    public SqliteUserRepository(SqliteDatabase database, ILogger<SqliteUserRepository> logger)
     {
         this.database = database;
         this.logger = logger;

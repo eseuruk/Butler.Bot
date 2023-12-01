@@ -6,9 +6,10 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<SqliteUserRepositoryOptions>(config);
 
-        services.AddSingleton<SqlightDatabase>();
+        services.AddSingleton<SqliteDatabase>();
         services.AddSingleton<IUserRepository, SqliteUserRepository>();
 
+        services.AddHealthChecks().AddCheck<SqliteHealthCheck>("SqliteUserRepository");
         return services;
     }
 }
