@@ -6,29 +6,29 @@ namespace Butler.Bot.Core;
 
 public class ButlerOptions
 {
-    public string TargetGroupDisplayName { get; init; } = string.Empty;
+    public string TargetGroupDisplayName { get; set; } = string.Empty;
 
-    public long TargetGroupId { get; init; } = 0;
+    public long TargetGroupId { get; set; } = 0;
 
-    public long AdminGroupId { get; init; } = 0;
+    public long AdminGroupId { get; set; } = 0;
 
-    public string InvitationLink { get; init; } = string.Empty;
+    public string InvitationLink { get; set; } = string.Empty;
 
-    public string InvitationLinkName { get; init; } = string.Empty;
+    public string InvitationLinkName { get; set; } = string.Empty;
 
-    public int MinWoisLength { get; init; } = 120;
+    public int MinWoisLength { get; set; } = 120;
 
-    public WhoisReviewMode WhoisReviewMode { get; init; } = WhoisReviewMode.None;
+    public WhoisReviewMode WhoisReviewMode { get; set; } = WhoisReviewMode.None;
 
-    public string SiteUrl { get; init; } = "https://github.com/eseuruk/Butler.Bot";
+    public string SiteUrl { get; set; } = "https://github.com/eseuruk/Butler.Bot";
 
-    public AdminGroupOptions AdminGroupOptions { get; init; } = new AdminGroupOptions();
+    public AdminGroupOptions AdminGroupOptions { get; set; } = new AdminGroupOptions();
 
-    public TargetGroupOptions TargetGroupOptions { get; init; } = new TargetGroupOptions();
+    public TargetGroupOptions TargetGroupOptions { get; set; } = new TargetGroupOptions();
 
-    public UserChatMessages UserChatMessages { get; init; } =  new UserChatMessages();
+    public UserChatMessages UserChatMessages { get; set; } =  new UserChatMessages();
 
-    public TargetGroupMessages TargetGroupMessages { get; init; } = new TargetGroupMessages();
+    public TargetGroupMessages TargetGroupMessages { get; set; } = new TargetGroupMessages();
 
-    public AdminGroupMessages AdminGroupMessages { get; init; } = new AdminGroupMessages();
+    public AdminGroupMessages AdminGroupMessages { get; set; } = new AdminGroupMessages();
 }

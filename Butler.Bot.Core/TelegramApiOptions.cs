@@ -2,9 +2,9 @@
 
 public class TelegramApiOptions
 {
-    public string BotToken { get; init; } = String.Empty;
+    public string BotToken { get; set; } = String.Empty;
 
-    public string SecretToken { get; init; } = String.Empty;
+    public string SecretToken { get; set; } = String.Empty;
 
-    public bool SecretTokenValidation { get; init; }
+    public bool SecretTokenValidation { get; set; }
 }

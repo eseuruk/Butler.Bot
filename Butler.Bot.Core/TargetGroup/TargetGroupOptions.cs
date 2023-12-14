@@ -2,5 +2,5 @@
 
 public class TargetGroupOptions
 {
-    public int UserNameMaxLength { get; init; } = 30;
+    public int UserNameMaxLength { get; set; } = 30;
 }

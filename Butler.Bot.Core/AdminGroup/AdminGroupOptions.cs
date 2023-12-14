@@ -2,9 +2,9 @@
 
 public class AdminGroupOptions
 {
-    public int UserNameMaxLength { get; init; } = 100;
+    public int UserNameMaxLength { get; set; } = 100;
 
-    public int AdminNameMaxLength { get; init; } = 30;
+    public int AdminNameMaxLength { get; set; } = 30;
 }
 
 

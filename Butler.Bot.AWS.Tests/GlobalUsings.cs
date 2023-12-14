@@ -9,10 +9,9 @@ global using Microsoft.Extensions.Diagnostics.HealthChecks;
 global using Microsoft.AspNetCore.TestHost;
 global using Microsoft.AspNetCore.Mvc.Testing;
 
-// Xunit + FluentAssertions + Moq
+// Xunit + FluentAssertions
 global using Xunit;
 global using FluentAssertions;
-global using Moq;
 
 // Newtonsoft.Json
 global using Newtonsoft.Json;
