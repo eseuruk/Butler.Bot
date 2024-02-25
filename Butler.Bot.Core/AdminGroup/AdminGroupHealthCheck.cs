@@ -2,7 +2,7 @@
 
 namespace Butler.Bot.Core.AdminGroup;
 
-public class AdminGroupHealthCheck : IHealthCheck
+public class AdminGroupHealthCheck : IComponentHealthCheck
 {
     private readonly ITelegramBotClient apiClient;
     private readonly ButlerOptions options;
@@ -15,7 +15,9 @@ public class AdminGroupHealthCheck : IHealthCheck
         this.logger = logger;
     }
 
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    public string ComponentId => "AdminGroupMembership";
+
+    public async Task<HealthCheckResult> CheckHealthAsync(BotExecutionContext context, CancellationToken cancellationToken)
     {
         if (options.WhoisReviewMode == WhoisReviewMode.None)
         {

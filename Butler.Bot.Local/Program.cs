@@ -15,8 +15,6 @@ builder.Services.AddButlerBot(builder.Configuration.GetSection("Butler"));
 builder.Services.AddSingleton<PollingUpdateHandler>();
 builder.Services.AddHostedService<PollingHostedService>();
 
-builder.Services.AddHealthChecks();
-
 var host = builder.Build();
 
 host.Run();

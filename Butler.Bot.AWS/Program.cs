@@ -15,8 +15,8 @@ builder.Services.AddButlerBot(builder.Configuration.GetSection("Butler"));
 builder.Services.AddSingleton<SecretService>();
 builder.Services.AddControllers().AddNewtonsoftJson();
 
-builder.Services.AddHealthChecks()
-    .AddSecretServiceCheck();
+builder.Services.AddSingleton<IComponentInstaller, WebhookInstaller>();
+builder.Services.AddSingleton<IComponentHealthCheck, WebhookInstaller>();
 
 var app = builder.Build();
 

@@ -10,4 +10,10 @@ public static class TestExtensions
         body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         return body;
     }
+
+    public static async Task<T> ReadAsJsonAsync<T>(this HttpContent content)
+    {
+        var dataAsString = await content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<T>(dataAsString)!;
+    }
 }

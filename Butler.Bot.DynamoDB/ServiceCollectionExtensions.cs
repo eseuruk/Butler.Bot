@@ -10,7 +10,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<DynamoJoinRequestTable>();
         services.AddSingleton<IUserRepository, DynamoUserRepository>();
 
-        services.AddHealthChecks().AddCheck<DynamoHealthCheck>("DynamoUserRepository");
+        services.AddSingleton<IComponentHealthCheck, DynamoHealthCheck>();
+
         return services;
     }
 }

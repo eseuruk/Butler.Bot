@@ -34,7 +34,7 @@ public class UserChatMessages
 
     public string SayBlockedMember { get; set; } = "Ты был удален из группы и только администраторы могут вернуть тебе доступ.";
 
-    public string AskForForLeavingConfirmation { get; set; } = "Ты действительно хочешь покинуть группу {0} и удалить свое описание?\n\nЯ не могу удалить твои сообщения. Если хочешь удалить их, то перейди в группу и сделай это сам.";
+    public string AskForForLeavingConfirmation { get; set; } = "Ты действительно хочешь покинуть группу {0} и удалить свое описание?\n\nЯ не могу удалить все твои сообщения в группе. Если хочешь удалить их, то перейди в группу и сделай это сам перед выходом.";
 
     public string SayLeavingRequestCanceled { get; set; } = "Запрос на удаление из группы {0} был отменен.";
 

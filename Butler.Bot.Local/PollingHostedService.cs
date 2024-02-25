@@ -4,12 +4,12 @@ namespace Butler.Bot.Local;
 
 public class PollingHostedService : BackgroundService
 {
-    private readonly HealthCheckService healthService;
+    private readonly IHealthCheckService healthService;
     private readonly ITelegramBotClient botClient;
     private readonly PollingUpdateHandler updateHandler;
     private readonly ILogger<PollingHostedService> logger;
 
-    public PollingHostedService(HealthCheckService healthService, ITelegramBotClient botClient, PollingUpdateHandler updateHandler, ILogger<PollingHostedService> logger)
+    public PollingHostedService(IHealthCheckService healthService, ITelegramBotClient botClient, PollingUpdateHandler updateHandler, ILogger<PollingHostedService> logger)
     {
         this.healthService = healthService;
         this.botClient = botClient;
@@ -42,7 +42,10 @@ public class PollingHostedService : BackgroundService
     {
         logger.LogInformation("Checking system health");
 
-        var healthReport = await healthService.CheckHealthAsync();
+        var context = new BotExecutionContext();
+        var filter = new ComponentFilter(null);
+
+        var healthReport = await healthService.CheckHealthAsync(context, filter, stoppingToken);
 
         if (healthReport.Status == HealthStatus.Unhealthy)
         {

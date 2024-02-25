@@ -1,6 +1,6 @@
 ﻿namespace Butler.Bot.Core.TargetGroup;
 
-public class TargetGroupHealthCheck : IHealthCheck
+public class TargetGroupHealthCheck : IComponentHealthCheck
 {
     private readonly ITelegramBotClient apiClient;
     private readonly ButlerOptions options;
@@ -13,7 +13,9 @@ public class TargetGroupHealthCheck : IHealthCheck
         this.logger = logger;
     }
 
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    public string ComponentId => "TargetGroupMembership";
+
+    public async Task<HealthCheckResult> CheckHealthAsync(BotExecutionContext context, CancellationToken cancellationToken)
     {
         try
         {

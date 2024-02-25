@@ -5,30 +5,14 @@ public class BotController : ControllerBase
 {
     private readonly IUpdateService updateService;
     private readonly SecretService secretService;
-    private readonly HealthCheckService healthService;
 
     private readonly ILogger<BotController> logger;
 
-    public BotController(IUpdateService updateService, SecretService secretService, HealthCheckService healthService, ILogger<BotController> logger)
+    public BotController(IUpdateService updateService, SecretService secretService, ILogger<BotController> logger)
     {
         this.updateService = updateService;
         this.secretService = secretService;
-        this.healthService = healthService;
         this.logger = logger;
-    }
-
-    [HttpGet]
-    [Route("/health")]
-    public async Task<ButlerHealthReport> HehthCheckAsync(CancellationToken cancellationToken)
-    {
-        logger.LogInformation("Checking system health");
-
-        var buttlerVersion = ButlerVersion.GetCurrent();
-        var healthReport = await healthService.CheckHealthAsync(cancellationToken);
-
-        logger.LogInformation("System health status: {Status}, buttlerVersion: {ButtlerVersion}", healthReport.Status, buttlerVersion);
-
-        return new ButlerHealthReport(buttlerVersion, healthReport);
     }
 
     [HttpPost]

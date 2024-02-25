@@ -9,7 +9,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<SqliteDatabase>();
         services.AddSingleton<IUserRepository, SqliteUserRepository>();
 
-        services.AddHealthChecks().AddCheck<SqliteHealthCheck>("SqliteUserRepository");
+        services.AddSingleton<IComponentHealthCheck, SqliteHealthCheck>();
+
         return services;
     }
 }

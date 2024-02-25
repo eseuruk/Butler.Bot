@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Butler.Bot.AWS.Tests;
 
@@ -21,6 +22,8 @@ public class ButlerApplicationFactory : WebApplicationFactory<Program>
         {
             RecofigureTelegramApi(services);
             RecofigureUserRepository(services);
+            RecofigureHealthChecks(services);
+            RecofigureInstallers(services);
         });
     }
 
@@ -48,5 +51,19 @@ public class ButlerApplicationFactory : WebApplicationFactory<Program>
     private void RecofigureUserRepository(IServiceCollection services)
     {
         services.AddSingleton<IUserRepository, TestRequestRepository>();
+    }
+
+    private void RecofigureHealthChecks(IServiceCollection services)
+    {
+        services.RemoveAll<IComponentHealthCheck>();
+        services.AddSingleton<IComponentHealthCheck>(_ => new TestHealthCheck("Component1"));
+        services.AddSingleton<IComponentHealthCheck>(_ => new TestHealthCheck("Component2"));
+    }
+
+    private void RecofigureInstallers(IServiceCollection services)
+    {
+        services.RemoveAll<IComponentInstaller>();
+        services.AddSingleton<IComponentInstaller>(_ => new TestInstaller("Component3"));
+        services.AddSingleton<IComponentInstaller>(_ => new TestInstaller("Component4"));
     }
 }

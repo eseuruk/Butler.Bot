@@ -13,7 +13,8 @@ public static class ServiceCollectionExtensions
             return new TelegramBotClient(apiOptions.Value.BotToken);
         });
 
-        services.AddHealthChecks().AddCheck<TelegramApiHealthCheck>("TelegramApi");
+        services.AddSingleton<IComponentHealthCheck, TelegramApiHealthCheck>();
+
         return services;
     }
 
@@ -43,9 +44,13 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IUpdateHandler, BotChatStatusHandler>();
         services.AddSingleton<IUpdateService, UpdateService>();
 
-        services.AddHealthChecks()
-            .AddCheck<TargetGroup.TargetGroupHealthCheck>("TargetGroupMembership")
-            .AddCheck<AdminGroup.AdminGroupHealthCheck>("AdminGroupMembership");
+        services.AddSingleton<IHealthCheckService, HealthCheckService>();
+        services.AddSingleton<IInstallService, InstallService>();
+
+        services.AddSingleton<IComponentInstaller, UserChat.UserChatMenuInstaller>();
+        services.AddSingleton<IComponentHealthCheck, UserChat.UserChatMenuInstaller>();
+        services.AddSingleton<IComponentHealthCheck, TargetGroup.TargetGroupHealthCheck>();
+        services.AddSingleton<IComponentHealthCheck, AdminGroup.AdminGroupHealthCheck>();
 
         return services;
     }

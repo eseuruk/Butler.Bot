@@ -1,6 +1,6 @@
 ﻿namespace Butler.Bot.DynamoDB;
 
-public class DynamoHealthCheck : IHealthCheck
+public class DynamoHealthCheck : IComponentHealthCheck
 {
     private readonly DynamoJoinRequestTable table;
     private readonly ILogger<DynamoHealthCheck> logger;
@@ -11,7 +11,9 @@ public class DynamoHealthCheck : IHealthCheck
         this.logger = logger;
     }
 
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    public string ComponentId => "DynamoUserRepository";
+
+    public async Task<HealthCheckResult> CheckHealthAsync(BotExecutionContext context, CancellationToken cancellationToken)
     {
         const long testID = 0L;
 

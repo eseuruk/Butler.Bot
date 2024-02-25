@@ -1,6 +1,6 @@
 ﻿namespace Butler.Bot.Core;
 
-public class TelegramApiHealthCheck : IHealthCheck
+public class TelegramApiHealthCheck : IComponentHealthCheck
 {
     private readonly ITelegramBotClient botClient;
     private readonly ILogger<TelegramApiHealthCheck> logger;
@@ -11,7 +11,9 @@ public class TelegramApiHealthCheck : IHealthCheck
         this.logger = logger;
     }
 
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    public string ComponentId => "TelegramApi";
+
+    public async Task<HealthCheckResult> CheckHealthAsync(BotExecutionContext context, CancellationToken cancellationToken)
     {
         try
         {

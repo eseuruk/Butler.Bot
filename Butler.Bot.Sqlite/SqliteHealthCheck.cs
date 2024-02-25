@@ -1,6 +1,6 @@
 ﻿namespace Butler.Bot.Sqlite;
 
-public class SqliteHealthCheck : IHealthCheck
+public class SqliteHealthCheck : IComponentHealthCheck
 {
     private readonly SqliteDatabase database;
     private readonly ILogger<SqliteHealthCheck> logger;
@@ -11,7 +11,9 @@ public class SqliteHealthCheck : IHealthCheck
         this.logger = logger;
     }
 
-    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    public string ComponentId => "SqliteUserRepository";
+
+    public Task<HealthCheckResult> CheckHealthAsync(BotExecutionContext context, CancellationToken cancellationToken)
     {
         if (!database.IsExist())
         {
