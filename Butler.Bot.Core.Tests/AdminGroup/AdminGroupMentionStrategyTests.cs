@@ -25,7 +25,7 @@ public class AdminGroupMentionStrategyTests
     [InlineData(null, "John", "Doe", "John Doe")]
     [InlineData(null, "Aleksandrina", "Buenaventura Wetherington", "Aleksandrina Buenaventura Weth...")]
     [InlineData(null, "Flag emoji", "at the end ------>\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f", "Flag emoji at the end ------>\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f")]
-    public void GetAdminMention(string userName, string firstName, string lastName, string expected)
+    public void GetAdminMention(string? userName, string firstName, string? lastName, string expected)
     {
         // Arrange
         var user = new User { Username = userName, FirstName = firstName, LastName = lastName };
@@ -42,7 +42,7 @@ public class AdminGroupMentionStrategyTests
     [InlineData(null, "John", null, "John")]
     [InlineData(null, "John", "Doe", "John Doe")]
     [InlineData("HollyFlower", "Aleksandrina", "Buenaventura Wetherington", "Aleksandrina Buenaventura Wetherington @HollyFlower")]
-    public void GetUserMention(string userName, string firstName, string lastName, string expected)
+    public void GetUserMention(string? userName, string firstName, string? lastName, string expected)
     {
         // Arrange
         var user = new User { Username = userName, FirstName = firstName, LastName = lastName };

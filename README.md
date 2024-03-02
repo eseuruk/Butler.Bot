@@ -32,7 +32,7 @@ Bot is not multitenant. At least for now. Each instance of the bot is configured
 Likely we know how to do it for free. Please see [detailed instructions](Docs/BotCreation.md).
 
 ## Technology
-Bot is written in C# using [.Net 6 LTS](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Code is fully managed and use [Telegram.Bot library](https://github.com/TelegramBots/Telegram.Bot) to interact with [Telegram Bot API](https://core.telegram.org/bots/api). 
+Bot is written in C# using [.Net 8 LTS](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). Code is fully managed and use [Telegram.Bot library](https://github.com/TelegramBots/Telegram.Bot) to interact with [Telegram Bot API](https://core.telegram.org/bots/api). 
 
 ## Serverless
 Bot is originally designed to be serverless. It currently supports AWS and might be easy ported to any other cloud provider.
