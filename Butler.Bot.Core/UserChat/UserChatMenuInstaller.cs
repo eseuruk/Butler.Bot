@@ -28,10 +28,19 @@ public class UserChatMenuInstaller : IComponentInstaller, IComponentHealthCheck
                 scope: BotCommandScope.AllPrivateChats(),
                 cancellationToken: cancellationToken);
 
-            var menuDescription = CreateMenuDescription(currentCommands);
-            logger.LogInformation("User chat menu: {MenuDescription}", menuDescription);
+            var currentMenuDescription = CreateMenuDescription(currentCommands);
+            var expectedMenuDescription = CreateMenuDescription(commands);
 
-            return HealthCheckResult.Healthy(menuDescription);
+            if (currentMenuDescription == expectedMenuDescription)
+            {
+                logger.LogInformation("User chat menu: {currentMenu}", currentMenuDescription);
+                return HealthCheckResult.Healthy(currentMenuDescription);
+            }
+            else
+            {
+                logger.LogWarning("User chat menu: {currentMenu}, expected: {expectedMenu}", currentMenuDescription, expectedMenuDescription);
+                return HealthCheckResult.Degraded($"Menu does not match: {currentMenuDescription} expected: {expectedMenuDescription}");
+            }
         }
         catch (ApiRequestException ex)
         {
@@ -50,7 +59,7 @@ public class UserChatMenuInstaller : IComponentInstaller, IComponentHealthCheck
                 cancellationToken: cancellationToken);
 
             var menuDescription = CreateMenuDescription(commands);
-            logger.LogInformation("User chat menu installed: {MenuDescription}", menuDescription);
+            logger.LogInformation("User chat menu installed: {menu}", menuDescription);
 
             return InstallResult.Ok(menuDescription);
         }

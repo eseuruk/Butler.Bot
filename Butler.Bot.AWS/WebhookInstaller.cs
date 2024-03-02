@@ -24,14 +24,17 @@ public class WebhookInstaller : IComponentInstaller, IComponentHealthCheck
             var expectedUrl = ConstractWebhookUrl(context);
             if (string.IsNullOrEmpty(info.Url))
             {
+                logger.LogError("Webhook is not set");
                 return HealthCheckResult.Unhealthy("Webhook is not set");
             }
             else if (!expectedUrl.Equals(info.Url, StringComparison.InvariantCultureIgnoreCase))
             {
+                logger.LogWarning("Webhook does not match: {Url}, expected: {expectedUrl}", info.Url, expectedUrl);
                 return HealthCheckResult.Unhealthy($"Webhook does not match: {info.Url}, expected: {expectedUrl}");
             }
             else
             {
+                logger.LogInformation("Webhook: {Url}, SecretTokenValidation: {SecretTokenValidation}", info.Url, options.SecretTokenValidation);
                 return HealthCheckResult.Healthy($"Webhook: {info.Url}, SecretTokenValidation: {options.SecretTokenValidation}");
             }
         }
