@@ -74,7 +74,7 @@ Goto Lambda>Code and deploy **Buttler.Bot.AWS.zip** manually
 
 ![AWS.Lambda.Deploy](Images/AWS.Lambda.Deploy.png)
 
-## 9. All done
+## 9. Install Bot Components
 
 Go to **/install** url and install bot componets. If you want to install them manually please see scripts in Commands folder.
 
