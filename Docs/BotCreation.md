@@ -55,17 +55,7 @@ Deploy bot backend to AWS [as described here](AwsDeployment.md).
 
 You will need parameters from 2, 5, 6 and 7 to configure lambda function.
 
-## 10. Update webhook with the url from 9
-
-Update [bot webhook](WebHook.md) with the url of AWS Lambda functions created at step 9
-
-## 11. Setup bot command menu for provate chats 
-
-If you want bot command menu to be visable in the private chat, please follow [the instructions](BotMenu.md)
-
-![Bot.Menu](Images/Bot.Menu.png)
-
-## 12. All done
+## 10. All done
 
 Say hello to your new bot!
 

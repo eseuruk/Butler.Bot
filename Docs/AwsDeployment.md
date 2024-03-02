@@ -76,6 +76,13 @@ Goto Lambda>Code and deploy **Buttler.Bot.AWS.zip** manually
 
 ## 9. All done
 
-You bot backend is ready to work. Go to **/health** url and check the status. It should be healthy in all rows.
+Go to **/install** url and install bot componets. If you want to install them manually please see scripts in Commands folder.
+
+![AWS.Lambda.Install](Images/AWS.Lambda.Install.png)
+
+
+## 10. All done
+
+Your bot backend is ready to work. Go to **/health** url and check the status. It should be healthy in all rows.
 
 ![AWS.Lambda.Health](Images/AWS.Lambda.Health.png)
