@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
@@ -43,7 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows", "Windows", "{B62F
 		Commands\Windows\web_hook_set.bat = Commands\Windows\web_hook_set.bat
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Butler.Bot.DynamoDB", "Butler.Bot.DynamoDB\Butler.Bot.DynamoDB.csproj", "{2D370625-2277-441B-98A8-B34BC3B6C0AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Butler.Bot.DynamoDB", "Butler.Bot.DynamoDB\Butler.Bot.DynamoDB.csproj", "{2D370625-2277-441B-98A8-B34BC3B6C0AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

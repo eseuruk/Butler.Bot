@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Butler.Bot.Core;
+﻿namespace Butler.Bot.Core;
 
 public class InlineStateException : Exception
 {
@@ -15,10 +13,5 @@ public class InlineStateException : Exception
     public InlineStateException(string message, Exception innerException)
       :  base(message, innerException)
     { }
-
-    protected InlineStateException(SerializationInfo info, StreamingContext context)
-       : base(info, context)
-    { }
-
 }
 
