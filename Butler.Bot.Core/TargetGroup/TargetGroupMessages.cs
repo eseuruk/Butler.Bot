@@ -2,7 +2,7 @@
 
 public class TargetGroupMessages
 {
-    public string SayHelloToNewMember { get; set; } = "Приветствуем {0}\r\n#whois\r\n{1}";
+    public string SayHelloToNewMember { get; set; } = "Приветствуем {0}\r\n#whois\r\n<blockquote>{1}</blockquote>";
 
     public string SayHelloToUnknownNewMember { get; set; } = "Приветствуем {0}";
 

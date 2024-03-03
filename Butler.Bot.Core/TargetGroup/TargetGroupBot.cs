@@ -55,6 +55,7 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
             chatId: Options.TargetGroupId,
             text: Options.TargetGroupMessages.SayHelloToUnknownNewMember.SafeFormat(userMention),
             parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("Said hello to unknown new member in target group: {ChatId}, userId: {UserId}", Options.TargetGroupId, user.Id);
@@ -68,6 +69,7 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
             chatId: Options.TargetGroupId,
             text: Options.TargetGroupMessages.SayHelloAgain.SafeFormat(userMention),
             parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("Said hello again in target group: {ChatId}, userId: {UserId}", Options.TargetGroupId, user.Id);
@@ -106,6 +108,7 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
             chatId: Options.TargetGroupId,
             text: Options.TargetGroupMessages.SayLeavingToChangeWhois.SafeFormat(userMention),
             parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("Said user is leaving target group to change whois. group: {ChatId}, userId: {UserId}", Options.TargetGroupId, user.Id);
@@ -119,6 +122,7 @@ public class TargetGroupBot : GroupBotBase, ITargetGroupBot
             chatId: Options.TargetGroupId,
             text: Options.TargetGroupMessages.SayLeaving.SafeFormat(userMention),
             parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("Said user is leaving target group. group: {ChatId}, userId: {UserId}", Options.TargetGroupId, user.Id);

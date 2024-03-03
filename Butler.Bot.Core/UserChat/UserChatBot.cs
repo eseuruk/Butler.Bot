@@ -31,6 +31,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
         await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
             text: Options.UserChatMessages.SayHello.SafeFormat(Options.TargetGroupDisplayName),
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -45,6 +47,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
         await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
             text: Options.UserChatMessages.SayConfused.SafeFormat(Options.TargetGroupDisplayName),
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -56,6 +60,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
         await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
             text: Options.UserChatMessages.AskForWhois.SafeFormat(Options.MinWoisLength),
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("Asked to provide whois in private chat: {UserChatId}", userChatId);
@@ -66,6 +72,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
         await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
             text: validationError,
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("Said whois is not valid in private chat: {UserChatId}", userChatId);
@@ -79,6 +87,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
         await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
             text: Options.UserChatMessages.SayWhoisOkAndAskToRequestAccess,
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -102,6 +112,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
         await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
             text: Options.UserChatMessages.SayUsedToBeMember,
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -116,6 +128,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
         await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
             text: Options.UserChatMessages.SayAlreadyMember,
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -127,6 +141,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
         await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
             text: Options.UserChatMessages.SayBlockedMember,
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("Said blocked in private chat: {UserChatId}", userChatId);
@@ -149,6 +165,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
         var message = await ApiClient.SendTextMessageAsync(
             chatId: userChatId,
             text: Options.UserChatMessages.AskForForLeavingConfirmation.SafeFormat(Options.TargetGroupDisplayName),
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             replyMarkup: markup,
             cancellationToken: cancellationToken);
 
@@ -162,6 +180,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
             chatId: userChatId,
             messageId: requestMessageId,
             text: Options.UserChatMessages.SayLeavingRequestCanceled.SafeFormat(Options.TargetGroupDisplayName),
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("Said leave request canceled in private chat: {UserChatId}, requestMessageId: {RequestMessageId}", userChatId, requestMessageId);
@@ -173,6 +193,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
             chatId: userChatId,
             messageId: requestMessageId,
             text: Options.UserChatMessages.SayUserLeft.SafeFormat(Options.TargetGroupDisplayName),
+            parseMode: ParseMode.Html,
+            disableWebPagePreview: true,
             cancellationToken: cancellationToken);
 
         Logger.LogInformation("Said leave request fulfilled in private chat: {UserChatId}, requestMessageId: {RequestMessageId}", userChatId, requestMessageId);
@@ -188,6 +210,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
             await ApiClient.SendTextMessageAsync(
                 chatId: userChatId,
                 text: Options.UserChatMessages.SayRequestApproved,
+                parseMode: ParseMode.Html,
+                disableWebPagePreview: true,
                 replyMarkup: markup,
                 cancellationToken: cancellationToken);
 
@@ -210,6 +234,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
             await ApiClient.SendTextMessageAsync(
                 chatId: userChatId,
                 text: Options.UserChatMessages.SayRequestDeclined,
+                parseMode: ParseMode.Html,
+                disableWebPagePreview: true,
                 replyMarkup: markup,
                 cancellationToken: cancellationToken);
 
@@ -232,6 +258,8 @@ public class UserChatBot : GroupBotBase, IUserChatBot
             await ApiClient.SendTextMessageAsync(
                 chatId: userChatId,
                 text: Options.UserChatMessages.SayUserDeleted,
+                parseMode: ParseMode.Html,
+                disableWebPagePreview: true,
                 replyMarkup: markup,
                 cancellationToken: cancellationToken);
 

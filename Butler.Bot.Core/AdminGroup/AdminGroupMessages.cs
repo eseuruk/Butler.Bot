@@ -12,9 +12,9 @@ public class AdminGroupMessages
 
     public string ButtonCancel { get; set; } = "Отменить";
 
-    public string ReportJoinRequest { get; set; } = "<b>Запрос на вход в группу</b>\n{0}\n#whois\n{1}";
+    public string ReportJoinRequest { get; set; } = "<b>Запрос на вход в группу</b>\n{0}\n#whois\n<blockquote>{1}</blockquote>";
 
-    public string ReportUserAdded { get; set; } = "<b>Новый член группы</b>\n{0}\n#whois\n{1}";
+    public string ReportUserAdded { get; set; } = "<b>Новый член группы</b>\n{0}\n#whois\n<blockquote>{1}</blockquote>";
 
     public string MarkJoinRequestAsApproved { get; set; } = "Принято {0}";
 
